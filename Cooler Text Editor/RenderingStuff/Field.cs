@@ -30,6 +30,12 @@ namespace Cooler_Text_Editor.RenderingStuff
             BR = new Position2D();
         }
 
+        public Field2D(Size2D size)
+        {
+            TL = new Position2D();
+            BR = new Position2D(size.Width - 1, size.Height - 1);
+        }
+
         public static Field2D operator +(Field2D a, Position2D b)
         {
             return new Field2D(a.TL + b, a.BR + b);

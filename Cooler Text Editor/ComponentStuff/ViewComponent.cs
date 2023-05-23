@@ -22,6 +22,7 @@ namespace Cooler_Text_Editor.ComponentStuff
             Position = new Position2D();
             RenderedScreen = new Pixel[Size.Width, Size.Height];
             OldBackgroundColor = BackgroundColor;
+            UpdateFields = new List<Field2D>();
 
             Pixel bgPixel = new Pixel(BackgroundColor);
             for (int y = 0; y < Size.Height; y++)
@@ -31,13 +32,13 @@ namespace Cooler_Text_Editor.ComponentStuff
 
         public void AddChild(BasicComponent child)
         {
+            child.Parent = this;
             Children.Add(child);
             OldFields.Add(new Field2D());
         }
 
         public override void Update()
         {
-            List<Field2D> fieldsToUpdate = new List<Field2D>();
 
             for (int i = 0; i < Children.Count; i++)
             {
@@ -45,40 +46,37 @@ namespace Cooler_Text_Editor.ComponentStuff
                 Field2D tempField = Children[i].GetField();
                 if (OldFields[i] != tempField)
                 {
-                    if (!fieldsToUpdate.Contains(OldFields[i]))
-                        fieldsToUpdate.Add(OldFields[i]);
-                    if (!fieldsToUpdate.Contains(tempField))
-                        fieldsToUpdate.Add(tempField);
+                    if (!UpdateFields.Contains(OldFields[i]))
+                        UpdateFields.Add(OldFields[i]);
+                    if (!UpdateFields.Contains(tempField))
+                        UpdateFields.Add(tempField);
                     OldFields[i] = tempField;
-                }
-                else if (Children[i].Updated)
-                {
-                    if (!fieldsToUpdate.Contains(tempField))
-                        fieldsToUpdate.Add(tempField);
                 }
             }
 
             if (BackgroundColor != OldBackgroundColor)
             {
                 OldBackgroundColor = BackgroundColor;
-                fieldsToUpdate.Clear();
-                fieldsToUpdate.Add(new Field2D(new Position2D(), Size));
+                UpdateFields.Clear();
+                UpdateFields.Add(new Field2D(new Position2D(), Size));
             }
 
             Pixel bgPixel = new Pixel(BackgroundColor);
 
-            for (int i = 0; i < fieldsToUpdate.Count; i++)
+            for (int i = 0; i < UpdateFields.Count; i++)
             {
-                Field2D tempField = fieldsToUpdate[i];
+                Field2D tempField = UpdateFields[i];
 
                 Rendering.FillPixel(RenderedScreen, tempField, bgPixel);
 
                 foreach (var child in Children)
                     child.RenderTo(RenderedScreen, tempField);
+
+                if (Parent != null)
+                    Parent.UpdateFields.Add(tempField + Position);
             }
 
-            if (fieldsToUpdate.Count > 0)
-                Updated = true;
+            UpdateFields.Clear();
         }
     }
 }

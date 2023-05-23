@@ -13,16 +13,14 @@ namespace Cooler_Text_Editor.ComponentStuff
         public Position2D Position;
         public Size2D Size;
         public Pixel[,] RenderedScreen;
-        public bool Updated;
+        public BasicComponent Parent = null;
+        public List<Field2D> UpdateFields = new List<Field2D>();
+        // Maybe add Fixed OldSize here and auto Resize
 
         public abstract void Update();
 
         public void RenderTo(Pixel[,] screen, Field2D field)
         {
-            //if (!Updated)
-            //    return;
-            Updated = false;
-
             Field2D internalField = field - Position;
 
             if (internalField.TL.X < 0)
@@ -55,6 +53,30 @@ namespace Cooler_Text_Editor.ComponentStuff
         public Field2D GetField()
         {
             return new Field2D(Position, Size);
+        }
+
+        public void Resize(Size2D nSize)
+        {
+            Resize(nSize.Width, nSize.Height);
+        }
+
+        public void Resize(int nWidth, int nHeight)
+        {
+            Pixel[,] newPixels = new Pixel[nWidth, nHeight];
+            for (int y = 0; y < nHeight; y++)
+                for (int x = 0; x < nWidth; x++)
+                    newPixels[x, y] = Pixel.Empty;
+            for (int y = 0; y < Math.Min(Size.Height, nHeight); y++)
+                for (int x = 0; x < Math.Min(Size.Width, nWidth); x++)
+                    newPixels[x, y] = RenderedScreen[x, y];
+            RenderedScreen = newPixels;
+            Size.Width = nWidth;
+            Size.Height = nHeight;
+
+            Field2D updateFieldYes = GetField();
+            UpdateFields.Add(updateFieldYes - Position);
+            if (Parent != null)
+                Parent.UpdateFields.Add(updateFieldYes);
         }
     }
 }

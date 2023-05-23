@@ -24,6 +24,7 @@ namespace Cooler_Text_Editor.ComponentStuff
             Position = new Position2D();
             Size = new Size2D();
             Scroll = new Position2D();
+            UpdateFields = new List<Field2D>();
 
             OldSize = Size;
             OldPosition = Position;
@@ -31,7 +32,6 @@ namespace Cooler_Text_Editor.ComponentStuff
 
             RenderedScreen = new Pixel[0, 0];
             updateInternal = false;
-            Updated = true;
         }
 
         public override void Update()
@@ -46,22 +46,31 @@ namespace Cooler_Text_Editor.ComponentStuff
 
             if (!updateInternal)
                 return;
-            Updated = true;
             updateInternal = false;
 
             RenderedScreen = new Pixel[Size.Width, Size.Height];
+
+            bool tU = false;
 
             for (int y = Scroll.Y; y < Scroll.Y + Size.Height; y++)
             {
                 for (int x = Scroll.X; x < Scroll.X + Size.Width; x++)
                 {
-                    if (y >= Text.Count || y < 0 || 
-                        x >= Text[y].Count || x < 0)
-                        RenderedScreen[x, y] = Pixel.Empty;
-                    else
-                        RenderedScreen[x, y] = Text[y - Scroll.Y][x - Scroll.X];
+                    Pixel t = Pixel.Empty;
+                    if (y < Text.Count && y >= 0 && 
+                        x < Text[y].Count && x >= 0)
+                        t = Text[y - Scroll.Y][x - Scroll.X]; ;
+
+                    if (RenderedScreen[x, y] != t)
+                    {
+                        RenderedScreen[x, y] = t;
+                        tU = true;
+                    }
                 }
             }
+
+            if (tU && Parent != null)
+                Parent.UpdateFields.Add(GetField());
         }
     }
 }
