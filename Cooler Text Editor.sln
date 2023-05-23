@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.33516.290
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cooler Text Editor", "Cooler Text Editor\Cooler Text Editor.csproj", "{DF6D4005-11E8-4B74-B574-676C20701DBF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DF6D4005-11E8-4B74-B574-676C20701DBF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DF6D4005-11E8-4B74-B574-676C20701DBF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DF6D4005-11E8-4B74-B574-676C20701DBF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DF6D4005-11E8-4B74-B574-676C20701DBF}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {2E51506B-8614-4E70-B4B5-3B8E0C77F4F7}
+	EndGlobalSection
+EndGlobal
