@@ -9,8 +9,8 @@ namespace Cooler_Text_Editor.RenderingStuff
 {
     public struct Field2D
     {
-        Position2D TL;
-        Position2D BR;
+        public Position2D TL;
+        public Position2D BR;
 
         public Field2D(Position2D tl, Position2D br)
         {
@@ -52,12 +52,20 @@ namespace Cooler_Text_Editor.RenderingStuff
 
         public override bool Equals(object obj)
         {
-            throw new NotImplementedException();
+            if (!(obj is Field2D))
+                return false;
+            Field2D field = (Field2D)obj;
+            return field.TL == TL && field.BR == BR;
         }
 
         public override int GetHashCode()
         {
             throw new NotImplementedException();
+        }
+
+        public override string ToString()
+        {
+            return $"({TL} - {BR})";
         }
     }
 }

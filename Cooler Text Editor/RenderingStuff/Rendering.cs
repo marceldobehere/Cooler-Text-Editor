@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Cooler_Text_Editor.RenderingStuff;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -51,6 +52,22 @@ namespace Cooler_Text_Editor
                         ScreenBackbuffer[x, y] = pxl;
                     }
             Console.Write(renderString);
+        }
+
+        public static void FillPixel(Pixel[,] screen, Field2D field, Pixel pxl)
+        {
+            if (field.BR.X < 0)
+                field.BR.X = 0;
+            if (field.BR.Y < 0)
+                field.BR.Y = 0;
+            if (field.TL.X >= screen.GetLength(0))
+                field.TL.X = screen.GetLength(0) - 1;
+            if (field.TL.Y >= screen.GetLength(1))
+                field.TL.Y = screen.GetLength(1) - 1;
+
+            for (int y = field.TL.Y; y < field.BR.Y; y++)
+                for (int x = field.TL.X; x < field.BR.X; x++)
+                    screen[x, y] = pxl;
         }
     }
 }

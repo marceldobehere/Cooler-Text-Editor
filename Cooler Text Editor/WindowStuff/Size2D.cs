@@ -42,5 +42,10 @@ namespace Cooler_Text_Editor.WindowStuff
         {
             return !(a == b);
         }
+
+        public override string ToString()
+        {
+            return $"({Width}, {Height})";
+        }
     }
 }

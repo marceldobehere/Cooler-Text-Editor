@@ -55,5 +55,10 @@ namespace Cooler_Text_Editor.WindowStuff
         {
             throw new NotImplementedException();
         }
+
+        public override string ToString()
+        {
+            return $"({X}, {Y})";
+        }
     }
 }

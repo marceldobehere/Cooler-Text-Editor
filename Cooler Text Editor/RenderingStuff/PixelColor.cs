@@ -85,5 +85,10 @@ namespace Cooler_Text_Editor
         {
             return $"2;{R};{G};{B}m";
         }
+
+        public override string ToString()
+        {
+            return $"({R}, {G}, {B})";
+        }
     }
 }

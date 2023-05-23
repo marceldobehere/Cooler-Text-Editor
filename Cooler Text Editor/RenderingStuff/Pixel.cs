@@ -48,6 +48,13 @@ namespace Cooler_Text_Editor
             BackgroundColor = DefaultBackgroundColor;
         }
 
+        public Pixel(PixelColor col)
+        {
+            Character = ' ';
+            ForegroundColor = col;
+            BackgroundColor = col;
+        }
+
         public static bool operator== (Pixel left, Pixel right)
         {
             if (left.Character == right.Character && 
@@ -64,5 +71,9 @@ namespace Cooler_Text_Editor
             return !(left == right); 
         }
 
+        public override string ToString()
+        {
+            return $"('{Character}', {ForegroundColor}, {BackgroundColor})";
+        }
     }
 }

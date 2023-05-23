@@ -1,5 +1,6 @@
 ﻿// See https://aka.ms/new-console-template for more information
 using Cooler_Text_Editor;
+using Cooler_Text_Editor.ComponentStuff;
 using Cooler_Text_Editor.WindowStuff;
 using System.Diagnostics;
 
@@ -22,6 +23,22 @@ public class Program
         Exit = false;
         MainWindow = new Window(new Size2D(Console.WindowWidth, Console.WindowHeight));
         Rendering.ScreenBackbuffer = new Pixel[MainWindow.Size.Width, MainWindow.Size.Height];
+        ViewComponent viewComponent = new ViewComponent(MainWindow.Size);
+
+        {
+            ViewComponent tViewComp = new ViewComponent(new Size2D(10, 20));
+            tViewComp.Position = new Position2D(5, 5);
+            tViewComp.BackgroundColor = new PixelColor(200, 60, 90);
+            viewComponent.AddChild(tViewComp);
+        }
+
+        {
+            ViewComponent tViewComp = new ViewComponent(new Size2D(20, 20));
+            tViewComp.Position = new Position2D(25, 5);
+            tViewComp.BackgroundColor = new PixelColor(200, 200, 100);
+            viewComponent.AddChild(tViewComp);
+        }
+
 
         for (int y = 0; y < MainWindow.Size.Height; y++)
             for (int x = 0; x < MainWindow.Size.Width; x++)
@@ -37,6 +54,9 @@ public class Program
             for (int frame = 0; frame < frameCount && !Exit; frame++) 
             {
                 Input.HandleInputs(20);
+
+                viewComponent.Update();
+                viewComponent.RenderTo(MainWindow.Pixels, viewComponent.GetField());
 
                 Rendering.CheckWindowResize();
                 Rendering.RenderMainWindow();
