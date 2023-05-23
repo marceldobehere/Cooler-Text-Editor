@@ -14,6 +14,7 @@ namespace Cooler_Text_Editor.ComponentStuff
         public bool updateInternal;
         public Size2D OldSize;
         public Position2D OldPosition;
+        public PixelColor BackgroundColor;
 
         public Position2D Scroll;
         public Position2D OldScroll;
@@ -30,6 +31,7 @@ namespace Cooler_Text_Editor.ComponentStuff
             OldPosition = Position;
             OldScroll = Scroll;
 
+            BackgroundColor = new PixelColor();
             RenderedScreen = new Pixel[0, 0];
             updateInternal = false;
         }
@@ -52,11 +54,12 @@ namespace Cooler_Text_Editor.ComponentStuff
 
             bool tU = false;
 
+            Pixel tempBG = new Pixel(BackgroundColor);
             for (int y = Scroll.Y; y < Scroll.Y + Size.Height; y++)
             {
                 for (int x = Scroll.X; x < Scroll.X + Size.Width; x++)
                 {
-                    Pixel t = Pixel.Empty;
+                    Pixel t = tempBG;
                     if (y < Text.Count && y >= 0 && 
                         x < Text[y].Count && x >= 0)
                         t = Text[y - Scroll.Y][x - Scroll.X]; ;

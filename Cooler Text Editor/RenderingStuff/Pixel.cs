@@ -20,7 +20,7 @@ namespace Cooler_Text_Editor
             }
         }
         public static Pixel Empty = new Pixel(' ', DefaultForegroundColor, DefaultBackgroundColor);
-        public static Pixel EmptyButReplace = new Pixel('X', DefaultForegroundColor, DefaultBackgroundColor);
+        public static Pixel Transparent = new Pixel(' ', new PixelColor(), new PixelColor());
 
 
 
@@ -74,6 +74,18 @@ namespace Cooler_Text_Editor
         public override string ToString()
         {
             return $"('{Character}', {ForegroundColor}, {BackgroundColor})";
+        }
+
+        public void WriteOver(Pixel other)
+        {
+            if (!other.BackgroundColor.Transparent)
+                BackgroundColor = other.BackgroundColor;
+            if (!other.ForegroundColor.Transparent)
+            {
+                Character = other.Character;
+                ForegroundColor = other.ForegroundColor;
+            }
+            
         }
     }
 }

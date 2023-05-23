@@ -21,7 +21,7 @@ namespace Cooler_Text_Editor.ComponentStuff
 
             for (int y = 0; y < Size.Height; y++)
                 for (int x = 0; x < Size.Width; x++)
-                    RenderedScreen[x, y] = Pixel.Empty;
+                    RenderedScreen[x, y] = Pixel.Transparent;
 
             MainView = new ViewComponent(Size);
             MainView.Parent = this;

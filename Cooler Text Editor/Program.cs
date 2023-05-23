@@ -27,18 +27,36 @@ public class Program
         
 
         ViewComponent viewComponent = MainScreen.MainView;
+        ViewComponent tViewComp2;
         {
-            ViewComponent tViewComp = new ViewComponent(new Size2D(10, 20));
+            ViewComponent tViewComp = new ViewComponent(new Size2D(60, 20));
             tViewComp.Position = new Position2D(5, 5);
             tViewComp.BackgroundColor = new PixelColor(200, 60, 90);
             viewComponent.AddChild(tViewComp);
         }
         {
-            ViewComponent tViewComp = new ViewComponent(new Size2D(20, 20));
+            ViewComponent tViewComp = new ViewComponent(new Size2D(20, 10));
+            tViewComp2 = tViewComp;
             tViewComp.Position = new Position2D(25, 5);
             tViewComp.BackgroundColor = new PixelColor(200, 200, 100);
             viewComponent.AddChild(tViewComp);
+
+            {
+                TextComponent txtComp = new TextComponent();
+                tViewComp.AddChild(txtComp);
+                txtComp.Size = new Size2D(6, 1);
+                txtComp.Position = new Position2D(4, 2);
+                txtComp.Text.Clear();
+                List<Pixel> tLine = new List<Pixel>();
+                txtComp.Text.Add(tLine);
+                string tStr = "HOI :)";
+                for (int i = 0;i < tStr.Length; i++)
+                {
+                    tLine.Add(new Pixel(tStr[i], new PixelColor(0, i * 50, 200), new PixelColor()));
+                }
+            }
         }
+
 
         Stopwatch fpsWatch = new Stopwatch();
         int frameCount = 60;
@@ -51,6 +69,8 @@ public class Program
             {
                 Input.HandleInputs(20);
 
+                tViewComp2.Position.X = frame % 20;
+                tViewComp2.Position.Y = frame / 5;
 
                 MainScreen.Update();
                 if (Rendering.CheckWindowResize())

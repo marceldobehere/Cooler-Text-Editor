@@ -43,11 +43,9 @@ namespace Cooler_Text_Editor.ComponentStuff
             if (internalField.BR.Y + Position.Y > screen.GetLength(1) - 1)
                 internalField.BR.Y = screen.GetLength(1) - 1 - Position.Y;
 
-            ;
-
             for (int y = internalField.TL.Y; y <= internalField.BR.Y; y++)    
                 for (int x = internalField.TL.X; x <= internalField.BR.X; x++)
-                    screen[x + Position.X, y + Position.Y] = RenderedScreen[x, y];
+                    screen[x + Position.X, y + Position.Y].WriteOver(RenderedScreen[x, y]);
         }
 
         public Field2D GetField()

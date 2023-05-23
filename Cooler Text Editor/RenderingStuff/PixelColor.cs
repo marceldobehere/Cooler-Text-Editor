@@ -9,12 +9,24 @@ namespace Cooler_Text_Editor
     public struct PixelColor
     {
         public int R, G, B;
+        public bool Transparent;
+
+        public PixelColor()
+        {
+            Transparent = true;
+
+            R = 0;
+            G = 0;
+            B = 0;
+        }
 
         public PixelColor(int r, int g, int b)
         {
             R = r;
             G = g;
             B = b;
+
+            Transparent = false;
         }
 
         public static Dictionary<ConsoleColor, PixelColor> ConsoleColorToPixelColor = new Dictionary<ConsoleColor, PixelColor>()
@@ -88,6 +100,8 @@ namespace Cooler_Text_Editor
 
         public override string ToString()
         {
+            if (Transparent)
+                return $"(Transparent)";
             return $"({R}, {G}, {B})";
         }
     }
