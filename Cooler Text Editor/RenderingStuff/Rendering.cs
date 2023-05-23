@@ -19,8 +19,8 @@ namespace Cooler_Text_Editor
             if (cSizeY < 1)
                 cSizeY = 1;
 
-            if (cSizeX == Program.MainWindow.Width && 
-                cSizeY == Program.MainWindow.Height)
+            if (cSizeX == Program.MainWindow.Size.Width && 
+                cSizeY == Program.MainWindow.Size.Height)
                 return;
 
             // Might Remove Later
@@ -38,8 +38,8 @@ namespace Cooler_Text_Editor
         {
             StringBuilder renderString = new StringBuilder();
             renderString.Append("\x1b[" + (0) + ";" + (0) + "H");
-            for (int y = 0; y < Program.MainWindow.Height; y++)
-                for (int x = 0; x < Program.MainWindow.Width; x++)
+            for (int y = 0; y < Program.MainWindow.Size.Height; y++)
+                for (int x = 0; x < Program.MainWindow.Size.Width; x++)
                     if (ScreenBackbuffer[x, y] != Program.MainWindow.Pixels[x, y])
                     {
                         Pixel pxl = Program.MainWindow.Pixels[x, y];

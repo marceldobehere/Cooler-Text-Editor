@@ -1,5 +1,6 @@
 ﻿// See https://aka.ms/new-console-template for more information
 using Cooler_Text_Editor;
+using Cooler_Text_Editor.WindowStuff;
 using System.Diagnostics;
 
 public class Program
@@ -19,11 +20,11 @@ public class Program
         //Console.WriteLine("\x1b[36mTEST\x1b[0m");
 
         Exit = false;
-        MainWindow = new Window(Console.WindowWidth, Console.WindowHeight);
-        Rendering.ScreenBackbuffer = new Pixel[MainWindow.Width, MainWindow.Height];
+        MainWindow = new Window(new Size2D(Console.WindowWidth, Console.WindowHeight));
+        Rendering.ScreenBackbuffer = new Pixel[MainWindow.Size.Width, MainWindow.Size.Height];
 
-        for (int y = 0; y < MainWindow.Height; y++)
-            for (int x = 0; x < MainWindow.Width; x++)
+        for (int y = 0; y < MainWindow.Size.Height; y++)
+            for (int x = 0; x < MainWindow.Size.Width; x++)
                 MainWindow.Pixels[x, y] = new Pixel((char)('A' + x % 20));
 
         Stopwatch fpsWatch = new Stopwatch();
