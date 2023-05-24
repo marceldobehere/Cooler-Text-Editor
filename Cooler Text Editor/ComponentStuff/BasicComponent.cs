@@ -17,7 +17,24 @@ namespace Cooler_Text_Editor.ComponentStuff
         public List<Field2D> UpdateFields = new List<Field2D>();
         // Maybe add Fixed OldSize here and auto Resize
 
-        public abstract void Update();
+        public void Update()
+        {
+            if (Parent != null && Size.SizeBasedOnParent != null)
+            {
+                Size2D temp = Size.SizeBasedOnParent(Parent.Size);
+                if (temp.Width < 0)
+                    temp.Width = 0;
+                if (temp.Height < 0)
+                    temp.Height = 0;
+
+
+                if (temp != Size)
+                    Resize(temp);
+            }
+            InternalUpdate();
+        }
+
+        protected abstract void InternalUpdate();
 
         public void RenderTo(Pixel[,] screen, Field2D field)
         {
@@ -64,8 +81,8 @@ namespace Cooler_Text_Editor.ComponentStuff
             for (int y = 0; y < nHeight; y++)
                 for (int x = 0; x < nWidth; x++)
                     newPixels[x, y] = Pixel.Empty;
-            for (int y = 0; y < Math.Min(Size.Height, nHeight); y++)
-                for (int x = 0; x < Math.Min(Size.Width, nWidth); x++)
+            for (int y = 0; y < Math.Min(RenderedScreen.GetLength(1), nHeight); y++)
+                for (int x = 0; x < Math.Min(RenderedScreen.GetLength(0), nWidth); x++)
                     newPixels[x, y] = RenderedScreen[x, y];
             RenderedScreen = newPixels;
             Size.Width = nWidth;

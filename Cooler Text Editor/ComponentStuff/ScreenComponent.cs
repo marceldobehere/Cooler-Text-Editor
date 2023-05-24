@@ -25,10 +25,13 @@ namespace Cooler_Text_Editor.ComponentStuff
 
             MainView = new ViewComponent(Size);
             MainView.Parent = this;
+            MainView.Size.SizeBasedOnParent = (Size2D parent) => { return parent; };
         }
 
-        public override void Update()
+        protected override void InternalUpdate()
         {
+            //if (MainView.Size != Size)
+            //    MainView.Resize(Size);
             MainView.Update();
         }
 

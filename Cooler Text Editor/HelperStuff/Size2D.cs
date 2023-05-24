@@ -47,5 +47,20 @@ namespace Cooler_Text_Editor.WindowStuff
         {
             return $"({Width}, {Height})";
         }
+
+        public static Size2D operator +(Size2D a, Position2D b)
+        {
+            return new Size2D(a.Width + b.X, a.Height + b.Y);
+        }
+
+        public static Size2D operator -(Size2D a, Position2D b)
+        {
+            return new Size2D(a.Width - b.X, a.Height - b.Y);
+        }
+
+
+
+
+        public Func<Size2D, Size2D> SizeBasedOnParent;
     }
 }

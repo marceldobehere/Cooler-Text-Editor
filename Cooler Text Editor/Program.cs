@@ -24,15 +24,30 @@ public class Program
         Exit = false;
         MainScreen = new ScreenComponent(new Size2D(Console.WindowWidth, Console.WindowHeight));
         Rendering.ScreenBackbuffer = new Pixel[MainScreen.Size.Width, MainScreen.Size.Height];
-        
+        Rendering.InitCursor();
 
         ViewComponent viewComponent = MainScreen.MainView;
-        ViewComponent tViewComp2;
+        ViewComponent tViewComp1, tViewComp2;
         {
             ViewComponent tViewComp = new ViewComponent(new Size2D(60, 20));
+            tViewComp1 = tViewComp;
             tViewComp.Position = new Position2D(5, 5);
             tViewComp.BackgroundColor = new PixelColor(200, 60, 90);
             viewComponent.AddChild(tViewComp);
+
+            {
+                TextComponent textComp = new TextComponent();
+                tViewComp1.AddChild(textComp);
+                
+                textComp.Position = new Position2D(5, 5);
+                textComp.Size = new Size2D(10, 20);
+                textComp.Size.SizeBasedOnParent = (Size2D parent) => { return parent - textComp.Position; };
+
+                textComp.Text.Clear();
+                textComp.WriteLineText("Hello, World!");
+                textComp.WriteLineText();
+                textComp.WriteLineText("How are you?");
+            }
         }
         {
             ViewComponent tViewComp = new ViewComponent(new Size2D(20, 10));
@@ -44,15 +59,19 @@ public class Program
             {
                 TextComponent txtComp = new TextComponent();
                 tViewComp.AddChild(txtComp);
-                txtComp.Size = new Size2D(6, 1);
+                txtComp.Size = new Size2D(10, 4);
+                txtComp.Size.SizeBasedOnParent = (Size2D parent) => { return parent - txtComp.Position; };
                 txtComp.Position = new Position2D(4, 2);
                 txtComp.Text.Clear();
-                List<Pixel> tLine = new List<Pixel>();
-                txtComp.Text.Add(tLine);
-                string tStr = "HOI :)";
-                for (int i = 0;i < tStr.Length; i++)
+                for (int br = 0; br < 4; br++)
                 {
-                    tLine.Add(new Pixel(tStr[i], new PixelColor(0, i * 50, 200), new PixelColor()));
+                    List<Pixel> tLine = new List<Pixel>();
+                    txtComp.Text.Add(tLine);
+                    string tStr = "HOI :)  :)";
+                    for (int i = 0; i < tStr.Length; i++)
+                    {
+                        tLine.Add(new Pixel(tStr[i], new PixelColor(0, i * 50, 200), new PixelColor()));
+                    }
                 }
             }
         }
@@ -69,8 +88,11 @@ public class Program
             {
                 Input.HandleInputs(20);
 
-                tViewComp2.Position.X = frame % 20;
+                //tViewComp2.Position.X = frame % 30;
                 tViewComp2.Position.Y = frame / 5;
+
+                //tViewComp1.Position.X = frame / 3 + 10;
+                //tViewComp1.Position.Y = frame % 8 + 5;
 
                 MainScreen.Update();
                 if (Rendering.CheckWindowResize())
@@ -79,6 +101,8 @@ public class Program
                     MainScreen.UpdateFields.Add(new Field2D(MainScreen.Size));
                 }
                 MainScreen.RenderStuffToScreen();
+
+                Task.Delay(10).Wait();
             }
             FPS = frameCount / fpsWatch.Elapsed.TotalSeconds;
             Console.Title = $"Cooler Text Editor - {Math.Round(FPS, 2)} FPS";

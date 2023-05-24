@@ -37,7 +37,7 @@ namespace Cooler_Text_Editor.ComponentStuff
             OldFields.Add(new Field2D());
         }
 
-        public override void Update()
+        protected override void InternalUpdate()
         {
 
             for (int i = 0; i < Children.Count; i++)

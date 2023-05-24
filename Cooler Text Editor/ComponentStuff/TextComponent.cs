@@ -19,6 +19,8 @@ namespace Cooler_Text_Editor.ComponentStuff
         public Position2D Scroll;
         public Position2D OldScroll;
 
+        public PixelColor DefaultForegroundColor, DefaultBackgroundColor;
+
         public TextComponent()
         {
             Text = new List<List<Pixel>>();
@@ -34,9 +36,12 @@ namespace Cooler_Text_Editor.ComponentStuff
             BackgroundColor = new PixelColor();
             RenderedScreen = new Pixel[0, 0];
             updateInternal = false;
+
+            DefaultForegroundColor = new PixelColor(255, 255, 255);
+            DefaultBackgroundColor = new PixelColor();
         }
 
-        public override void Update()
+        protected override void InternalUpdate()
         {
             if (OldSize != Size || OldPosition != Position ||
                 OldScroll != Scroll)
@@ -74,6 +79,55 @@ namespace Cooler_Text_Editor.ComponentStuff
 
             if (tU && Parent != null)
                 Parent.UpdateFields.Add(GetField());
+        }
+
+        public void AddNewLineIfNotExist()
+        {
+            if (Text.Count == 0)
+                Text.Add(new List<Pixel>());
+        }
+
+        public void WriteText(string txt)
+        {
+            AddNewLineIfNotExist();
+            List<Pixel> currentLine = Text.Last();
+            for (int i = 0; i < txt.Length; i++)
+            {
+                char chr = txt[i];
+                if (chr == '\n')
+                {
+                    currentLine = new List<Pixel>();
+                    Text.Add(currentLine);
+                    continue;
+                }
+
+                currentLine.Add(new Pixel(chr, DefaultForegroundColor, DefaultBackgroundColor));
+            }
+        }
+
+        public void WriteLineText(string txt)
+        {
+            AddNewLineIfNotExist();
+            List<Pixel> currentLine = Text.Last();
+            for (int i = 0; i < txt.Length; i++)
+            {
+                char chr = txt[i];
+                if (chr == '\n')
+                {
+                    currentLine = new List<Pixel>();
+                    Text.Add(currentLine);
+                    continue;
+                }
+
+                currentLine.Add(new Pixel(chr, DefaultForegroundColor, DefaultBackgroundColor));
+            }
+
+            Text.Add(new List<Pixel>());
+        }
+
+        public void WriteLineText()
+        {
+            Text.Add(new List<Pixel>());
         }
     }
 }
