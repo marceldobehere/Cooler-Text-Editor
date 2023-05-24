@@ -87,7 +87,7 @@ public class Program
                 Input.HandleInputs(20);
 
                 //tViewComp2.Position.X = frame % 30;
-                tViewComp2.Position.Y = frame / 5;
+                //tViewComp2.Position.Y = frame / 5;
 
                 //tViewComp1.Position.X = frame / 3 + 10;
                 //tViewComp1.Position.Y = frame % 8 + 5;
@@ -100,7 +100,7 @@ public class Program
                 }
                 MainScreen.RenderStuffToScreen();
 
-                Task.Delay(10).Wait();
+                Task.Delay(10).Wait(); // Limit yes
             }
             FPS = frameCount / fpsWatch.Elapsed.TotalSeconds;
             Console.Title = $"Cooler Text Editor - {Math.Round(FPS, 2)} FPS";

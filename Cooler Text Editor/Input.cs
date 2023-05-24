@@ -10,8 +10,8 @@ namespace Cooler_Text_Editor
     {
         public static void HandleInputs(int amt)
         {
-            for (int i = 0; i < amt; i++)
-                HandleInput();
+            for (int i = 0; i < amt && HandleInput(); i++)
+                ;
         }
         public static bool HandleInput()
         {
