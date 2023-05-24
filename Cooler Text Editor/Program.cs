@@ -37,11 +37,10 @@ public class Program
 
             {
                 TextComponent textComp = new TextComponent();
-                tViewComp1.AddChild(textComp);
+                tViewComp.AddChild(textComp);
                 
                 textComp.Position = new Position2D(5, 5);
-                textComp.Size = new Size2D(10, 20);
-                textComp.Size.SizeBasedOnParent = (Size2D parent) => { return parent - textComp.Position; };
+                textComp.Size = new Size2D((Size2D parent) => { return parent - textComp.Position; });
 
                 textComp.Text.Clear();
                 textComp.WriteLineText("Hello, World!");
@@ -59,8 +58,7 @@ public class Program
             {
                 TextComponent txtComp = new TextComponent();
                 tViewComp.AddChild(txtComp);
-                txtComp.Size = new Size2D(10, 4);
-                txtComp.Size.SizeBasedOnParent = (Size2D parent) => { return parent - txtComp.Position; };
+                txtComp.Size = new Size2D((Size2D parent) => { return parent - txtComp.Position; });
                 txtComp.Position = new Position2D(4, 2);
                 txtComp.Text.Clear();
                 for (int br = 0; br < 4; br++)

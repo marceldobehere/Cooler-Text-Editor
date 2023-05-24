@@ -15,12 +15,21 @@ namespace Cooler_Text_Editor.WindowStuff
         {
             Width = width;
             Height = height;
+            SizeBasedOnParent = null;
         }   
 
         public Size2D()
         {
             Width = 0;
             Height = 0;
+            SizeBasedOnParent = null;
+        }
+
+        public Size2D(Func<Size2D, Size2D> sizeBasedOnParent)
+        {
+            Width = 0;
+            Height = 0;
+            SizeBasedOnParent = sizeBasedOnParent;
         }
 
         public static Size2D operator +(Size2D a, Size2D b)
