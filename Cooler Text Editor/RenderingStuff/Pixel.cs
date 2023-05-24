@@ -8,8 +8,8 @@ namespace Cooler_Text_Editor
 {
     public struct Pixel
     {
-        public static PixelColor DefaultForegroundColor = PixelColor.ConsoleColorToPixelColor[ConsoleColor.White];
-        private static PixelColor _DefaultBackgroundColor = PixelColor.ConsoleColorToPixelColor[ConsoleColor.Black];
+        public static PixelColor DefaultForegroundColor = PixelColor.White;
+        private static PixelColor _DefaultBackgroundColor = PixelColor.Black;
         public static PixelColor DefaultBackgroundColor
         {
             get { return _DefaultBackgroundColor; }
@@ -20,7 +20,7 @@ namespace Cooler_Text_Editor
             }
         }
         public static Pixel Empty = new Pixel(' ', DefaultForegroundColor, DefaultBackgroundColor);
-        public static Pixel Transparent = new Pixel(' ', new PixelColor(), new PixelColor());
+        public static Pixel Transparent = new Pixel(' ', PixelColor.Transparent, PixelColor.Transparent);
 
 
 
@@ -55,6 +55,13 @@ namespace Cooler_Text_Editor
             BackgroundColor = col;
         }
 
+        public Pixel()
+        {
+            Character = ' ';
+            ForegroundColor = DefaultForegroundColor;
+            BackgroundColor = DefaultBackgroundColor;
+        }
+
         public static bool operator== (Pixel left, Pixel right)
         {
             if (left.Character == right.Character && 
@@ -67,8 +74,14 @@ namespace Cooler_Text_Editor
         }
 
         public static bool operator!= (Pixel left, Pixel right)
-        { 
-            return !(left == right); 
+        {
+            if (left.Character == right.Character &&
+                left.Character == ' ')
+                return left.BackgroundColor != right.BackgroundColor;
+
+            return left.Character != right.Character ||
+                left.ForegroundColor != right.ForegroundColor ||
+                left.BackgroundColor != right.BackgroundColor;
         }
 
         public override string ToString()
@@ -78,9 +91,9 @@ namespace Cooler_Text_Editor
 
         public void WriteOver(Pixel other)
         {
-            if (!other.BackgroundColor.Transparent)
+            if (!other.BackgroundColor.IsTransparent)
                 BackgroundColor = other.BackgroundColor;
-            if (!other.ForegroundColor.Transparent)
+            if (!other.ForegroundColor.IsTransparent)
             {
                 Character = other.Character;
                 ForegroundColor = other.ForegroundColor;

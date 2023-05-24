@@ -1,4 +1,5 @@
-﻿using Cooler_Text_Editor.RenderingStuff;
+﻿using Cooler_Text_Editor.HelperStuff;
+using Cooler_Text_Editor.RenderingStuff;
 using Cooler_Text_Editor.WindowStuff;
 using System;
 using System.Collections.Generic;
@@ -15,10 +16,14 @@ namespace Cooler_Text_Editor.ComponentStuff
         public ScreenComponent(Size2D size)
         {
             Size = size;
+            Visible = true;
+            OldVisible = Visible;
             Position = new Position2D();
-            RenderedScreen = new Pixel[Size.Width, Size.Height];
+            
             UpdateFields = new List<Field2D>();
+            ComponentCursor = new Cursor(this);
 
+            RenderedScreen = new Pixel[Size.Width, Size.Height];
             for (int y = 0; y < Size.Height; y++)
                 for (int x = 0; x < Size.Width; x++)
                     RenderedScreen[x, y] = Pixel.Transparent;
@@ -44,5 +49,9 @@ namespace Cooler_Text_Editor.ComponentStuff
             UpdateFields.Clear();
         }
 
+        public override void HandleKey(ConsoleKeyInfo info)
+        {
+            //throw new NotImplementedException();
+        }
     }
 }

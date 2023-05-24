@@ -18,6 +18,13 @@ namespace Cooler_Text_Editor.WindowStuff
             SizeBasedOnParent = null;
         }   
 
+        public Size2D(Pixel[,] arr)
+        {
+            Width = arr.GetLength(0);
+            Height = arr.GetLength(1);
+            SizeBasedOnParent = null;
+        }
+
         public Size2D()
         {
             Width = 0;

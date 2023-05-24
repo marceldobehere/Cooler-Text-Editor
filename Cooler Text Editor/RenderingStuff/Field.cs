@@ -1,6 +1,7 @@
 ﻿using Cooler_Text_Editor.WindowStuff;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -72,6 +73,29 @@ namespace Cooler_Text_Editor.RenderingStuff
         public override string ToString()
         {
             return $"({TL} - {BR})";
+        }
+
+        public Field2D MergeMinField(Field2D smoller)
+        {
+            bool isValid = true;
+            // check if invalid (only if the fields dont touch at all
+            if (smoller.TL.X > BR.X || smoller.TL.Y > BR.Y || 
+                smoller.BR.X < TL.X || smoller.BR.Y < TL.Y)
+                isValid = false;
+
+            if (smoller.TL.X < TL.X)
+                smoller.TL.X = TL.X;
+            if (smoller.TL.Y < TL.Y)
+                smoller.TL.Y = TL.Y;
+            if (smoller.BR.X > BR.X)
+                smoller.BR.X = BR.X;
+            if (smoller.BR.Y > BR.Y)
+                smoller.BR.Y = BR.Y;
+
+            if (!isValid)
+                return new Field2D(new Size2D(-1, -1));
+
+            return smoller;
         }
     }
 }

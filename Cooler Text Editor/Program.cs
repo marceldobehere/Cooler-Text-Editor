@@ -1,6 +1,7 @@
 ﻿// See https://aka.ms/new-console-template for more information
 using Cooler_Text_Editor;
 using Cooler_Text_Editor.ComponentStuff;
+using Cooler_Text_Editor.HelperStuff;
 using Cooler_Text_Editor.RenderingStuff;
 using Cooler_Text_Editor.WindowStuff;
 using System.Diagnostics;
@@ -13,8 +14,8 @@ public class Program
 
     public static void Main()
     {
-        Console.BackgroundColor = PixelColor.PixelColorToConsoleColor[Pixel.DefaultBackgroundColor];
-        Console.ForegroundColor = PixelColor.PixelColorToConsoleColor[Pixel.DefaultForegroundColor];
+        Console.BackgroundColor = ConsoleColor.Black;
+        Console.ForegroundColor = ConsoleColor.White;
         Console.Clear();
 
         //Console.WriteLine("TEST");
@@ -24,6 +25,12 @@ public class Program
         Exit = false;
         MainScreen = new ScreenComponent(new Size2D(Console.WindowWidth, Console.WindowHeight));
         Rendering.ScreenBackbuffer = new Pixel[MainScreen.Size.Width, MainScreen.Size.Height];
+        for (int y = 0; y < MainScreen.Size.Height; y++)
+            for (int x = 0; x < MainScreen.Size.Width; x++)
+                Rendering.ScreenBackbuffer[x, y] = Pixel.Empty;
+
+        Cursor.MainCursor = MainScreen.MainView.ComponentCursor;
+
         Rendering.InitCursor();
 
         ViewComponent viewComponent = MainScreen.MainView;
@@ -36,16 +43,18 @@ public class Program
             viewComponent.AddChild(tViewComp);
 
             {
-                TextComponent textComp = new TextComponent();
-                tViewComp.AddChild(textComp);
+                TextComponent txtComp = new TextComponent();
+                tViewComp.AddChild(txtComp);
                 
-                textComp.Position = new Position2D(5, 5);
-                textComp.Size = new Size2D((Size2D parent) => { return parent - textComp.Position; });
+                txtComp.Position = new Position2D(5, 5);
+                txtComp.Size = new Size2D((Size2D parent) => { return parent - txtComp.Position; });
 
-                textComp.Text.Clear();
-                textComp.WriteLineText("Hello, World!");
-                textComp.WriteLineText();
-                textComp.WriteLineText("How are you?");
+                txtComp.Text.Clear();
+                txtComp.WriteLineText("Hello, World!");
+                txtComp.WriteLineText();
+                txtComp.WriteLineText("How are you?");
+
+                txtComp.Visible = false;
             }
         }
         {
@@ -71,6 +80,7 @@ public class Program
                         tLine.Add(new Pixel(tStr[i], new PixelColor(0, i * 50, 200), new PixelColor()));
                     }
                 }
+                txtComp.Visible = false;
             }
         }
 
@@ -86,11 +96,15 @@ public class Program
             {
                 Input.HandleInputs(20);
 
-                //tViewComp2.Position.X = frame % 30;
-                //tViewComp2.Position.Y = frame / 5;
+                tViewComp2.Position.X = frame % 30 + 10;
+                tViewComp2.Position.Y = frame / 5;
 
-                //tViewComp1.Position.X = frame / 3 + 10;
-                //tViewComp1.Position.Y = frame % 8 + 5;
+                tViewComp1.Position.X = frame / 3 - 10;
+                tViewComp1.Position.Y = frame % 8 - 3;
+
+                //CursorThing.MainCursor.CursorPosition.X = frame % 20;
+                //CursorThing.MainCursor.CursorPosition.Y = frame / 6;
+                //tViewComp1.Visible = frame % 2 == 0;
 
                 MainScreen.Update();
                 if (Rendering.CheckWindowResize())
@@ -100,7 +114,7 @@ public class Program
                 }
                 MainScreen.RenderStuffToScreen();
 
-                Task.Delay(10).Wait(); // Limit yes
+                Task.Delay(200).Wait(); // Limit yes
             }
             FPS = frameCount / fpsWatch.Elapsed.TotalSeconds;
             Console.Title = $"Cooler Text Editor - {Math.Round(FPS, 2)} FPS";

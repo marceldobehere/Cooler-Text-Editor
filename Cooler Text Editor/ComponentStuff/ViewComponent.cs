@@ -1,4 +1,5 @@
-﻿using Cooler_Text_Editor.RenderingStuff;
+﻿using Cooler_Text_Editor.HelperStuff;
+using Cooler_Text_Editor.RenderingStuff;
 using Cooler_Text_Editor.WindowStuff;
 using System;
 using System.Collections.Generic;
@@ -13,18 +14,23 @@ namespace Cooler_Text_Editor.ComponentStuff
     {
         public List<BasicComponent> Children = new List<BasicComponent>();
         public List<Field2D> OldFields = new List<Field2D>();
-        public PixelColor BackgroundColor = new PixelColor(10, 10, 10);
+        public PixelColor BackgroundColor = Pixel.DefaultBackgroundColor;// new PixelColor(10, 10, 10);
         public PixelColor OldBackgroundColor;
 
         public ViewComponent(Size2D size)
         {
             Size = size;
+            Visible = true;
+            OldVisible = Visible;
             Position = new Position2D();
-            RenderedScreen = new Pixel[Size.Width, Size.Height];
+            
             OldBackgroundColor = BackgroundColor;
             UpdateFields = new List<Field2D>();
+            ComponentCursor = new Cursor(this);
 
             Pixel bgPixel = new Pixel(BackgroundColor);
+
+            RenderedScreen = new Pixel[Size.Width, Size.Height];
             for (int y = 0; y < Size.Height; y++)
                 for (int x = 0; x < Size.Width; x++)
                     RenderedScreen[x, y] = bgPixel;
@@ -35,6 +41,27 @@ namespace Cooler_Text_Editor.ComponentStuff
             child.Parent = this;
             Children.Add(child);
             OldFields.Add(new Field2D());
+           
+        }
+
+        public void RemoveChild(BasicComponent child)
+        {
+            if (child == null)
+                return;
+            if (child.Parent != this)
+                return;
+            if (!Children.Contains(child))
+                return;
+
+            UpdateFields.Add(child.GetField());
+            child.Parent = null;
+            OldFields.RemoveAt(Children.IndexOf(child));
+            Children.Remove(child);
+        }
+
+        public override void HandleKey(ConsoleKeyInfo info)
+        {
+            //throw new NotImplementedException();
         }
 
         protected override void InternalUpdate()
@@ -58,7 +85,7 @@ namespace Cooler_Text_Editor.ComponentStuff
             {
                 OldBackgroundColor = BackgroundColor;
                 UpdateFields.Clear();
-                UpdateFields.Add(new Field2D(new Position2D(), Size));
+                UpdateFields.Add(GetLocalField());
             }
 
             Pixel bgPixel = new Pixel(BackgroundColor);

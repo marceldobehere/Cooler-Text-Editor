@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Cooler_Text_Editor.HelperStuff;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -25,9 +26,43 @@ namespace Cooler_Text_Editor
                 return true;
             }
 
+            if (consoleKeyInfo.Modifiers == ConsoleModifiers.Alt)
+            {
+                if (Cursor.MainCursor != null &&
+                    Cursor.MainCursor.CursorComponent != null)
+                {
+                    if (consoleKeyInfo.Key == ConsoleKey.LeftArrow)
+                    {
+
+                    }
+                    else if (consoleKeyInfo.Key == ConsoleKey.RightArrow)
+                    {
+
+                    }
+                    else if (consoleKeyInfo.Key == ConsoleKey.UpArrow)
+                    {
+                        if (Cursor.MainCursor.CursorComponent.Parent != null &&
+                            Cursor.MainCursor.CursorComponent.Parent.ComponentCursor != null)
+                            Cursor.MainCursor = Cursor.MainCursor.CursorComponent.Parent.ComponentCursor;
+                    }
+                    else if (consoleKeyInfo.Key == ConsoleKey.DownArrow)
+                    {
+
+                    }
+                }
+
+                return true;
+            }
+
+            if (Cursor.MainCursor == null ||
+                Cursor.MainCursor.CursorComponent == null)
+                return true;
 
 
-            Console.Write(consoleKeyInfo.KeyChar);
+            Cursor.MainCursor.CursorComponent.HandleKey(consoleKeyInfo);
+
+
+            //Console.Write(consoleKeyInfo.KeyChar);
 
             return true;
         }

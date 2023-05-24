@@ -1,4 +1,5 @@
-﻿using Cooler_Text_Editor.RenderingStuff;
+﻿using Cooler_Text_Editor.HelperStuff;
+using Cooler_Text_Editor.RenderingStuff;
 using Cooler_Text_Editor.WindowStuff;
 using System;
 using System.Collections.Generic;
@@ -6,12 +7,13 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Cooler_Text_Editor.HelperStuff.Cursor;
 
 namespace Cooler_Text_Editor
 {
     public class Rendering
     {
-        public static Pixel[,] ScreenBackbuffer = new Pixel[1, 1];
+        public static Pixel[,] ScreenBackbuffer = new Pixel[0, 0];
 
         public static bool CheckWindowResize()
         {
@@ -46,18 +48,10 @@ namespace Cooler_Text_Editor
 
         private static void RenderInternalField(Pixel[,] screen, Field2D updateField, List<Position2D> updatedPixels)
         {
-            if (updateField.TL.X < 0)
-                updateField.TL.X = 0;
-            if (updateField.TL.Y < 0)
-                updateField.TL.Y = 0;
-            if (updateField.BR.X > ScreenBackbuffer.GetLength(0) - 1)
-                updateField.BR.X = ScreenBackbuffer.GetLength(0) - 1;
-            if (updateField.BR.Y > ScreenBackbuffer.GetLength(1) - 1)
-                updateField.BR.Y = ScreenBackbuffer.GetLength(1) - 1;
-            if (updateField.BR.X > screen.GetLength(0) - 1)
-                updateField.BR.X = screen.GetLength(0) - 1;
-            if (updateField.BR.Y > screen.GetLength(1) - 1)
-                updateField.BR.Y = screen.GetLength(1) - 1;
+            Field2D Scr1 = new Field2D(new Size2D(ScreenBackbuffer));
+            Field2D Scr2 = new Field2D(new Size2D(screen));
+            Field2D Scr3 = Scr1.MergeMinField(Scr2);
+            updateField = Scr3.MergeMinField(updateField);
 
             for (int y = updateField.TL.Y; y <= updateField.BR.Y; y++)
                 for (int x = updateField.TL.X; x <= updateField.BR.X; x++)
@@ -82,11 +76,11 @@ namespace Cooler_Text_Editor
 
         public static void InitCursor()
         {
+            Position2D actualCursorPos = GetActualCursorPosition(MainCursor);
+            Position2D inbounds = GetInBoundCursor(actualCursorPos);
 
-            CursorPosition = new Position2D(0, 0);
-            OldCursorPosition = new Position2D(0, 0);
-            CursorMode = CursorModeEnum.STEADY_VERTICAL_LINE;
-            OldCursorMode = CursorModeEnum.STEADY_VERTICAL_LINE;
+            OldCursorPosition = actualCursorPos;
+            OldCursorMode = MainCursor.CursorMode;
 
 
             StringBuilder renderString = new StringBuilder();
@@ -95,58 +89,55 @@ namespace Cooler_Text_Editor
             //renderString.Append("\x1b[?25l");
 
             // ESC [ 6 SP q	
-            renderString.Append($"\x1b[{(int)CursorMode} q");
-            renderString.Append("\x1b[" + (InBoundsCursor.X) + ";" + (InBoundsCursor.Y) + "H");
+            renderString.Append($"\x1b[{(int)OldCursorMode} q");
+            renderString.Append("\x1b[" + (inbounds.X) + ";" + (inbounds.Y) + "H");
 
 
             Console.Write(renderString);
         }
 
         public static Position2D OldCursorPosition;
-        public static Position2D CursorPosition;
-        public static CursorModeEnum CursorMode, OldCursorMode;
-        public enum CursorModeEnum
+        public static CursorModeEnum OldCursorMode;
+
+        public static Position2D GetActualCursorPosition(Cursor thing)
         {
-            BLINKING_BLOCK = 1,
-            STEADY_BLOCK = 2,
-            BLINKING_UNDERLINE = 3,
-            STEADY_UNDERLINE = 4,
-            BLINKING_VERTICAL_LINE = 5,
-            STEADY_VERTICAL_LINE = 6
+            return thing.CursorPosition + thing.CursorComponent.GetAbsolutePosition();
         }
 
-        public static Position2D InBoundsCursor
+        public static Position2D GetInBoundCursor(Position2D cursor)
         {
-            get
-            {
-                Position2D tempCursor = CursorPosition;
-                if (tempCursor.X < 0)
-                    tempCursor.X = 0;
-                if (tempCursor.Y < 0)
-                    tempCursor.Y = 0;
-                if (tempCursor.X > ScreenBackbuffer.GetLength(0) - 1)
-                    tempCursor.X = ScreenBackbuffer.GetLength(0) - 1;
-                if (tempCursor.Y > ScreenBackbuffer.GetLength(1) - 1)
-                    tempCursor.Y = ScreenBackbuffer.GetLength(1) - 1;
+            Position2D tempCursor = cursor;
+            if (tempCursor.X < 0)
+                tempCursor.X = 0;
+            if (tempCursor.Y < 0)
+                tempCursor.Y = 0;
+            if (tempCursor.X > ScreenBackbuffer.GetLength(0) - 1)
+                tempCursor.X = ScreenBackbuffer.GetLength(0) - 1;
+            if (tempCursor.Y > ScreenBackbuffer.GetLength(1) - 1)
+                tempCursor.Y = ScreenBackbuffer.GetLength(1) - 1;
 
-                return tempCursor;
-            }
+            return tempCursor;
         }
 
+        static int Bruh = 0;
         public static void DoActualRender(List<Position2D> updatedPoints)
         {
+            Position2D actualCursorPos = GetActualCursorPosition(MainCursor);
+            Position2D inbounds = GetInBoundCursor(actualCursorPos);
+            Bruh = (Bruh + 16) % 100;
             if (updatedPoints.Count == 0)
             {
                 StringBuilder tBuilder = new StringBuilder();
-                if (CursorMode != OldCursorMode)
+                if (MainCursor.CursorMode != OldCursorMode)
                 {
-                    tBuilder.Append($"\x1b[{(int)CursorMode} q");
-                    OldCursorMode = CursorMode;
+                    tBuilder.Append($"\x1b[{(int)MainCursor.CursorMode} q");
+                    OldCursorMode = MainCursor.CursorMode;
                 }
-                if (CursorPosition != OldCursorPosition)
+
+                if (actualCursorPos != OldCursorPosition)
                 {
-                    tBuilder.Append("\x1b[" + (InBoundsCursor.X) + ";" + (InBoundsCursor.Y) + "H");
-                    OldCursorPosition = CursorPosition;
+                    tBuilder.Append("\x1b[" + (inbounds.Y) + ";" + (inbounds.X) + "H");
+                    OldCursorPosition = actualCursorPos;
                 }
 
                 if (tBuilder.Length > 0)
@@ -156,9 +147,14 @@ namespace Cooler_Text_Editor
 
 
             StringBuilder renderString = new StringBuilder();
-            renderString.Append("\x1b[" + (InBoundsCursor.X) + ";" + (InBoundsCursor.Y) + "H");
+            //renderString.Append("\x1b[" + (inbounds.Y) + ";" + (inbounds.X) + "H");
             //ESC [ ? 12 l
             renderString.Append("\x1b[?25l");
+
+            int lastX = updatedPoints[0].X + 100;
+            int lastY = updatedPoints[0].Y + 100;
+            PixelColor lastFG = PixelColor.Transparent;
+            PixelColor lastBG = PixelColor.Transparent;
 
             foreach (Position2D pos in updatedPoints)
             {
@@ -166,13 +162,34 @@ namespace Cooler_Text_Editor
                 int y = pos.Y;
 
                 Pixel pxl = ScreenBackbuffer[x, y];
+                if (y != lastY || x != lastX + 1)
+                    renderString.Append("\x1b[" + (y) + ";" + (x) + "H");
+                else
+                    ;
                 renderString.Append("\x1b[" + (y) + ";" + (x) + "H");
-                renderString.Append($"\u001b[38;{pxl.ForegroundColor.GetAnsiColorString()}");
-                renderString.Append($"\u001b[48;{pxl.BackgroundColor.GetAnsiColorString()}");
-                renderString.Append(pxl.Character);
+
+                if (pxl.Character == '!')
+                    ;
+
+                if (pxl.ForegroundColor != lastFG)
+                    renderString.Append($"\u001b[38;{pxl.ForegroundColor.GetAnsiColorString()}");
+                if (pxl.BackgroundColor != lastBG)
+                    ;//renderString.Append($"\u001b[48;{pxl.BackgroundColor.GetAnsiColorString()}");
+                PixelColor Bruh2 = pxl.BackgroundColor;
+                Bruh2.R = 0;
+                Bruh2.G = Bruh;
+                Bruh2.B = 0;
+                renderString.Append($"\u001b[48;{Bruh2.GetAnsiColorString()}");
+                //renderString.Append(pxl.Character);
+                renderString.Append("?");
+
+                lastX = x;
+                lastY = y;
+                lastFG = pxl.ForegroundColor;
+                lastBG = pxl.BackgroundColor;
             }
 
-            renderString.Append("\x1b[" + (InBoundsCursor.X) + ";" + (InBoundsCursor.Y) + "H");
+            renderString.Append("\x1b[" + (inbounds.Y) + ";" + (inbounds.X) + "H");
             renderString.Append($"\u001b[38;{Pixel.DefaultForegroundColor.GetAnsiColorString()}");
             renderString.Append($"\u001b[48;{Pixel.DefaultBackgroundColor.GetAnsiColorString()}");
             renderString.Append("\x1b[?25h");
@@ -180,40 +197,9 @@ namespace Cooler_Text_Editor
             Console.Write(renderString);
         }
 
-        //public static void RenderMainWindowOLD()
-        //{
-        //    StringBuilder renderString = new StringBuilder();
-        //    renderString.Append("\x1b[" + (0) + ";" + (0) + "H");
-        //    for (int y = 0; y < Program.MainWindow.Size.Height; y++)
-        //        for (int x = 0; x < Program.MainWindow.Size.Width; x++)
-        //            if (ScreenBackbuffer[x, y] != Program.MainWindow.Pixels[x, y])
-        //            {
-        //                Pixel pxl = Program.MainWindow.Pixels[x, y];
-        //                renderString.Append("\x1b[" + (y) + ";" + (x) + "H");
-        //                renderString.Append($"\u001b[38;{pxl.ForegroundColor.GetAnsiColorString()}");
-        //                renderString.Append($"\u001b[48;{pxl.BackgroundColor.GetAnsiColorString()}");
-        //                renderString.Append(pxl.Character);
-        //                //renderString.Append("X");
-        //                ScreenBackbuffer[x, y] = pxl;
-        //            }
-
-        //    renderString.Append("\x1b[" + (0) + ";" + (0) + "H");
-        //    renderString.Append($"\u001b[38;{Pixel.DefaultForegroundColor.GetAnsiColorString()}");
-        //    renderString.Append($"\u001b[48;{Pixel.DefaultBackgroundColor.GetAnsiColorString()}");
-
-        //    Console.Write(renderString);
-        //}
-
         public static void FillPixel(Pixel[,] screen, Field2D field, Pixel pxl)
         {
-            if (field.TL.X < 0)
-                field.TL.X = 0;
-            if (field.TL.Y < 0)
-                field.TL.Y = 0;
-            if (field.BR.X > screen.GetLength(0) - 1)
-                field.BR.X = screen.GetLength(0) - 1;
-            if (field.BR.Y > screen.GetLength(1) - 1)
-                field.BR.Y = screen.GetLength(1) - 1;
+            field = new Field2D(new Size2D(screen)).MergeMinField(field);
 
             for (int y = field.TL.Y; y <= field.BR.Y; y++)
                 for (int x = field.TL.X; x <= field.BR.X; x++)

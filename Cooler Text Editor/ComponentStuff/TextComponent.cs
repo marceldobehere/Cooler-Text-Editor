@@ -1,4 +1,5 @@
-﻿using Cooler_Text_Editor.RenderingStuff;
+﻿using Cooler_Text_Editor.HelperStuff;
+using Cooler_Text_Editor.RenderingStuff;
 using Cooler_Text_Editor.WindowStuff;
 using System;
 using System.Collections.Generic;
@@ -13,7 +14,7 @@ namespace Cooler_Text_Editor.ComponentStuff
         public List<List<Pixel>> Text;
         public bool updateInternal;
         public Size2D OldSize;
-        public Position2D OldPosition;
+        //public Position2D OldPosition;
         public PixelColor BackgroundColor;
 
         public Position2D Scroll;
@@ -24,13 +25,16 @@ namespace Cooler_Text_Editor.ComponentStuff
         public TextComponent()
         {
             Text = new List<List<Pixel>>();
+            Visible = true;
+            OldVisible = Visible;
             Position = new Position2D();
             Size = new Size2D();
             Scroll = new Position2D();
             UpdateFields = new List<Field2D>();
+            ComponentCursor = new Cursor(this);
 
             OldSize = Size;
-            OldPosition = Position;
+            //OldPosition = Position;
             OldScroll = Scroll;
 
             BackgroundColor = new PixelColor();
@@ -43,11 +47,11 @@ namespace Cooler_Text_Editor.ComponentStuff
 
         protected override void InternalUpdate()
         {
-            if (OldSize != Size || OldPosition != Position ||
+            if (OldSize != Size || //OldPosition != Position ||
                 OldScroll != Scroll)
             {
                 OldSize = Size;
-                OldPosition = Position;
+                //OldPosition = Position;
                 updateInternal = true;
             }
 
@@ -128,6 +132,11 @@ namespace Cooler_Text_Editor.ComponentStuff
         public void WriteLineText()
         {
             Text.Add(new List<Pixel>());
+        }
+
+        public override void HandleKey(ConsoleKeyInfo info)
+        {
+            //throw new NotImplementedException();
         }
     }
 }
