@@ -51,8 +51,15 @@ namespace Cooler_Text_Editor
         public Pixel(PixelColor col)
         {
             Character = ' ';
-            ForegroundColor = col;
+            ForegroundColor = PixelColor.Transparent;
             BackgroundColor = col;
+        }
+
+        public Pixel(PixelColor fg, PixelColor bg)
+        {
+            Character = ' ';
+            ForegroundColor = fg;
+            BackgroundColor = bg;
         }
 
         public Pixel()

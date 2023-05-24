@@ -84,13 +84,13 @@ namespace Cooler_Text_Editor
 
 
             StringBuilder renderString = new StringBuilder();
-            renderString.Append("\x1b[" + (0) + ";" + (0) + "H");
+            renderString.Append("\x1b[" + (0 + 1) + ";" + (0 + 1) + "H");
             //ESC [ ? 12 l
             //renderString.Append("\x1b[?25l");
 
             // ESC [ 6 SP q	
             renderString.Append($"\x1b[{(int)OldCursorMode} q");
-            renderString.Append("\x1b[" + (inbounds.X) + ";" + (inbounds.Y) + "H");
+            renderString.Append("\x1b[" + (inbounds.X + 1) + ";" + (inbounds.Y + 1) + "H");
 
 
             Console.Write(renderString);
@@ -136,7 +136,7 @@ namespace Cooler_Text_Editor
 
                 if (actualCursorPos != OldCursorPosition)
                 {
-                    tBuilder.Append("\x1b[" + (inbounds.Y) + ";" + (inbounds.X) + "H");
+                    tBuilder.Append("\x1b[" + (inbounds.Y + 1) + ";" + (inbounds.X + 1) + "H");
                     OldCursorPosition = actualCursorPos;
                 }
 
@@ -163,25 +163,22 @@ namespace Cooler_Text_Editor
 
                 Pixel pxl = ScreenBackbuffer[x, y];
                 if (y != lastY || x != lastX + 1)
-                    renderString.Append("\x1b[" + (y) + ";" + (x) + "H");
-                else
-                    ;
-                renderString.Append("\x1b[" + (y) + ";" + (x) + "H");
-
-                if (pxl.Character == '!')
-                    ;
+                    renderString.Append("\x1b[" + (y + 1) + ";" + (x + 1) + "H");
 
                 if (pxl.ForegroundColor != lastFG)
                     renderString.Append($"\u001b[38;{pxl.ForegroundColor.GetAnsiColorString()}");
                 if (pxl.BackgroundColor != lastBG)
-                    ;//renderString.Append($"\u001b[48;{pxl.BackgroundColor.GetAnsiColorString()}");
+                    renderString.Append($"\u001b[48;{pxl.BackgroundColor.GetAnsiColorString()}");
                 PixelColor Bruh2 = pxl.BackgroundColor;
                 Bruh2.R = 0;
                 Bruh2.G = Bruh;
                 Bruh2.B = 0;
-                renderString.Append($"\u001b[48;{Bruh2.GetAnsiColorString()}");
-                //renderString.Append(pxl.Character);
-                renderString.Append("?");
+                //renderString.Append($"\u001b[48;{Bruh2.GetAnsiColorString()}");
+                if ("\0\n\r\t\u001b\b".Contains(pxl.Character))
+                    renderString.Append(" ");
+                else
+                    renderString.Append(pxl.Character);
+                //renderString.Append("?");
 
                 lastX = x;
                 lastY = y;
@@ -189,7 +186,7 @@ namespace Cooler_Text_Editor
                 lastBG = pxl.BackgroundColor;
             }
 
-            renderString.Append("\x1b[" + (inbounds.Y) + ";" + (inbounds.X) + "H");
+            renderString.Append("\x1b[" + (inbounds.Y + 1) + ";" + (inbounds.X + 1) + "H");
             renderString.Append($"\u001b[38;{Pixel.DefaultForegroundColor.GetAnsiColorString()}");
             renderString.Append($"\u001b[48;{Pixel.DefaultBackgroundColor.GetAnsiColorString()}");
             renderString.Append("\x1b[?25h");
@@ -204,6 +201,15 @@ namespace Cooler_Text_Editor
             for (int y = field.TL.Y; y <= field.BR.Y; y++)
                 for (int x = field.TL.X; x <= field.BR.X; x++)
                     screen[x, y] = pxl;
+        }
+
+        public static void FillOverPixel(Pixel[,] screen, Field2D field, Pixel pxl)
+        {
+            field = new Field2D(new Size2D(screen)).MergeMinField(field);
+
+            for (int y = field.TL.Y; y <= field.BR.Y; y++)
+                for (int x = field.TL.X; x <= field.BR.X; x++)
+                    screen[x, y].WriteOver(pxl);
         }
     }
 }

@@ -34,7 +34,7 @@ public class Program
         Rendering.InitCursor();
 
         ViewComponent viewComponent = MainScreen.MainView;
-        ViewComponent tViewComp1, tViewComp2;
+        ViewComponent tViewComp1, tViewComp2, tViewComp3;
         {
             ViewComponent tViewComp = new ViewComponent(new Size2D(60, 20));
             tViewComp1 = tViewComp;
@@ -54,20 +54,20 @@ public class Program
                 txtComp.WriteLineText();
                 txtComp.WriteLineText("How are you?");
 
-                txtComp.Visible = false;
+                //txtComp.Visible = false;
             }
         }
         {
-            ViewComponent tViewComp = new ViewComponent(new Size2D(20, 10));
+            ViewComponent tViewComp = new ViewComponent(new Size2D(30, 30));
             tViewComp2 = tViewComp;
-            tViewComp.Position = new Position2D(25, 5);
-            tViewComp.BackgroundColor = new PixelColor(200, 200, 100);
+            tViewComp.Position = new Position2D(70, 5);
+            tViewComp.BackgroundColor = new PixelColor(90, 100, 40);
             viewComponent.AddChild(tViewComp);
 
             {
                 TextComponent txtComp = new TextComponent();
                 tViewComp.AddChild(txtComp);
-                txtComp.Size = new Size2D((Size2D parent) => { return parent - txtComp.Position; });
+                txtComp.Size = new Size2D((Size2D parent) => { return new Size2D(parent.Width, parent.Height / 2); });
                 txtComp.Position = new Position2D(4, 2);
                 txtComp.Text.Clear();
                 for (int br = 0; br < 4; br++)
@@ -80,12 +80,37 @@ public class Program
                         tLine.Add(new Pixel(tStr[i], new PixelColor(0, i * 50, 200), new PixelColor()));
                     }
                 }
-                txtComp.Visible = false;
+                //txtComp.Visible = false;
+            }
+
+            {
+                TextComponent txtComp = new TextComponent();
+                tViewComp.AddChild(txtComp);
+                txtComp.Size = new Size2D((Size2D parent) => { return new Size2D(parent.Width, parent.Height / 2); });
+                txtComp.Position = new Position2D(4, 17);
+                txtComp.Text.Clear();
+                for (int br = 0; br < 4; br++)
+                {
+                    List<Pixel> tLine = new List<Pixel>();
+                    txtComp.Text.Add(tLine);
+                    string tStr = "YAY :O  :)";
+                    for (int i = 0; i < tStr.Length; i++)
+                    {
+                        tLine.Add(new Pixel(tStr[i], new PixelColor(0, i * 50, 200), new PixelColor()));
+                    }
+                }
+                //txtComp.Visible = false;
             }
         }
 
+        {
+            TerminalComponent terminalComponent = new TerminalComponent(new Size2D((Size2D parent) => { return new Size2D(parent.Width, parent.Height); }));
+            terminalComponent.Size = new Size2D(90, 20);
+            terminalComponent.Position = new Position2D(15, 28);
+            viewComponent.AddChild(terminalComponent);
+        }
 
-        Stopwatch fpsWatch = new Stopwatch();
+            Stopwatch fpsWatch = new Stopwatch();
         int frameCount = 60;
         FPS = 1;
 
@@ -96,15 +121,27 @@ public class Program
             {
                 Input.HandleInputs(20);
 
-                tViewComp2.Position.X = frame % 30 + 10;
-                tViewComp2.Position.Y = frame / 5;
+                //tViewComp2.Position.X = frame % 30 + 10;
+                //tViewComp2.Position.Y = frame / 9;
 
-                tViewComp1.Position.X = frame / 3 - 10;
-                tViewComp1.Position.Y = frame % 8 - 3;
+                //tViewComp1.Position.X = frame / 3 - 10;
+                //tViewComp1.Position.Y = frame / 7;
+
+                ////tViewComp2.Visible = false;
+                //tViewComp2.Position.X = 0;
+                //tViewComp2.Position.Y = 0;
+
+                ////tViewComp1.Visible = false;
+                //tViewComp1.Position.X = 1;
+                //tViewComp1.Position.Y = 1;
+
 
                 //CursorThing.MainCursor.CursorPosition.X = frame % 20;
                 //CursorThing.MainCursor.CursorPosition.Y = frame / 6;
                 //tViewComp1.Visible = frame % 2 == 0;
+
+                //Cursor.MainCursor.CursorPosition.X = 1;
+                //Cursor.MainCursor.CursorPosition.Y = 2;
 
                 MainScreen.Update();
                 if (Rendering.CheckWindowResize())
@@ -114,7 +151,7 @@ public class Program
                 }
                 MainScreen.RenderStuffToScreen();
 
-                Task.Delay(200).Wait(); // Limit yes
+                Task.Delay(10).Wait(); // Limit yes
             }
             FPS = frameCount / fpsWatch.Elapsed.TotalSeconds;
             Console.Title = $"Cooler Text Editor - {Math.Round(FPS, 2)} FPS";

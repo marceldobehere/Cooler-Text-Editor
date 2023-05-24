@@ -20,38 +20,37 @@ namespace Cooler_Text_Editor
                 return false;
 
             ConsoleKeyInfo consoleKeyInfo = Console.ReadKey(true);
-            if (consoleKeyInfo.Modifiers == ConsoleModifiers.Alt && consoleKeyInfo.Key == ConsoleKey.X)
+            if (consoleKeyInfo.Modifiers == ConsoleModifiers.Alt && 
+                consoleKeyInfo.Key == ConsoleKey.X)
             {
                 Program.Exit = true;
                 return true;
             }
 
-            if (consoleKeyInfo.Modifiers == ConsoleModifiers.Alt)
+            if (consoleKeyInfo.Modifiers == ConsoleModifiers.Control &&
+                consoleKeyInfo.Key == ConsoleKey.Backspace)
             {
-                if (Cursor.MainCursor != null &&
-                    Cursor.MainCursor.CursorComponent != null)
+                if (Cursor.MainCursor.CursorComponent.Parent != null &&
+                    Cursor.MainCursor.CursorComponent.Parent.ComponentCursor != null)
                 {
-                    if (consoleKeyInfo.Key == ConsoleKey.LeftArrow)
-                    {
-
-                    }
-                    else if (consoleKeyInfo.Key == ConsoleKey.RightArrow)
-                    {
-
-                    }
-                    else if (consoleKeyInfo.Key == ConsoleKey.UpArrow)
-                    {
-                        if (Cursor.MainCursor.CursorComponent.Parent != null &&
-                            Cursor.MainCursor.CursorComponent.Parent.ComponentCursor != null)
-                            Cursor.MainCursor = Cursor.MainCursor.CursorComponent.Parent.ComponentCursor;
-                    }
-                    else if (consoleKeyInfo.Key == ConsoleKey.DownArrow)
-                    {
-
-                    }
+                    Cursor.MainCursor.CursorComponent.HandleExitFocus();
+                    Cursor.MainCursor = Cursor.MainCursor.CursorComponent.Parent.ComponentCursor;
+                    Cursor.MainCursor.CursorComponent.HandleEnterFocus();
+                    return true;
                 }
+            }
 
-                return true;
+            if (consoleKeyInfo.Modifiers == ConsoleModifiers.Control &&
+                consoleKeyInfo.Key == ConsoleKey.Enter)
+            {
+                if (Cursor.MainCursor.HoverComponent != null &&
+                    Cursor.MainCursor.HoverComponent.ComponentCursor != null)
+                {
+                    Cursor.MainCursor.CursorComponent.HandleExitFocus();
+                    Cursor.MainCursor = Cursor.MainCursor.HoverComponent.ComponentCursor;
+                    Cursor.MainCursor.CursorComponent.HandleEnterFocus();
+                    return true;
+                }
             }
 
             if (Cursor.MainCursor == null ||

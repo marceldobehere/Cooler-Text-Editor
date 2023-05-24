@@ -23,12 +23,14 @@ namespace Cooler_Text_Editor.HelperStuff
         public static Cursor MainCursor;
 
         public BasicComponent CursorComponent;
+        public BasicComponent HoverComponent;
         public Position2D CursorPosition;
         public CursorModeEnum CursorMode;
 
         public Cursor(BasicComponent mainComponent)
         {
             CursorComponent = mainComponent;
+            HoverComponent = null;
             CursorPosition = new Position2D();
             CursorMode = CursorModeEnum.STEADY_VERTICAL_LINE;
         }

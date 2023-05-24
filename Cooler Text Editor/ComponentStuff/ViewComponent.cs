@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -23,7 +24,7 @@ namespace Cooler_Text_Editor.ComponentStuff
             Visible = true;
             OldVisible = Visible;
             Position = new Position2D();
-            
+
             OldBackgroundColor = BackgroundColor;
             UpdateFields = new List<Field2D>();
             ComponentCursor = new Cursor(this);
@@ -40,8 +41,8 @@ namespace Cooler_Text_Editor.ComponentStuff
         {
             child.Parent = this;
             Children.Add(child);
-            OldFields.Add(new Field2D());
-           
+            OldFields.Add(new Field2D(new Size2D(-1, -1)));
+
         }
 
         public void RemoveChild(BasicComponent child)
@@ -61,7 +62,35 @@ namespace Cooler_Text_Editor.ComponentStuff
 
         public override void HandleKey(ConsoleKeyInfo info)
         {
-            //throw new NotImplementedException();
+            if (info.Modifiers == ConsoleModifiers.Control &&
+                (info.Key == ConsoleKey.RightArrow ||
+                info.Key == ConsoleKey.LeftArrow))
+            {
+                if (Children.Count == 0)
+                {
+                    ComponentCursor.HoverComponent = null;
+                    return;
+                }
+
+                if (Children.Contains(ComponentCursor.HoverComponent))
+                {
+                    int cIndex = Children.IndexOf(ComponentCursor.HoverComponent) + Children.Count;
+
+                    if (info.Modifiers == ConsoleModifiers.Control &&
+                        info.Key == ConsoleKey.RightArrow)
+                        cIndex++;
+                    else if (info.Modifiers == ConsoleModifiers.Control &&
+                        info.Key == ConsoleKey.LeftArrow)
+                        cIndex--;
+                    cIndex = cIndex % Children.Count;
+                    ComponentCursor.HoverComponent = Children[cIndex];
+                }
+                else
+                {
+                    ComponentCursor.HoverComponent = Children[0];
+                }
+            }
+
         }
 
         protected override void InternalUpdate()

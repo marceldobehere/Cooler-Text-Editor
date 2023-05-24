@@ -22,6 +22,7 @@ namespace Cooler_Text_Editor.ComponentStuff
             
             UpdateFields = new List<Field2D>();
             ComponentCursor = new Cursor(this);
+            
 
             RenderedScreen = new Pixel[Size.Width, Size.Height];
             for (int y = 0; y < Size.Height; y++)
@@ -31,6 +32,7 @@ namespace Cooler_Text_Editor.ComponentStuff
             MainView = new ViewComponent(Size);
             MainView.Parent = this;
             MainView.Size.SizeBasedOnParent = (Size2D parent) => { return parent; };
+            ComponentCursor.HoverComponent = MainView;
         }
 
         protected override void InternalUpdate()
@@ -51,7 +53,7 @@ namespace Cooler_Text_Editor.ComponentStuff
 
         public override void HandleKey(ConsoleKeyInfo info)
         {
-            //throw new NotImplementedException();
+            MainView.HandleKey(info);
         }
     }
 }

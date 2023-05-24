@@ -17,8 +17,7 @@ namespace Cooler_Text_Editor.ComponentStuff
         public BasicComponent Parent = null;
         public List<Field2D> UpdateFields = new List<Field2D>();
         public bool Visible, OldVisible;
-        // Maybe add Fixed OldSize here and auto Resize
-        public PixelColor BorderColor = PixelColor.Red;
+        public PixelColor BorderColor = PixelColor.Transparent;
         public PixelColor OldBorderColor = PixelColor.Transparent;
         public Cursor ComponentCursor = null;
         
@@ -33,9 +32,14 @@ namespace Cooler_Text_Editor.ComponentStuff
                 if (temp.Height < 0)
                     temp.Height = 0;
 
-
                 if (temp != Size)
                     Resize(temp);
+            }
+
+            if (Size.Width != RenderedScreen.GetLength(0) ||
+                Size.Height != RenderedScreen.GetLength(1))
+            {
+                Resize(Size);
             }
 
             if (Visible != OldVisible)
@@ -47,11 +51,30 @@ namespace Cooler_Text_Editor.ComponentStuff
                 UpdateFields.Add(GetLocalField());
             }
 
+            if (this == Cursor.MainCursor.CursorComponent)
+                BorderColor = PixelColor.Blue;
+            else if (this == Cursor.MainCursor.HoverComponent)
+                BorderColor = PixelColor.Yellow;
+            else
+                BorderColor = PixelColor.Transparent;
+
             if (BorderColor != OldBorderColor)
             {
                 OldBorderColor = BorderColor;
-                UpdateFields.Clear();
-                UpdateFields.Add(GetLocalField());
+                //UpdateFields.Clear();
+                //UpdateFields.Add(GetLocalField());
+                Field2D tField1 = GetField();
+                Field2D TopBorder = new Field2D(tField1.TL, new Position2D(tField1.BR.X, tField1.TL.Y));
+                Field2D LeftBorder = new Field2D(tField1.TL, new Position2D(tField1.TL.X, tField1.BR.Y));
+                Field2D RightBorder = new Field2D(new Position2D(tField1.BR.X, tField1.TL.Y), tField1.BR);
+                Field2D BottomBorder = new Field2D(new Position2D(tField1.TL.X, tField1.BR.Y), tField1.BR);
+                if (Parent != null)
+                {
+                    Parent.UpdateFields.Add(TopBorder);
+                    Parent.UpdateFields.Add(LeftBorder);
+                    Parent.UpdateFields.Add(RightBorder);
+                    Parent.UpdateFields.Add(BottomBorder);
+                }
             }
 
             InternalUpdate();
@@ -70,35 +93,37 @@ namespace Cooler_Text_Editor.ComponentStuff
             Field2D internalField = tField3.MergeMinField(tField1.MergeMinField(tField2));
             internalField -= Position;
 
-            //Field2D internalField = field - Position;
-
-            //if (internalField.TL.X < 0)
-            //    internalField.TL.X = 0;
-            //if (internalField.TL.Y < 0)
-            //    internalField.TL.Y = 0;
-            //if (internalField.BR.X > Size.Width - 1)
-            //    internalField.BR.X = Size.Width - 1;
-            //if (internalField.BR.Y > Size.Height - 1)
-            //    internalField.BR.Y = Size.Height - 1;
-
-
-            //// Need to check later
-            //if (internalField.TL.X + Position.X < 0)
-            //    internalField.TL.X = -Position.X;
-            //if (internalField.TL.Y + Position.Y < 0)
-            //    internalField.TL.Y = -Position.Y;
-            //if (internalField.BR.X + Position.X > screen.GetLength(0) - 1)
-            //    internalField.BR.X = screen.GetLength(0) - 1 - Position.X;
-            //if (internalField.BR.Y + Position.Y > screen.GetLength(1) - 1)
-            //    internalField.BR.Y = screen.GetLength(1) - 1 - Position.Y;
-
-
             for (int y = internalField.TL.Y; y <= internalField.BR.Y; y++)    
                 for (int x = internalField.TL.X; x <= internalField.BR.X; x++)
                     screen[x + Position.X, y + Position.Y].WriteOver(RenderedScreen[x, y]);
 
             if (BorderColor.IsTransparent)
                 return;
+            Pixel borderPixel = new Pixel(BorderColor);
+            
+            {
+                Field2D TopBorder = new Field2D(tField1.TL, new Position2D(tField1.BR.X, tField1.TL.Y));
+                TopBorder = tField3.MergeMinField(TopBorder.MergeMinField(tField2));
+                Rendering.FillOverPixel(screen, TopBorder, borderPixel);
+            }
+
+            {
+                Field2D LeftBorder = new Field2D(tField1.TL, new Position2D(tField1.TL.X, tField1.BR.Y));
+                LeftBorder = tField3.MergeMinField(LeftBorder.MergeMinField(tField2));
+                Rendering.FillOverPixel(screen, LeftBorder, borderPixel);
+            }
+
+            {
+                Field2D RightBorder = new Field2D(new Position2D(tField1.BR.X, tField1.TL.Y), tField1.BR);
+                RightBorder = tField3.MergeMinField(RightBorder.MergeMinField(tField2));
+                Rendering.FillOverPixel(screen, RightBorder, borderPixel);
+            }
+
+            {
+                Field2D BottomBorder = new Field2D(new Position2D(tField1.TL.X, tField1.BR.Y), tField1.BR);
+                BottomBorder = tField3.MergeMinField(BottomBorder.MergeMinField(tField2));
+                Rendering.FillOverPixel(screen, BottomBorder, borderPixel);
+            }
         }
 
         public Field2D GetField()
