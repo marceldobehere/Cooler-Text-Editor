@@ -76,7 +76,7 @@ namespace Cooler_Text_Editor
 
         public static void InitCursor()
         {
-            Position2D actualCursorPos = GetActualCursorPosition(MainCursor);
+            Position2D actualCursorPos = GetActualCursorPosition(MainCursor, false);
             Position2D inbounds = GetInBoundCursor(actualCursorPos);
 
             OldCursorPosition = actualCursorPos;
@@ -99,22 +99,30 @@ namespace Cooler_Text_Editor
         public static Position2D OldCursorPosition;
         public static CursorModeEnum OldCursorMode;
 
-        public static Position2D GetActualCursorPosition(Cursor thing)
+        public static Position2D GetActualCursorPosition(Cursor thing, bool allowOutOfComponentBounds)
         {
-            return thing.CursorPosition + thing.CursorComponent.GetAbsolutePosition();
+            if (allowOutOfComponentBounds)
+                return thing.CursorPosition + thing.CursorComponent.GetAbsolutePosition();
+            else
+                return GetInBoundCursor(thing.CursorPosition, new Field2D(thing.CursorComponent.Size)) + thing.CursorComponent.GetAbsolutePosition();
         }
 
         public static Position2D GetInBoundCursor(Position2D cursor)
         {
+            return GetInBoundCursor(cursor, new Field2D(new Size2D(ScreenBackbuffer)));
+        }
+
+        public static Position2D GetInBoundCursor(Position2D cursor, Field2D field)
+        {
             Position2D tempCursor = cursor;
-            if (tempCursor.X < 0)
-                tempCursor.X = 0;
-            if (tempCursor.Y < 0)
-                tempCursor.Y = 0;
-            if (tempCursor.X > ScreenBackbuffer.GetLength(0) - 1)
-                tempCursor.X = ScreenBackbuffer.GetLength(0) - 1;
-            if (tempCursor.Y > ScreenBackbuffer.GetLength(1) - 1)
-                tempCursor.Y = ScreenBackbuffer.GetLength(1) - 1;
+            if (tempCursor.X < field.TL.X)
+                tempCursor.X = field.TL.X;
+            if (tempCursor.Y < field.TL.Y)
+                tempCursor.Y = field.TL.Y;
+            if (tempCursor.X > field.BR.X)
+                tempCursor.X = field.BR.X;
+            if (tempCursor.Y > field.BR.Y)
+                tempCursor.Y = field.BR.Y;
 
             return tempCursor;
         }
@@ -122,7 +130,7 @@ namespace Cooler_Text_Editor
         static int Bruh = 0;
         public static void DoActualRender(List<Position2D> updatedPoints)
         {
-            Position2D actualCursorPos = GetActualCursorPosition(MainCursor);
+            Position2D actualCursorPos = GetActualCursorPosition(MainCursor, false);
             Position2D inbounds = GetInBoundCursor(actualCursorPos);
             Bruh = (Bruh + 16) % 100;
             if (updatedPoints.Count == 0)

@@ -93,7 +93,11 @@ namespace Cooler_Text_Editor.ComponentStuff
             {
                 ReadTask = PowershellProc.StandardOutput.ReadAsync(CharCache, 0, CharCacheSize);
             }
-            else if (ReadTask.IsCompleted)
+            else if (ReadTask.IsCanceled || ReadTask.IsFaulted)
+            {
+                ReadTask = null;
+            }
+            else if (ReadTask.IsCompletedSuccessfully)
             {
                 for (int i2 = 0; i2 < ReadTask.Result; i2++)
                 {
@@ -118,6 +122,13 @@ namespace Cooler_Text_Editor.ComponentStuff
             }
 
             UpdateFields.Clear();
+            ComponentCursor.CursorPosition.Y = InternalTextComponent.Text.Count - InternalTextComponent.Scroll.Y - 1;
+            if (InternalTextComponent.Text.Count > 0)
+            {
+                ComponentCursor.CursorPosition.X = InternalTextComponent.Text.Last().Count - InternalTextComponent.Scroll.X;
+            }
+            else
+                ComponentCursor.CursorPosition.X = 0;
         }
     }
 }
