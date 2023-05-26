@@ -5,6 +5,7 @@ using Cooler_Text_Editor.HelperStuff;
 using Cooler_Text_Editor.RenderingStuff;
 using Cooler_Text_Editor.WindowStuff;
 using System.Diagnostics;
+using System.Drawing;
 
 public class Program
 {
@@ -104,9 +105,18 @@ public class Program
         }
 
         {
+            ImageComponent imgComp = new ImageComponent(new Bitmap("../../testImages/rocc.png"));
+            viewComponent.AddChild(imgComp);
+            imgComp.Position = new Position2D(10, 3);
+            imgComp.Size = new Size2D(60, 30);
+            imgComp.UpdateScreen();
+
+        }
+
+        {
             TerminalComponent terminalComponent = new TerminalComponent(new Size2D((Size2D parent) => { return new Size2D(parent.Width, parent.Height); }));
             terminalComponent.Size = new Size2D(90, 20);
-            terminalComponent.Position = new Position2D(15, 28);
+            terminalComponent.Position = new Position2D(15, 35);
             viewComponent.AddChild(terminalComponent);
         }
 

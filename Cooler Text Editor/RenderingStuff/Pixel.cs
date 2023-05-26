@@ -107,5 +107,10 @@ namespace Cooler_Text_Editor
             }
             
         }
+
+        public static Pixel Create2DColPixel(PixelColor top, PixelColor bottom)
+        {
+            return new Pixel('▄', bottom, top);
+        }
     }
 }
