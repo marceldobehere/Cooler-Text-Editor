@@ -139,7 +139,6 @@ namespace Cooler_Text_Editor.ComponentStuff
                         {
                             Text.RemoveAt(Text.Count - 1);
                             currentLine = Text.Last();
-                            currentLine.RemoveAt(currentLine.Count - 1);
                         }
                     }
                     continue;

@@ -51,7 +51,57 @@ namespace Cooler_Text_Editor.ComponentStuff
         }
 
 
+        public void CheckCursorBounds()
+        {
+            if (InternalCursor.CursorPosition.Y > InternalTextComponent.Text.Count - 1)
+            {
+                InternalCursor.CursorPosition.Y = InternalTextComponent.Text.Count - 1;
 
+                if (InternalCursor.CursorPosition.Y >= 0 && InternalCursor.CursorPosition.Y < InternalTextComponent.Text.Count)
+                    InternalCursor.CursorPosition.X = InternalTextComponent.Text[InternalCursor.CursorPosition.Y].Count;
+            }
+
+            if (InternalCursor.CursorPosition.Y >= 0 && InternalCursor.CursorPosition.Y < InternalTextComponent.Text.Count)
+            {
+                if (InternalCursor.CursorPosition.X > InternalTextComponent.Text[InternalCursor.CursorPosition.Y].Count)
+                    InternalCursor.CursorPosition.X = InternalTextComponent.Text[InternalCursor.CursorPosition.Y].Count;
+            }
+            else
+                InternalCursor.CursorPosition.X = 0;
+
+
+            if (InternalCursor.CursorPosition.Y < 0)
+                InternalCursor.CursorPosition.Y = 0;
+
+            if (InternalCursor.CursorPosition.X < 0)
+                InternalCursor.CursorPosition.X = 0;
+        }
+
+        public void CheckCursorScroll()
+        {
+            CheckCursorBounds();
+
+            for (int i = 0; i < 5; i++)
+            {
+                if ((InternalCursor.CursorPosition.Y - InternalTextComponent.Scroll.Y) < 3)
+                    InternalTextComponent.Scroll.Y--;
+                if ((InternalCursor.CursorPosition.Y - InternalTextComponent.Scroll.Y) > InternalTextComponent.Size.Height - 3)
+                    InternalTextComponent.Scroll.Y++;
+            }
+            if (InternalTextComponent.Scroll.Y < 0)
+                InternalTextComponent.Scroll.Y = 0;
+
+            for (int i = 0; i < 5; i++)
+            {
+                while ((InternalCursor.CursorPosition.X - InternalTextComponent.Scroll.X) < 3)
+                    InternalTextComponent.Scroll.X--;
+                while ((InternalCursor.CursorPosition.X - InternalTextComponent.Scroll.X) > InternalTextComponent.Size.Width - 3)
+                    InternalTextComponent.Scroll.X++;
+            }
+            if (InternalTextComponent.Scroll.X < 0)
+                InternalTextComponent.Scroll.X = 0;
+
+        }
 
         public override void HandleKey(ConsoleKeyInfo info)
         {
@@ -96,30 +146,9 @@ namespace Cooler_Text_Editor.ComponentStuff
                 }
                 else if (info.Key == ConsoleKey.DownArrow)
                     InternalCursor.CursorPosition.Y++;
-                
-
-                if (InternalCursor.CursorPosition.Y > InternalTextComponent.Text.Count - 1)
-                {
-                    InternalCursor.CursorPosition.Y = InternalTextComponent.Text.Count - 1;
-
-                    if (InternalCursor.CursorPosition.Y >= 0 && InternalCursor.CursorPosition.Y < InternalTextComponent.Text.Count)
-                        InternalCursor.CursorPosition.X = InternalTextComponent.Text[InternalCursor.CursorPosition.Y].Count;
-                }
-
-                if (InternalCursor.CursorPosition.Y >= 0 && InternalCursor.CursorPosition.Y < InternalTextComponent.Text.Count)
-                {
-                    if (InternalCursor.CursorPosition.X > InternalTextComponent.Text[InternalCursor.CursorPosition.Y].Count)
-                        InternalCursor.CursorPosition.X = InternalTextComponent.Text[InternalCursor.CursorPosition.Y].Count;
-                }
-                else
-                    InternalCursor.CursorPosition.X = 0;
 
 
-                if (InternalCursor.CursorPosition.Y < 0)
-                    InternalCursor.CursorPosition.Y = 0;
-
-                if (InternalCursor.CursorPosition.X < 0)
-                    InternalCursor.CursorPosition.X = 0;
+                CheckCursorBounds();
 
                 return;
             }
@@ -149,7 +178,9 @@ namespace Cooler_Text_Editor.ComponentStuff
         {
             Pixel bgPixel = new Pixel(BackgroundColor, BackgroundColor);
 
+            CheckCursorScroll();
             InternalTextComponent.Update();
+
 
             for (int i = 0; i < UpdateFields.Count; i++)
             {

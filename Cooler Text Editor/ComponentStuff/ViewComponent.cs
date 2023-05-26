@@ -30,7 +30,7 @@ namespace Cooler_Text_Editor.ComponentStuff
             ComponentCursor = new Cursor(this);
             ComponentCursor.CursorShown = false;
 
-            Pixel bgPixel = new Pixel(BackgroundColor);
+            Pixel bgPixel = new Pixel(BackgroundColor, BackgroundColor);
 
             RenderedScreen = new Pixel[Size.Width, Size.Height];
             for (int y = 0; y < Size.Height; y++)
@@ -122,7 +122,7 @@ namespace Cooler_Text_Editor.ComponentStuff
                 UpdateFields.Add(GetLocalField());
             }
 
-            Pixel bgPixel = new Pixel(BackgroundColor);
+            Pixel bgPixel = new Pixel(BackgroundColor, BackgroundColor);
 
             for (int i = 0; i < UpdateFields.Count; i++)
             {

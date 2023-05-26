@@ -61,7 +61,7 @@ public class Program
         }
 
         {
-            EditorComponent txtComp = new EditorComponent(new Size2D(60, 20));
+            EditorComponent txtComp = new EditorComponent(new Size2D(120, 40)); //(new Size2D(60, 20));
             viewComponent.AddChild(txtComp);
 
             txtComp.Position = new Position2D(5, 5);
@@ -160,7 +160,7 @@ public class Program
             fpsWatch.Restart();
             for (int frame = 0; frame < frameCount && !Exit; frame++)
             {
-                Input.HandleInputs(20);
+                Input.HandleInputs(50);
 
                 //tViewComp2.Position.X = frame % 30 + 10;
                 //tViewComp2.Position.Y = frame / 9;
