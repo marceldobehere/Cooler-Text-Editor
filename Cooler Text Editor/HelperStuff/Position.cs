@@ -17,6 +17,12 @@ namespace Cooler_Text_Editor.WindowStuff
             Y = y;
         }
 
+        public Position2D(int x)
+        {
+            X = x;
+            Y = x;
+        }
+
         public Position2D()
         {
             X = 0;

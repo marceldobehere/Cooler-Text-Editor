@@ -13,6 +13,7 @@ namespace Cooler_Text_Editor.ComponentStuff
     public class ImageComponent : BasicComponent
     {
         public Bitmap Image;
+        public Size2D OldSize;
 
         public ImageComponent(Bitmap image)
         {
@@ -65,6 +66,7 @@ namespace Cooler_Text_Editor.ComponentStuff
 
                     RenderedScreen[x, y] = Pixel.Create2DColPixel(col1, col2);
                 }
+            OldSize = Size;
         }
 
         public override void HandleKey(ConsoleKeyInfo info)
@@ -72,9 +74,15 @@ namespace Cooler_Text_Editor.ComponentStuff
             //throw new NotImplementedException();
         }
 
+
         protected override void InternalUpdate()
         {
-            //throw new NotImplementedException();
+            if (OldSize != Size)
+            {
+                UpdateScreen();
+                if (Parent != null)
+                    Parent.UpdateFields.Add(GetField());
+            }
         }
     }
 }
