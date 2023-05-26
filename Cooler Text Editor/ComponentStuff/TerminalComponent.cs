@@ -47,6 +47,11 @@ namespace Cooler_Text_Editor.ComponentStuff
             InternalTextComponent.updateInternal = true;
 
 
+            RestartPowershellProc();
+        }
+
+        public void RestartPowershellProc()
+        {
             PowershellProc = new Process();
             PowershellProc.StartInfo = new ProcessStartInfo("powershell.exe");
             PowershellProc.StartInfo.RedirectStandardOutput = true;
@@ -57,7 +62,19 @@ namespace Cooler_Text_Editor.ComponentStuff
             PowershellProc.StartInfo.RedirectStandardError = true;
             PowershellProc.Start();
 
+            AttachClearHostAlias();
+        }
 
+        public void AttachClearHostAlias()
+        {
+            PowershellProc.StandardInput.WriteLine(@"
+                function Invoke-CustomClearHost {"+
+                    $"Write-Host '{(char)(0x0C)}'"
+                 + @"}
+
+                Set-Alias -Name Clear-Host -Value Invoke-CustomClearHost -Option AllScope");
+
+            PowershellProc.StandardInput.WriteLine("cls");
         }
 
         public override void HandleKey(ConsoleKeyInfo info)
@@ -84,11 +101,17 @@ namespace Cooler_Text_Editor.ComponentStuff
         }
 
         public Task<int> ReadTask = null;
-        public const int CharCacheSize = 50;
+        public const int CharCacheSize = 500;
         public char[] CharCache = new char[CharCacheSize];
 
         protected override void InternalUpdate()
         {
+            if (PowershellProc == null || PowershellProc.HasExited)
+            {
+                RestartPowershellProc();
+            }
+
+
             if (ReadTask == null)
             {
                 ReadTask = PowershellProc.StandardOutput.ReadAsync(CharCache, 0, CharCacheSize);

@@ -13,3 +13,23 @@ C:\Users\MarcelTest\Documents\C#\Cooler Text Editor\Cooler Text Editor\obj\Relea
 C:\Users\MarcelTest\Documents\C#\Cooler Text Editor\Cooler Text Editor\obj\Release\net7.0\Cooler Text Editor.pdb
 C:\Users\MarcelTest\Documents\C#\Cooler Text Editor\Cooler Text Editor\obj\Release\net7.0\Cooler Text Editor.genruntimeconfig.cache
 C:\Users\MarcelTest\Documents\C#\Cooler Text Editor\Cooler Text Editor\obj\Release\net7.0\ref\Cooler Text Editor.dll
+E:\C SHARP\Cooler-Text-Editor\Cooler Text Editor\bin\Release\net7.0\Cooler Text Editor.exe
+E:\C SHARP\Cooler-Text-Editor\Cooler Text Editor\bin\Release\net7.0\Cooler Text Editor.deps.json
+E:\C SHARP\Cooler-Text-Editor\Cooler Text Editor\bin\Release\net7.0\Cooler Text Editor.runtimeconfig.json
+E:\C SHARP\Cooler-Text-Editor\Cooler Text Editor\bin\Release\net7.0\Cooler Text Editor.dll
+E:\C SHARP\Cooler-Text-Editor\Cooler Text Editor\bin\Release\net7.0\Cooler Text Editor.pdb
+E:\C SHARP\Cooler-Text-Editor\Cooler Text Editor\bin\Release\net7.0\Microsoft.Win32.SystemEvents.dll
+E:\C SHARP\Cooler-Text-Editor\Cooler Text Editor\bin\Release\net7.0\System.Drawing.Common.dll
+E:\C SHARP\Cooler-Text-Editor\Cooler Text Editor\bin\Release\net7.0\runtimes\win\lib\net7.0\Microsoft.Win32.SystemEvents.dll
+E:\C SHARP\Cooler-Text-Editor\Cooler Text Editor\bin\Release\net7.0\runtimes\win\lib\net7.0\System.Drawing.Common.dll
+E:\C SHARP\Cooler-Text-Editor\Cooler Text Editor\obj\Release\net7.0\Cooler Text Editor.csproj.AssemblyReference.cache
+E:\C SHARP\Cooler-Text-Editor\Cooler Text Editor\obj\Release\net7.0\Cooler Text Editor.GeneratedMSBuildEditorConfig.editorconfig
+E:\C SHARP\Cooler-Text-Editor\Cooler Text Editor\obj\Release\net7.0\Cooler Text Editor.AssemblyInfoInputs.cache
+E:\C SHARP\Cooler-Text-Editor\Cooler Text Editor\obj\Release\net7.0\Cooler Text Editor.AssemblyInfo.cs
+E:\C SHARP\Cooler-Text-Editor\Cooler Text Editor\obj\Release\net7.0\Cooler Text Editor.csproj.CoreCompileInputs.cache
+E:\C SHARP\Cooler-Text-Editor\Cooler Text Editor\obj\Release\net7.0\Cooler Text Editor.csproj.CopyComplete
+E:\C SHARP\Cooler-Text-Editor\Cooler Text Editor\obj\Release\net7.0\Cooler Text Editor.dll
+E:\C SHARP\Cooler-Text-Editor\Cooler Text Editor\obj\Release\net7.0\refint\Cooler Text Editor.dll
+E:\C SHARP\Cooler-Text-Editor\Cooler Text Editor\obj\Release\net7.0\Cooler Text Editor.pdb
+E:\C SHARP\Cooler-Text-Editor\Cooler Text Editor\obj\Release\net7.0\Cooler Text Editor.genruntimeconfig.cache
+E:\C SHARP\Cooler-Text-Editor\Cooler Text Editor\obj\Release\net7.0\ref\Cooler Text Editor.dll

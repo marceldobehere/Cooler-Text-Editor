@@ -144,7 +144,12 @@ namespace Cooler_Text_Editor.ComponentStuff
                     }
                     continue;
                 }
-                if (chr == '\u001b' && i + 1 > txt.Length)
+                if (chr == 0x0C)
+                {
+                    Clear();
+                    return;
+                }
+                if (chr == '\u001b')// && i + 1 < txt.Length)
                 {
                     //string after = txt.Substring(i);
                     // \u001b[2J

@@ -114,6 +114,15 @@ public class Program
         }
 
         {
+            ImageComponent imgComp = new ImageComponent(new Bitmap("../../testImages/wat.gif"));
+            viewComponent.AddChild(imgComp);
+            imgComp.Position = new Position2D(190, 5);
+            imgComp.Size = new Size2D(60, 30);// new Size2D((Size2D parent) => { return new Size2D(parent.Width / 4, parent.Height / 4); });
+            imgComp.UpdateScreen();
+
+        }
+
+        {
             TerminalComponent terminalComponent = new TerminalComponent(new Size2D((Size2D parent) => { return new Size2D(parent.Width, parent.Height); }));
             terminalComponent.Size = new Size2D(80, 20);
             terminalComponent.Position = new Position2D(15, 35);
