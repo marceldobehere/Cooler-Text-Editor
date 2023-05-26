@@ -22,7 +22,7 @@ namespace Cooler_Text_Editor.ComponentStuff
 
         public PixelColor DefaultForegroundColor, DefaultBackgroundColor;
 
-        public bool AllowEdit, AutoYScroll;
+        public bool AutoYScroll;
 
         public TextComponent()
         {
@@ -34,9 +34,9 @@ namespace Cooler_Text_Editor.ComponentStuff
             Scroll = new Position2D();
             UpdateFields = new List<Field2D>();
             ComponentCursor = new Cursor(this);
+            ComponentCursor.CursorShown = false;
 
-            AllowEdit = false;
-            AutoYScroll = true;
+            AutoYScroll = false;
 
             OldSize = Size;
             //OldPosition = Position;
@@ -157,6 +157,17 @@ namespace Cooler_Text_Editor.ComponentStuff
 
                     continue;
                 }
+                if (chr == '\t')
+                {
+                    for (int j = 0; j < 4; j++)
+                        currentLine.Add(new Pixel(' ', fg, bg));
+                    continue;
+                }
+                if ("\r".Contains(chr))
+                {
+                    continue;
+                }
+
 
                 currentLine.Add(new Pixel(chr, fg, bg));
             }
@@ -184,9 +195,6 @@ namespace Cooler_Text_Editor.ComponentStuff
         public override void HandleKey(ConsoleKeyInfo info)
         {
             //throw new NotImplementedException();
-
-            if (!AllowEdit)
-                return;
         }
         public void Clear()
         {

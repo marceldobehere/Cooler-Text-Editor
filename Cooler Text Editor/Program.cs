@@ -42,22 +42,45 @@ public class Program
             tViewComp.Position = new Position2D(5, 5);
             tViewComp.BackgroundColor = new PixelColor(200, 60, 90);
             viewComponent.AddChild(tViewComp);
+            tViewComp1.Visible = false;
 
-            {
-                TextComponent txtComp = new TextComponent();
-                tViewComp.AddChild(txtComp);
+            //{
+            //    TextComponent txtComp = new TextComponent();
+            //    tViewComp.AddChild(txtComp);
                 
-                txtComp.Position = new Position2D(5, 5);
-                txtComp.Size = new Size2D((Size2D parent) => { return parent - txtComp.Position; });
+            //    txtComp.Position = new Position2D(5, 5);
+            //    txtComp.Size = new Size2D((Size2D parent) => { return parent - txtComp.Position; });
 
-                txtComp.Text.Clear();
-                txtComp.WriteLineText("Hello, World!");
-                txtComp.WriteLineText();
-                txtComp.WriteLineText("How are you?");
+            //    txtComp.Text.Clear();
+            //    txtComp.WriteLineText("Hello, World!");
+            //    txtComp.WriteLineText();
+            //    txtComp.WriteLineText("How are you?");
 
-                //txtComp.Visible = false;
-            }
+            //    //txtComp.Visible = false;
+            //}
         }
+
+        {
+            EditorComponent txtComp = new EditorComponent(new Size2D(60, 20));
+            viewComponent.AddChild(txtComp);
+
+            txtComp.Position = new Position2D(5, 5);
+            //txtComp.Size = new Size2D((Size2D parent) => { return parent - txtComp.Position; });
+            txtComp.BackgroundColor = new PixelColor(10, 20, 30);
+
+            txtComp.InternalTextComponent.Text.Clear();
+            //txtComp.InternalTextComponent.WriteLineText("Hello, World!");
+            //txtComp.WriteLineText();
+            //txtComp.WriteLineText("How are you?");
+            using (StreamReader reader = new StreamReader("../../testFiles/test.txt"))
+            {
+                txtComp.InternalTextComponent.WriteText(reader.ReadToEnd());
+            }
+
+            //txtComp.Visible = false;
+        }
+
+
         {
             ViewComponent tViewComp = new ViewComponent(new Size2D(30, 30));
             tViewComp2 = tViewComp;
@@ -97,7 +120,7 @@ public class Program
                     string tStr = "YAY :O  :)";
                     for (int i = 0; i < tStr.Length; i++)
                     {
-                        tLine.Add(new Pixel(tStr[i], new PixelColor(0, i * 50, 200), new PixelColor()));
+                        tLine.Add(new Pixel(tStr[i], new PixelColor(0, 200, i * 30), new PixelColor()));
                     }
                 }
                 //txtComp.Visible = false;
@@ -113,14 +136,13 @@ public class Program
 
         }
 
-        {
-            ImageComponent imgComp = new ImageComponent(new Bitmap("../../testImages/wat.gif"));
-            viewComponent.AddChild(imgComp);
-            imgComp.Position = new Position2D(190, 5);
-            imgComp.Size = new Size2D(60, 30);// new Size2D((Size2D parent) => { return new Size2D(parent.Width / 4, parent.Height / 4); });
-            imgComp.UpdateScreen();
-
-        }
+        //{
+        //    ImageComponent imgComp = new ImageComponent(new Bitmap("../../testImages/wat.gif"));
+        //    viewComponent.AddChild(imgComp);
+        //    imgComp.Position = new Position2D(0, 0);
+        //    imgComp.Size = new Size2D((Size2D parent) => { return new Size2D(parent.Width / 2, parent.Height / 2); });
+        //    imgComp.UpdateScreen();
+        //}
 
         {
             TerminalComponent terminalComponent = new TerminalComponent(new Size2D((Size2D parent) => { return new Size2D(parent.Width, parent.Height); }));
@@ -170,7 +192,7 @@ public class Program
                 }
                 MainScreen.RenderStuffToScreen();
 
-                Task.Delay(10).Wait(); // Limit yes
+                Task.Delay(5).Wait(); // Limit yes
             }
             FPS = frameCount / fpsWatch.Elapsed.TotalSeconds;
             Console.Title = $"Cooler Text Editor - {Math.Round(FPS, 2)} FPS";

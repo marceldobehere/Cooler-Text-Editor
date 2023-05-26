@@ -28,6 +28,7 @@ namespace Cooler_Text_Editor.ComponentStuff
             OldBackgroundColor = BackgroundColor;
             UpdateFields = new List<Field2D>();
             ComponentCursor = new Cursor(this);
+            ComponentCursor.CursorShown = false;
 
             Pixel bgPixel = new Pixel(BackgroundColor);
 
@@ -66,15 +67,18 @@ namespace Cooler_Text_Editor.ComponentStuff
                 (info.Key == ConsoleKey.RightArrow ||
                 info.Key == ConsoleKey.LeftArrow))
             {
-                if (Children.Count == 0)
+                List<BasicComponent> visibleChildren = Children.Where((BasicComponent child) => { return child.Visible; }).ToList();
+
+                if (visibleChildren.Count == 0)
                 {
                     ComponentCursor.HoverComponent = null;
                     return;
                 }
 
-                if (Children.Contains(ComponentCursor.HoverComponent))
+               
+                if (visibleChildren.Contains(ComponentCursor.HoverComponent))
                 {
-                    int cIndex = Children.IndexOf(ComponentCursor.HoverComponent) + Children.Count;
+                    int cIndex = visibleChildren.IndexOf(ComponentCursor.HoverComponent) + visibleChildren.Count;
 
                     if (info.Modifiers == ConsoleModifiers.Control &&
                         info.Key == ConsoleKey.RightArrow)
@@ -82,12 +86,13 @@ namespace Cooler_Text_Editor.ComponentStuff
                     else if (info.Modifiers == ConsoleModifiers.Control &&
                         info.Key == ConsoleKey.LeftArrow)
                         cIndex--;
-                    cIndex = cIndex % Children.Count;
-                    ComponentCursor.HoverComponent = Children[cIndex];
+
+                    cIndex = cIndex % visibleChildren.Count;
+                    ComponentCursor.HoverComponent = visibleChildren[cIndex];
                 }
                 else
                 {
-                    ComponentCursor.HoverComponent = Children[0];
+                    ComponentCursor.HoverComponent = visibleChildren[0];
                 }
             }
 

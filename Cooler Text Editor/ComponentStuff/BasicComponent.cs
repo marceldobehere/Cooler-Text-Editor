@@ -52,9 +52,9 @@ namespace Cooler_Text_Editor.ComponentStuff
             }
 
             if (this == Cursor.MainCursor.CursorComponent)
-                BorderColor = PixelColor.Blue;
+                BorderColor = new PixelColor(100, 120, 150);
             else if (this == Cursor.MainCursor.HoverComponent)
-                BorderColor = PixelColor.Yellow;
+                BorderColor = new PixelColor(80, 130, 100);
             else
                 BorderColor = PixelColor.Transparent;
 

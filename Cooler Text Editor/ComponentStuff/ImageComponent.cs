@@ -29,6 +29,7 @@ namespace Cooler_Text_Editor.ComponentStuff
             //OldBackgroundColor = BackgroundColor;
             UpdateFields = new List<Field2D>();
             ComponentCursor = new Cursor(this);
+            ComponentCursor.CursorShown = false;
 
             LoadImage(image);
         }
@@ -91,19 +92,39 @@ namespace Cooler_Text_Editor.ComponentStuff
             byte[] imageData = new byte[image.Height * image.Width * 4];
             //try
             //{
+            //unsafe
+            //{
+            //    byte* ptr = (byte*)bitmapData.Scan0;
+            //    for (int i = 0; i < image.Height * image.Width * 4; i += 4)
+            //    {
+            //        byte R = ptr[i+2];
+            //        byte G = ptr[i+1];
+            //        byte B = ptr[i+0];
+            //        byte A = ptr[i+3];
+
+            //        pixels[(i / 4) % image.Width, (i / 4) / image.Width] = new PixelColor(R, G, B);
+            //    }
+            //}
+
+            int imgH = image.Height;
+            int imgW = image.Width;
+
+            
             unsafe
             {
                 byte* ptr = (byte*)bitmapData.Scan0;
-                for (int i = 0; i < image.Height * image.Width * 4; i += 4)
+                Parallel.For(0, imgH * imgW, i =>
                 {
-                    byte R = ptr[i+2];
-                    byte G = ptr[i+1];
-                    byte B = ptr[i+0];
-                    byte A = ptr[i+3];
+                    i *= 4;
+                    byte R = ptr[i + 2];
+                    byte G = ptr[i + 1];
+                    byte B = ptr[i + 0];
+                    //byte A = ptr[i + 3];
 
-                    pixels[(i / 4) % image.Width, (i / 4) / image.Width] = new PixelColor(R, G, B);
-                }
+                    pixels[(i / 4) % imgW, (i / 4) / imgW] = new PixelColor(R, G, B);
+                });
             }
+
             //}
             //catch (Exception e)
             //{
@@ -116,7 +137,11 @@ namespace Cooler_Text_Editor.ComponentStuff
 
         public void UpdateScreen()
         {
-            RenderedScreen = new Pixel[Size.Width, Size.Height];
+            if (RenderedScreen == null ||
+                Size.Width != RenderedScreen.GetLength(0) || 
+                Size.Height != RenderedScreen.GetLength(1))
+                RenderedScreen = new Pixel[Size.Width, Size.Height];
+
             if (Image == null)
             {
                 Pixel bgPixel = Pixel.Transparent;
@@ -160,7 +185,8 @@ namespace Cooler_Text_Editor.ComponentStuff
                     PixelColor col1 = gifData[currentFrame][aX, aY1];
                     PixelColor col2 = gifData[currentFrame][aX, aY2];
 
-
+                    //if (currentFrame != 0)
+                    //    break;
                     RenderedScreen[x, y] = Pixel.Create2DColPixel(col1, col2);
                 }
             OldSize = Size;
@@ -182,10 +208,10 @@ namespace Cooler_Text_Editor.ComponentStuff
                 lastTimeMS = time;
 
                 delayLeft -= diff;
-                if (delayLeft < 0)
+                while (delayLeft < 0)
                 {
                     currentFrame++;
-                    delayLeft = frameDelay;
+                    delayLeft += frameDelay;
                 }
             }
 

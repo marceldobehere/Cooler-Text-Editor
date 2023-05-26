@@ -1,4 +1,5 @@
-﻿using Cooler_Text_Editor.HelperStuff;
+﻿using Cooler_Text_Editor.ComponentStuff;
+using Cooler_Text_Editor.HelperStuff;
 using Cooler_Text_Editor.RenderingStuff;
 using Cooler_Text_Editor.WindowStuff;
 using System;
@@ -81,6 +82,7 @@ namespace Cooler_Text_Editor
 
             OldCursorPosition = actualCursorPos;
             OldCursorMode = MainCursor.CursorMode;
+            OldCursorShown = MainCursor.CursorShown;
 
 
             StringBuilder renderString = new StringBuilder();
@@ -98,13 +100,25 @@ namespace Cooler_Text_Editor
 
         public static Position2D OldCursorPosition;
         public static CursorModeEnum OldCursorMode;
+        public static bool OldCursorShown;
 
         public static Position2D GetActualCursorPosition(Cursor thing, bool allowOutOfComponentBounds)
         {
             if (allowOutOfComponentBounds)
                 return thing.CursorPosition + thing.CursorComponent.GetAbsolutePosition();
             else
-                return GetInBoundCursor(thing.CursorPosition, new Field2D(thing.CursorComponent.Size)) + thing.CursorComponent.GetAbsolutePosition();
+            {
+                //return GetInBoundCursor(thing.CursorPosition, new Field2D(thing.CursorComponent.Size)) + thing.CursorComponent.GetAbsolutePosition();
+                Position2D mPos = thing.CursorPosition;
+                BasicComponent tParent = thing.CursorComponent;
+                while (tParent != null)
+                {
+                    mPos = GetInBoundCursor(mPos + tParent.Position, tParent.GetField());
+                    tParent = tParent.Parent;
+                }
+
+                return mPos;
+            }
         }
 
         public static Position2D GetInBoundCursor(Position2D cursor)
@@ -146,6 +160,15 @@ namespace Cooler_Text_Editor
                 {
                     tBuilder.Append("\x1b[" + (inbounds.Y + 1) + ";" + (inbounds.X + 1) + "H");
                     OldCursorPosition = actualCursorPos;
+                }
+
+                if (MainCursor.CursorShown != OldCursorShown)
+                {
+                    if (MainCursor.CursorShown)
+                        tBuilder.Append("\x1b[?25h");
+                    else
+                        tBuilder.Append("\x1b[?25l");
+                    OldCursorShown = MainCursor.CursorShown;
                 }
 
                 if (tBuilder.Length > 0)
@@ -197,7 +220,10 @@ namespace Cooler_Text_Editor
             renderString.Append("\x1b[" + (inbounds.Y + 1) + ";" + (inbounds.X + 1) + "H");
             renderString.Append($"\u001b[38;{Pixel.DefaultForegroundColor.GetAnsiColorString()}");
             renderString.Append($"\u001b[48;{Pixel.DefaultBackgroundColor.GetAnsiColorString()}");
-            renderString.Append("\x1b[?25h");
+            if (MainCursor.CursorShown)
+                renderString.Append("\x1b[?25h");
+            else
+                renderString.Append("\x1b[?25l");
 
             Console.Write(renderString);
         }

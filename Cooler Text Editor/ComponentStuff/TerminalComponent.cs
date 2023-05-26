@@ -27,6 +27,9 @@ namespace Cooler_Text_Editor.ComponentStuff
             UpdateFields = new List<Field2D>();
             ComponentCursor = new Cursor(this);
 
+            ForegroundColor = PixelColor.White;
+            BackgroundColor = PixelColor.Black;
+
             Pixel bgPixel = new Pixel(BackgroundColor, BackgroundColor);
 
             RenderedScreen = new Pixel[Size.Width, Size.Height];
@@ -34,8 +37,7 @@ namespace Cooler_Text_Editor.ComponentStuff
                 for (int x = 0; x < Size.Width; x++)
                     RenderedScreen[x, y] = bgPixel;
 
-            ForegroundColor = PixelColor.White;
-            BackgroundColor = PixelColor.Black;
+
 
             InternalTextComponent = new TextComponent();
             InternalTextComponent.Size = new Size2D(((Size2D parent) => { return parent; }));
@@ -45,6 +47,7 @@ namespace Cooler_Text_Editor.ComponentStuff
             InternalTextComponent.DefaultBackgroundColor = BackgroundColor;
             InternalTextComponent.DefaultForegroundColor = ForegroundColor;
             InternalTextComponent.updateInternal = true;
+            InternalTextComponent.AutoYScroll = true;
 
 
             RestartPowershellProc();
@@ -131,12 +134,13 @@ namespace Cooler_Text_Editor.ComponentStuff
             }
 
             InternalTextComponent.Update();
+            Pixel bgPixel = new Pixel(BackgroundColor, BackgroundColor);
 
             for (int i = 0; i < UpdateFields.Count; i++)
             {
                 Field2D tempField = UpdateFields[i];
 
-                //Rendering.FillPixel(RenderedScreen, tempField, bgPixel);
+                Rendering.FillPixel(RenderedScreen, tempField, bgPixel);
 
                 InternalTextComponent.RenderTo(RenderedScreen, tempField);
 

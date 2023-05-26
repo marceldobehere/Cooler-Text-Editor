@@ -26,6 +26,7 @@ namespace Cooler_Text_Editor.HelperStuff
         public BasicComponent HoverComponent;
         public Position2D CursorPosition;
         public CursorModeEnum CursorMode;
+        public bool CursorShown;
 
         public Cursor(BasicComponent mainComponent)
         {
@@ -33,6 +34,7 @@ namespace Cooler_Text_Editor.HelperStuff
             HoverComponent = null;
             CursorPosition = new Position2D();
             CursorMode = CursorModeEnum.STEADY_VERTICAL_LINE;
+            CursorShown = true;
         }
     }
 }

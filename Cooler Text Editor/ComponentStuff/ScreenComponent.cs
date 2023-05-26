@@ -33,6 +33,7 @@ namespace Cooler_Text_Editor.ComponentStuff
             MainView.Parent = this;
             MainView.Size.SizeBasedOnParent = (Size2D parent) => { return parent; };
             ComponentCursor.HoverComponent = MainView;
+            ComponentCursor.CursorShown = false;
         }
 
         protected override void InternalUpdate()

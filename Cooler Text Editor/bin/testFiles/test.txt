@@ -1,0 +1,11 @@
+public class Program
+{
+    public static bool Exit;
+    public static double FPS;
+    public static ScreenComponent MainScreen;
+
+    public static void Main()
+    {
+        Console.WriteLine("Hello, world!");
+    }
+}
