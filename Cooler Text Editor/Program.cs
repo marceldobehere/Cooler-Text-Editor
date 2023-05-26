@@ -107,8 +107,8 @@ public class Program
         {
             ImageComponent imgComp = new ImageComponent(new Bitmap("../../testImages/rocc.png"));
             viewComponent.AddChild(imgComp);
-            imgComp.Position = new Position2D(10, 5);
-            imgComp.Size = new Size2D(60, 30);
+            imgComp.Position = new Position2D(120, 5);
+            imgComp.Size = new Size2D(60, 30);// new Size2D((Size2D parent) => { return new Size2D(parent.Width / 4, parent.Height / 4); });
             imgComp.UpdateScreen();
 
         }
