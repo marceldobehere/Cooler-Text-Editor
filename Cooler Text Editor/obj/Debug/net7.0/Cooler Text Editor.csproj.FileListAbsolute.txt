@@ -1,0 +1,20 @@
+C:\Users\MarcelTest\Documents\C#\Cooler Text Editor\Cooler Text Editor\bin\Debug\net7.0\Cooler Text Editor.exe
+C:\Users\MarcelTest\Documents\C#\Cooler Text Editor\Cooler Text Editor\bin\Debug\net7.0\Cooler Text Editor.deps.json
+C:\Users\MarcelTest\Documents\C#\Cooler Text Editor\Cooler Text Editor\bin\Debug\net7.0\Cooler Text Editor.runtimeconfig.json
+C:\Users\MarcelTest\Documents\C#\Cooler Text Editor\Cooler Text Editor\bin\Debug\net7.0\Cooler Text Editor.dll
+C:\Users\MarcelTest\Documents\C#\Cooler Text Editor\Cooler Text Editor\bin\Debug\net7.0\Cooler Text Editor.pdb
+C:\Users\MarcelTest\Documents\C#\Cooler Text Editor\Cooler Text Editor\obj\Debug\net7.0\Cooler Text Editor.csproj.AssemblyReference.cache
+C:\Users\MarcelTest\Documents\C#\Cooler Text Editor\Cooler Text Editor\obj\Debug\net7.0\Cooler Text Editor.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\MarcelTest\Documents\C#\Cooler Text Editor\Cooler Text Editor\obj\Debug\net7.0\Cooler Text Editor.AssemblyInfoInputs.cache
+C:\Users\MarcelTest\Documents\C#\Cooler Text Editor\Cooler Text Editor\obj\Debug\net7.0\Cooler Text Editor.AssemblyInfo.cs
+C:\Users\MarcelTest\Documents\C#\Cooler Text Editor\Cooler Text Editor\obj\Debug\net7.0\Cooler Text Editor.csproj.CoreCompileInputs.cache
+C:\Users\MarcelTest\Documents\C#\Cooler Text Editor\Cooler Text Editor\obj\Debug\net7.0\Cooler Text Editor.dll
+C:\Users\MarcelTest\Documents\C#\Cooler Text Editor\Cooler Text Editor\obj\Debug\net7.0\refint\Cooler Text Editor.dll
+C:\Users\MarcelTest\Documents\C#\Cooler Text Editor\Cooler Text Editor\obj\Debug\net7.0\Cooler Text Editor.pdb
+C:\Users\MarcelTest\Documents\C#\Cooler Text Editor\Cooler Text Editor\obj\Debug\net7.0\Cooler Text Editor.genruntimeconfig.cache
+C:\Users\MarcelTest\Documents\C#\Cooler Text Editor\Cooler Text Editor\obj\Debug\net7.0\ref\Cooler Text Editor.dll
+C:\Users\MarcelTest\Documents\C#\Cooler Text Editor\Cooler Text Editor\bin\Debug\net7.0\Microsoft.Win32.SystemEvents.dll
+C:\Users\MarcelTest\Documents\C#\Cooler Text Editor\Cooler Text Editor\bin\Debug\net7.0\System.Drawing.Common.dll
+C:\Users\MarcelTest\Documents\C#\Cooler Text Editor\Cooler Text Editor\bin\Debug\net7.0\runtimes\win\lib\net7.0\Microsoft.Win32.SystemEvents.dll
+C:\Users\MarcelTest\Documents\C#\Cooler Text Editor\Cooler Text Editor\bin\Debug\net7.0\runtimes\win\lib\net7.0\System.Drawing.Common.dll
+C:\Users\MarcelTest\Documents\C#\Cooler Text Editor\Cooler Text Editor\obj\Debug\net7.0\Cooler Text Editor.csproj.CopyComplete

@@ -1,0 +1,23 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v7.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v7.0": {
+      "Cooler Text Editor/1.0.0": {
+        "runtime": {
+          "Cooler Text Editor.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "Cooler Text Editor/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}
