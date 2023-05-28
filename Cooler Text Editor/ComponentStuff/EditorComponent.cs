@@ -152,24 +152,66 @@ namespace Cooler_Text_Editor.ComponentStuff
 
                 return;
             }
+            CheckCursorBounds();
 
 
-            if (info.Key == ConsoleKey.Enter)
+
+            if (info.Key == ConsoleKey.Escape && info.Modifiers == ConsoleModifiers.Shift)
             {
+                InternalTextComponent.Clear();
                 InternalTextComponent.WriteLineText();
+            }
+            else if (info.Key == ConsoleKey.Enter)
+            {
+                //InternalTextComponent.WriteLineText();
+                if (InternalCursor.CursorPosition.X == 0)
+                {
+                    InternalTextComponent.Text.Insert(InternalCursor.CursorPosition.Y, new List<Pixel>());
+                    InternalCursor.CursorPosition.Y++;
+                }
+                else
+                {
+                    List<Pixel> temp = new List<Pixel>();
+                    for (int i = InternalCursor.CursorPosition.X; i < InternalTextComponent.Text[InternalCursor.CursorPosition.Y].Count; i++)
+                        temp.Add(InternalTextComponent.Text[InternalCursor.CursorPosition.Y][i]);
+
+                    InternalTextComponent.Text[InternalCursor.CursorPosition.Y].RemoveRange(InternalCursor.CursorPosition.X, InternalTextComponent.Text[InternalCursor.CursorPosition.Y].Count - InternalCursor.CursorPosition.X);
+                    InternalTextComponent.Text.Insert(InternalCursor.CursorPosition.Y + 1, temp);
+                    InternalCursor.CursorPosition.Y++;
+                    InternalCursor.CursorPosition.X = 0;
+                }
             }
             else if (info.Key == ConsoleKey.Backspace)
             {
-
-                InternalTextComponent.WriteText(info.KeyChar.ToString(), ForegroundColor, BackgroundColor);
+                //InternalTextComponent.WriteText(info.KeyChar.ToString(), ForegroundColor, BackgroundColor);
+                if (InternalCursor.CursorPosition.X == 0)
+                {
+                    if (InternalCursor.CursorPosition.Y > 0)
+                    {
+                        InternalCursor.CursorPosition.Y--;
+                        InternalCursor.CursorPosition.X = InternalTextComponent.Text[InternalCursor.CursorPosition.Y].Count;
+                        InternalTextComponent.Text[InternalCursor.CursorPosition.Y].AddRange(InternalTextComponent.Text[InternalCursor.CursorPosition.Y + 1]);
+                        InternalTextComponent.Text.RemoveAt(InternalCursor.CursorPosition.Y + 1);
+                    }
+                }
+                else
+                {
+                    InternalTextComponent.Text[InternalCursor.CursorPosition.Y].RemoveAt(InternalCursor.CursorPosition.X - 1);
+                    InternalCursor.CursorPosition.X--;
+                }
             }
-            else if (info.Key == ConsoleKey.Escape && info.Modifiers == ConsoleModifiers.Shift)
+            else if (info.Key == ConsoleKey.Tab)
             {
-                InternalTextComponent.Clear();
+                for (int i = 0; i < 4; i++)
+                {
+                    InternalTextComponent.Text[InternalCursor.CursorPosition.Y].Insert(InternalCursor.CursorPosition.X, new Pixel(' ', ForegroundColor, BackgroundColor));
+                    InternalCursor.CursorPosition.X++;
+                }
             }
             else
             {
-                InternalTextComponent.WriteText(info.KeyChar.ToString(), ForegroundColor, BackgroundColor);
+                InternalTextComponent.Text[InternalCursor.CursorPosition.Y].Insert(InternalCursor.CursorPosition.X, new Pixel(info.KeyChar, ForegroundColor, BackgroundColor));
+                InternalCursor.CursorPosition.X++;
             }
         }
 

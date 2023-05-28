@@ -144,12 +144,12 @@ public class Program
         //    imgComp.UpdateScreen();
         //}
 
-        {
-            TerminalComponent terminalComponent = new TerminalComponent(new Size2D((Size2D parent) => { return new Size2D(parent.Width, parent.Height); }));
-            terminalComponent.Size = new Size2D(80, 20);
-            terminalComponent.Position = new Position2D(15, 35);
-            viewComponent.AddChild(terminalComponent);
-        }
+        //{
+        //    TerminalComponent terminalComponent = new TerminalComponent(new Size2D((Size2D parent) => { return new Size2D(parent.Width, parent.Height); }));
+        //    terminalComponent.Size = new Size2D(80, 20);
+        //    terminalComponent.Position = new Position2D(15, 35);
+        //    viewComponent.AddChild(terminalComponent);
+        //}
 
             Stopwatch fpsWatch = new Stopwatch();
         int frameCount = 60;

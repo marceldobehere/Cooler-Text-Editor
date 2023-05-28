@@ -72,15 +72,15 @@ namespace Cooler_Text_Editor.ComponentStuff
                 updateInternal = true;
             }
 
-            if (!updateInternal)
-                return;
-            updateInternal = false;
+            if (updateInternal)
+            {
+                RenderedScreen = new Pixel[Size.Width, Size.Height];
+            }
+            
 
-            RenderedScreen = new Pixel[Size.Width, Size.Height];
-
-            bool tU = false;
 
             Pixel tempBG = new Pixel(BackgroundColor, BackgroundColor);
+            List<Field2D> tUpdates = new List<Field2D>();
             for (int y = Scroll.Y; y < Scroll.Y + Size.Height; y++)
             {
                 for (int x = Scroll.X; x < Scroll.X + Size.Width; x++)
@@ -96,13 +96,27 @@ namespace Cooler_Text_Editor.ComponentStuff
                     if (RenderedScreen[x2, y2] != t)
                     {
                         RenderedScreen[x2, y2] = t;
-                        tU = true;
+
+                        Field2D tUpdate = new Field2D(Position + new Position2D(0, y2), new Size2D(Size.Width, 1));
+                        if (!tUpdates.Contains(tUpdate))
+                            tUpdates.Add(tUpdate);
                     }
                 }
             }
 
-            if (tU && Parent != null)
-                Parent.UpdateFields.Add(GetField());
+            if (Parent != null)
+            {
+                if (updateInternal)
+                {
+                    Parent.UpdateFields.Add(GetField());
+                }
+                else
+                {
+                    Parent.UpdateFields.AddRange(tUpdates);
+                }
+            }
+
+            updateInternal = false;
         }
 
         public void AddNewLineIfNotExist()

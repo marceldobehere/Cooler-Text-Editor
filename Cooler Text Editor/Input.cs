@@ -20,7 +20,7 @@ namespace Cooler_Text_Editor
                 return false;
 
             ConsoleKeyInfo consoleKeyInfo = Console.ReadKey(true);
-            if (consoleKeyInfo.Modifiers == ConsoleModifiers.Alt && 
+            if (consoleKeyInfo.Modifiers == ConsoleModifiers.Alt &&
                 consoleKeyInfo.Key == ConsoleKey.X)
             {
                 Program.Exit = true;
@@ -59,6 +59,12 @@ namespace Cooler_Text_Editor
 
 
             Cursor.MainCursor.CursorComponent.HandleKey(consoleKeyInfo);
+
+            if (consoleKeyInfo.Key == ConsoleKey.LeftArrow ||
+                consoleKeyInfo.Key == ConsoleKey.RightArrow ||
+                consoleKeyInfo.Key == ConsoleKey.UpArrow ||
+                consoleKeyInfo.Key == ConsoleKey.DownArrow)
+                return false;
 
 
             //Console.Write(consoleKeyInfo.KeyChar);
