@@ -160,7 +160,7 @@ public class Program
             fpsWatch.Restart();
             for (int frame = 0; frame < frameCount && !Exit; frame++)
             {
-                Input.HandleInputs(50);
+                Input.HandleInputs(100);
 
                 //tViewComp2.Position.X = frame % 30 + 10;
                 //tViewComp2.Position.Y = frame / 9;
