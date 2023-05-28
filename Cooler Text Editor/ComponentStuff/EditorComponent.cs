@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Cooler_Text_Editor.ComponentStuff
@@ -81,26 +82,24 @@ namespace Cooler_Text_Editor.ComponentStuff
         {
             CheckCursorBounds();
 
-            for (int i = 0; i < 5; i++)
             {
-                if ((InternalCursor.CursorPosition.Y - InternalTextComponent.Scroll.Y) < 3)
+                while ((InternalCursor.CursorPosition.Y - InternalTextComponent.Scroll.Y) < 3)
                     InternalTextComponent.Scroll.Y--;
-                if ((InternalCursor.CursorPosition.Y - InternalTextComponent.Scroll.Y) > InternalTextComponent.Size.Height - 3)
+                while ((InternalTextComponent.Size.Height > 3) && (InternalCursor.CursorPosition.Y - InternalTextComponent.Scroll.Y) > InternalTextComponent.Size.Height - 3)
                     InternalTextComponent.Scroll.Y++;
             }
             if (InternalTextComponent.Scroll.Y < 0)
                 InternalTextComponent.Scroll.Y = 0;
 
-            for (int i = 0; i < 5; i++)
             {
                 while ((InternalCursor.CursorPosition.X - InternalTextComponent.Scroll.X) < 3)
                     InternalTextComponent.Scroll.X--;
-                while ((InternalCursor.CursorPosition.X - InternalTextComponent.Scroll.X) > InternalTextComponent.Size.Width - 3)
+                while ((InternalTextComponent.Size.Width > 3) && (InternalCursor.CursorPosition.X - InternalTextComponent.Scroll.X) > InternalTextComponent.Size.Width - 3)
                     InternalTextComponent.Scroll.X++;
             }
+
             if (InternalTextComponent.Scroll.X < 0)
                 InternalTextComponent.Scroll.X = 0;
-
         }
 
         public override void HandleKey(ConsoleKeyInfo info)
