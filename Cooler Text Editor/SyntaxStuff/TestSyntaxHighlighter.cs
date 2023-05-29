@@ -14,35 +14,42 @@ namespace Cooler_Text_Editor.SyntaxStuff
                 {
                     new List<string>()
                     {
-                        ".", ",", "(", ")", ";"
+                        ".", ",", "(", ")", ";", "[", "]"
                     },
-                    PixelColor.Gray
+                    PixelColor.Gray2
                 },
                 {
                     new List<string>()
                     {
-                        "+", "-", "*", "/", "=", "==", "!=", ">", "<", ">=", "<=", "%"
+                        "+", "-", "*", "/", "=", "==", "!=", ">", "<", ">=", "<=", "%", "$"
                     },
                     PixelColor.Yellow
                 },
                 {
                     new List<string>()
                     {
-                        "public","static","abstract","private", "protected", "virtual", "class", "namespace", "struct", "using"
+                        "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", 
                     },
                     PixelColor.Cyan
                 },
                 {
                     new List<string>()
                     {
-                        "void", "int","double","string","double", "bool", "char", "float", "long", "short", "byte", "uint", "ulong", "ushort", "sbyte", "this", "base", "true", "false", "null"
+                        "public ","static ","abstract ","private ", "protected ", "virtual ", "class ", "namespace ", "struct ", "using "
+                    },
+                    PixelColor.Blue3
+                },
+                {
+                    new List<string>()
+                    {
+                        "void ", "int ","double ","string ","double ", "bool ", "char ", "float ", "long ", "short ", "byte ", "uint ", "ulong ", "ushort ", "sbyte ", "this ", "base ", "true ", "false ", "null " 
                     },
                     PixelColor.Blue2
                 },
                 {
                     new List<string>()
                     {
-                        "foreach", "for", "if", "else", "break", "continue", "return", "while", "do", "switch", "case", "default", "try", "catch", "finally", "throw", "new"
+                        "foreach ", "for ", "if ", "else ", "break ", "continue ", "return ", "while ", "do ", "switch ", "case ", "default ", "try ", "catch ", "finally ", "throw ", "new "
                     },
                     PixelColor.Magenta2
                 },
@@ -71,7 +78,7 @@ namespace Cooler_Text_Editor.SyntaxStuff
                     {
                         foreach (string test in testo.Key)
                         {
-                            if (str.Substring(x).StartsWith(test))
+                            if (str2.StartsWith(test))
                             {
                                 found = test;
                                 fCol = testo.Value;
@@ -80,6 +87,21 @@ namespace Cooler_Text_Editor.SyntaxStuff
                         }
                         if (found != null)
                             break;
+                    }
+                    if (str2.StartsWith("//"))
+                    {
+                        found = str2;
+                        fCol = PixelColor.Green;
+                    }
+                    else if (str2.StartsWith("\""))
+                    {
+                        int tI = str2.Substring(1).IndexOf('\"');
+                        if (tI == -1)
+                            found = str2;
+                        else
+                            found = str2.Substring(0, tI + 2);
+                        
+                        fCol = PixelColor.Orange;
                     }
 
                     if (found == null)
