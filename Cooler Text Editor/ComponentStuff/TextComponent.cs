@@ -32,7 +32,7 @@ namespace Cooler_Text_Editor.ComponentStuff
             Position = new Position2D();
             Size = new Size2D();
             Scroll = new Position2D();
-            UpdateFields = new List<Field2D>();
+            UpdateFields = new HashSet<Field2D>();
             ComponentCursor = new Cursor(this);
             ComponentCursor.CursorShown = false;
 
@@ -112,7 +112,8 @@ namespace Cooler_Text_Editor.ComponentStuff
                 }
                 else
                 {
-                    Parent.UpdateFields.AddRange(tUpdates);
+                    foreach (Field2D tUpdate in tUpdates)
+                        Parent.UpdateFields.Add(tUpdate);
                 }
             }
 

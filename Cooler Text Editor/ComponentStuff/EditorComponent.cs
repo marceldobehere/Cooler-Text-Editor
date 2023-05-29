@@ -24,7 +24,7 @@ namespace Cooler_Text_Editor.ComponentStuff
             OldVisible = Visible;
             Position = new Position2D();
 
-            UpdateFields = new List<Field2D>();
+            UpdateFields = new HashSet<Field2D>();
             ComponentCursor = new Cursor(this);
 
             ForegroundColor = PixelColor.White;
@@ -243,22 +243,36 @@ namespace Cooler_Text_Editor.ComponentStuff
             Pixel bgPixel = new Pixel(BackgroundColor, BackgroundColor);
 
             CheckCursorScroll();
+            InternalTextComponent.DefaultForegroundColor = ForegroundColor;
+            InternalTextComponent.DefaultBackgroundColor = BackgroundColor;
+            InternalTextComponent.BackgroundColor = BackgroundColor;
             InternalTextComponent.Update();
 
 
-            for (int i = 0; i < UpdateFields.Count; i++)
-            {
-                Field2D tempField = UpdateFields[i];
 
-                Rendering.FillPixel(RenderedScreen, tempField, bgPixel);
+            //for (int i = 0; i < UpdateFields.Count; i++)
+            //{
+            //    Field2D tempField = UpdateFields[i];
 
-                InternalTextComponent.RenderTo(RenderedScreen, tempField);
+            //    Rendering.FillPixel(RenderedScreen, tempField, bgPixel);
 
-                if (Parent != null)
+            //    InternalTextComponent.RenderTo(RenderedScreen, tempField);
+
+            //    if (Parent != null)
+            //        Parent.UpdateFields.Add(tempField + Position);
+            //}
+
+            //UpdateFields.Clear();
+
+            RenderedScreen = InternalTextComponent.RenderedScreen;
+
+            if (Parent != null)
+                foreach (Field2D tempField in UpdateFields)
                     Parent.UpdateFields.Add(tempField + Position);
-            }
 
             UpdateFields.Clear();
+
+
             ComponentCursor.CursorPosition = InternalCursor.CursorPosition - InternalTextComponent.Scroll;
         }
     }

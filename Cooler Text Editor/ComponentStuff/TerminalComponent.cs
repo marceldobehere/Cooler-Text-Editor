@@ -24,7 +24,7 @@ namespace Cooler_Text_Editor.ComponentStuff
             OldVisible = Visible;
             Position = new Position2D();
 
-            UpdateFields = new List<Field2D>();
+            UpdateFields = new HashSet<Field2D>();
             ComponentCursor = new Cursor(this);
 
             ForegroundColor = PixelColor.White;
@@ -136,10 +136,8 @@ namespace Cooler_Text_Editor.ComponentStuff
             InternalTextComponent.Update();
             Pixel bgPixel = new Pixel(BackgroundColor, BackgroundColor);
 
-            for (int i = 0; i < UpdateFields.Count; i++)
+            foreach (Field2D tempField in UpdateFields)
             {
-                Field2D tempField = UpdateFields[i];
-
                 Rendering.FillPixel(RenderedScreen, tempField, bgPixel);
 
                 InternalTextComponent.RenderTo(RenderedScreen, tempField);

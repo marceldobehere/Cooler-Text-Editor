@@ -63,14 +63,42 @@ public class Program
         }
 
         {
-            EditorComponent txtComp = new EditorComponent(new Size2D(120, 40)); //(new Size2D(60, 20));
-            viewComponent.AddChild(txtComp);
+            //EditorComponent txtComp = new EditorComponent(new Size2D(120, 40)); //(new Size2D(60, 20));
+            //viewComponent.AddChild(txtComp);
 
-            txtComp.Position = new Position2D(5, 5);
+            //txtComp.Position = new Position2D(5, 5);
+            ////txtComp.Size = new Size2D((Size2D parent) => { return parent - txtComp.Position; });
+            //txtComp.BackgroundColor = new PixelColor(10, 20, 30);
+
+            //txtComp.InternalTextComponent.Text.Clear();
+            ////txtComp.InternalTextComponent.WriteLineText("Hello, World!");
+            ////txtComp.WriteLineText();
+            ////txtComp.WriteLineText("How are you?");
+
+            //string str = "../../testFiles/test.txt";
+            //if (!File.Exists(str))
+            //    str = "./test/testFiles/test.txt";
+
+            //using (StreamReader reader = new StreamReader(str))
+            //{
+            //    txtComp.InternalTextComponent.WriteText(reader.ReadToEnd());
+            //}
+
+            //txtComp.Visible = false;
+        }
+
+
+        {
+            SyntaxHighlightingEditorComponent editComp = new SyntaxHighlightingEditorComponent(new Size2D(120, 40));
+
+            viewComponent.AddChild(editComp);
+
+            editComp.Position = new Position2D(5, 5);
             //txtComp.Size = new Size2D((Size2D parent) => { return parent - txtComp.Position; });
-            txtComp.BackgroundColor = new PixelColor(10, 20, 30);
+            editComp.MainEditorComponent.BackgroundColor = new PixelColor(10, 20, 30);
 
-            txtComp.InternalTextComponent.Text.Clear();
+            editComp.MainEditorComponent.InternalTextComponent.Text.Clear();
+            editComp.Update();
             //txtComp.InternalTextComponent.WriteLineText("Hello, World!");
             //txtComp.WriteLineText();
             //txtComp.WriteLineText("How are you?");
@@ -81,10 +109,11 @@ public class Program
 
             using (StreamReader reader = new StreamReader(str))
             {
-                txtComp.InternalTextComponent.WriteText(reader.ReadToEnd());
+                editComp.MainEditorComponent.InternalTextComponent.WriteText(reader.ReadToEnd());
             }
-
-            //txtComp.Visible = false;
+            editComp.TextChanged = true;
+            editComp.CancelSyntaxUpdate = false;
+            editComp.Update();
         }
 
 

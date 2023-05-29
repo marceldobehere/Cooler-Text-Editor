@@ -15,7 +15,7 @@ namespace Cooler_Text_Editor.ComponentStuff
         public Size2D Size;
         public Pixel[,] RenderedScreen;
         public BasicComponent Parent = null;
-        public List<Field2D> UpdateFields = new List<Field2D>();
+        public HashSet<Field2D> UpdateFields = new HashSet<Field2D>();
         public bool Visible, OldVisible;
         public PixelColor BorderColor = PixelColor.Transparent;
         public PixelColor OldBorderColor = PixelColor.Transparent;

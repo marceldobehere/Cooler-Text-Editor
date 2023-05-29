@@ -36,5 +36,14 @@ namespace Cooler_Text_Editor.HelperStuff
             CursorMode = CursorModeEnum.STEADY_VERTICAL_LINE;
             CursorShown = true;
         }
+
+        public void OverwriteCursor(Cursor other)
+        {
+            //CursorComponent = other.CursorComponent;
+            //HoverComponent = other.HoverComponent;
+            CursorPosition = other.CursorPosition;
+            CursorMode = other.CursorMode;
+            CursorShown = other.CursorShown;
+        }
     }
 }

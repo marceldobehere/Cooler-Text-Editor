@@ -27,7 +27,7 @@ namespace Cooler_Text_Editor.ComponentStuff
             Position = new Position2D();
 
             //OldBackgroundColor = BackgroundColor;
-            UpdateFields = new List<Field2D>();
+            UpdateFields = new HashSet<Field2D>();
             ComponentCursor = new Cursor(this);
             ComponentCursor.CursorShown = false;
 

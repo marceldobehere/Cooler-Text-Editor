@@ -59,7 +59,7 @@ namespace Cooler_Text_Editor.WindowStuff
 
         public override int GetHashCode()
         {
-            throw new NotImplementedException();
+            return HashCode.Combine(X.GetHashCode(), Y.GetHashCode());
         }
 
         public override string ToString()

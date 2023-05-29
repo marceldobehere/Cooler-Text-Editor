@@ -69,8 +69,10 @@ namespace Cooler_Text_Editor
         public static PixelColor Red = new PixelColor(255, 0, 0);
         public static PixelColor Green = new PixelColor(0, 255, 0);
         public static PixelColor Blue = new PixelColor(0, 0, 255);
+        public static PixelColor Blue2 = new PixelColor(0, 128, 255);
         public static PixelColor Yellow = new PixelColor(255, 255, 0);
         public static PixelColor Magenta = new PixelColor(255, 0, 255);
+        public static PixelColor Magenta2 = new PixelColor(255, 128, 255);
         public static PixelColor Cyan = new PixelColor(0, 255, 255);
         public static PixelColor Gray = new PixelColor(128, 128, 128);
         public static PixelColor DarkGray = new PixelColor(64, 64, 64);

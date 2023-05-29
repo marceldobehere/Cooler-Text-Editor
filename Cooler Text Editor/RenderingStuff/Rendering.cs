@@ -66,7 +66,7 @@ namespace Cooler_Text_Editor
                 }
         }
 
-        public static void RenderFields(Pixel[,] screen, List<Field2D> fieldUpdates)
+        public static void RenderFields(Pixel[,] screen, HashSet<Field2D> fieldUpdates)
         {
             List<Position2D> updatedPixels = new List<Position2D>();
             foreach (Field2D field in fieldUpdates)
