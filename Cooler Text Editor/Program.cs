@@ -114,6 +114,8 @@ public class Program
             editComp.TextChanged = true;
             editComp.CancelSyntaxUpdate = false;
             editComp.Update();
+
+            Cursor.MainCursor = editComp.ComponentCursor;
         }
 
 
