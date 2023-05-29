@@ -16,6 +16,20 @@ namespace Cooler_Text_Editor
     {
         public static Pixel[,] ScreenBackbuffer = new Pixel[0, 0];
 
+        public static void ConsWrite(StringBuilder str)
+        {
+            try
+            {
+                GC.KeepAlive(Console.WindowWidth);
+            }
+            catch 
+            {
+
+            }
+
+            Console.Write(str.ToString());
+        }
+
         public static bool CheckWindowResize()
         {
             int cSizeX = Console.WindowWidth;
@@ -34,7 +48,7 @@ namespace Cooler_Text_Editor
             renderString.Append($"\u001b[38;{Pixel.DefaultForegroundColor.GetAnsiColorString()}");
             renderString.Append($"\u001b[48;{Pixel.DefaultBackgroundColor.GetAnsiColorString()}");
             renderString.Append("\u001b[2J");
-            Console.Write(renderString);
+            ConsWrite(renderString);
 
             //Program.MainScreen.Resize(cSizeX, cSizeY);
             Program.MainScreen.Resize(cSizeX, cSizeY);
@@ -95,7 +109,7 @@ namespace Cooler_Text_Editor
             renderString.Append("\x1b[" + (inbounds.X + 1) + ";" + (inbounds.Y + 1) + "H");
 
 
-            Console.Write(renderString);
+            ConsWrite(renderString);
         }
 
         public static Position2D OldCursorPosition;
@@ -172,7 +186,7 @@ namespace Cooler_Text_Editor
                 }
 
                 if (tBuilder.Length > 0)
-                    Console.Write(tBuilder);
+                    ConsWrite(tBuilder);
                 return;
             }
 
@@ -225,7 +239,7 @@ namespace Cooler_Text_Editor
             else
                 renderString.Append("\x1b[?25l");
 
-            Console.Write(renderString);
+            ConsWrite(renderString);
         }
 
         public static void FillPixel(Pixel[,] screen, Field2D field, Pixel pxl)
