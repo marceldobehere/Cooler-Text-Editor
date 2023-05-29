@@ -40,9 +40,9 @@
         "net7.0": {
           "targetAlias": "net7.0",
           "dependencies": {
-            "System.Drawing.Common": {
+            "SixLabors.ImageSharp": {
               "target": "Package",
-              "version": "[7.0.0, )"
+              "version": "[3.0.1, )"
             }
           },
           "imports": [

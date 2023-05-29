@@ -3,24 +3,26 @@ using Cooler_Text_Editor.RenderingStuff;
 using Cooler_Text_Editor.WindowStuff;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
-using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Formats.Gif;
+using SixLabors.ImageSharp.ColorSpaces;
 
 namespace Cooler_Text_Editor.ComponentStuff
 {
     public class ImageComponent : BasicComponent
     {
-        public Bitmap Image;
+        
+        public Image InternalImage;
         public Size2D OldSize;
         public bool IsGif;
         public int frameDelay, currentFrame, oldFrame, delayLeft, lastTimeMS;
         PixelColor[][,] gifData;
 
-        public ImageComponent(Bitmap image)
+        public ImageComponent(Image image)
         {
             Visible = true;
             OldVisible = Visible;
@@ -34,27 +36,25 @@ namespace Cooler_Text_Editor.ComponentStuff
             LoadImage(image);
         }
 
-        public void LoadImage(Bitmap image)
+        public void LoadImage(Image image)
         {
-            Image = image;
+            InternalImage = image;
             if (image == null)
                 Size = new Size2D(1, 1);
             else
                 Size = new Size2D(image.Width, image.Height / 2);
 
-            int fCount = 1;
-            if (Image.PropertyIdList.Contains(0x5100))
+            int fCount = InternalImage.Frames.Count;
+            //if (InternalImage.PropertyIdList.Contains(0x5100))
+            if (fCount > 1)
             {
                 IsGif = true;
 
-                PropertyItem item = Image.GetPropertyItem(0x5100); // FrameDelay in libgdiplus
-                                                                   // Time is in milliseconds
-                int delay = (item.Value[0] + item.Value[1] * 256) * 10;
+                int tDel = InternalImage.Frames.RootFrame.Metadata.GetGifMetadata().FrameDelay;
+                int delay = tDel * 10; // Time is in milliseconds
 
                 frameDelay = delay;
                 currentFrame = 0;
-
-                fCount = Image.GetFrameCount(FrameDimension.Time);
             }
             else
             {
@@ -68,28 +68,25 @@ namespace Cooler_Text_Editor.ComponentStuff
 
 
             gifData = new PixelColor[fCount][,];//[Image.Width, Image.Height];
-            if (IsGif)
             {
-                for (int i = 0; i < fCount; i++)
-                {
-                    Image.SelectActiveFrame(FrameDimension.Time, i);
-                    gifData[i] = ConvBitmap(Image);
-                }
+                int i = 0;
+                foreach (var frame in InternalImage.Frames)
+                    gifData[i++] = ConvBitmap(frame);
             }
-            else
-                gifData[0] = ConvBitmap(Image);
 
 
             UpdateScreen();
         }
 
-        public PixelColor[,] ConvBitmap(Bitmap image)
+        public PixelColor[,] ConvBitmap(ImageFrame image)
         {
             PixelColor[,] pixels = new PixelColor[image.Width, image.Height];
 
-            BitmapData bitmapData = image.LockBits(new Rectangle(0, 0, image.Width, image.Height), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
+            
+
+            //BitmapData bitmapData = image.LockBits(new Rectangle(0, 0, image.Width, image.Height), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
             //Console.WriteLine($"Image: {image.Width}x{image.Height} = {image.Width * image.Height} ({image.Width * image.Height * 4} bytes)");
-            byte[] imageData = new byte[image.Height * image.Width * 4];
+            //byte[] imageData = new byte[image.Height * image.Width * 4];
             //try
             //{
             //unsafe
@@ -108,22 +105,31 @@ namespace Cooler_Text_Editor.ComponentStuff
 
             int imgH = image.Height;
             int imgW = image.Width;
+            //image.Metadata.Get
+            ImageFrame<Rgba32> img = (ImageFrame<Rgba32>)image;
+
+            for (int y = 0; y < imgH; y++)
+                for (int x = 0; x < imgW; x++)
+                {
+                    Rgba32 t = img[x, y];
+                    pixels[x, y] = new PixelColor(t.R, t.G, t.B);
+                }
 
             
-            unsafe
-            {
-                byte* ptr = (byte*)bitmapData.Scan0;
-                Parallel.For(0, imgH * imgW, i =>
-                {
-                    i *= 4;
-                    byte R = ptr[i + 2];
-                    byte G = ptr[i + 1];
-                    byte B = ptr[i + 0];
-                    //byte A = ptr[i + 3];
+            //unsafe
+            //{
+            //    byte* ptr = (byte*)bitmapData.Scan0;
+            //    Parallel.For(0, imgH * imgW, i =>
+            //    {
+            //        i *= 4;
+            //        byte R = ptr[i + 2];
+            //        byte G = ptr[i + 1];
+            //        byte B = ptr[i + 0];
+            //        //byte A = ptr[i + 3];
 
-                    pixels[(i / 4) % imgW, (i / 4) / imgW] = new PixelColor(R, G, B);
-                });
-            }
+            //        pixels[(i / 4) % imgW, (i / 4) / imgW] = new PixelColor(R, G, B);
+            //    });
+            //}
 
             //}
             //catch (Exception e)
@@ -131,7 +137,7 @@ namespace Cooler_Text_Editor.ComponentStuff
             //    Console.WriteLine("Reading Image failed!");
             //}
 
-            image.UnlockBits(bitmapData);
+            //image.UnlockBits(bitmapData);
             return pixels;
         }
 
@@ -142,7 +148,7 @@ namespace Cooler_Text_Editor.ComponentStuff
                 Size.Height != RenderedScreen.GetLength(1))
                 RenderedScreen = new Pixel[Size.Width, Size.Height];
 
-            if (Image == null)
+            if (InternalImage == null)
             {
                 Pixel bgPixel = Pixel.Transparent;
                 for (int y = 0; y < Size.Height; y++)
@@ -160,8 +166,8 @@ namespace Cooler_Text_Editor.ComponentStuff
 
             oldFrame = currentFrame;
 
-            int iWidth = Image.Width;
-            int iHeight = Image.Height;
+            int iWidth = InternalImage.Width;
+            int iHeight = InternalImage.Height;
 
             //PixelColor[,] convImg = ConvBitmap(Image);
 

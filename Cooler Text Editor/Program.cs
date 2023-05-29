@@ -168,7 +168,7 @@ public class Program
             if (!File.Exists(str))
                 str = "./test/testImages/rocc.png";
 
-            ImageComponent imgComp = new ImageComponent(new Bitmap(str));
+            ImageComponent imgComp = new ImageComponent(Image.Load<Rgba32>(str));
             viewComponent.AddChild(imgComp);
             imgComp.Position = new Position2D(120, 5);
             imgComp.Size = new Size2D(60, 30);// new Size2D((Size2D parent) => { return new Size2D(parent.Width / 4, parent.Height / 4); });
@@ -177,7 +177,7 @@ public class Program
         }
 
         //{
-        //    ImageComponent imgComp = new ImageComponent(new Bitmap("../../testImages/wat.gif"));
+        //    ImageComponent imgComp = new ImageComponent(Image.Load<Rgba32>("../../testImages/wat.gif"));
         //    viewComponent.AddChild(imgComp);
         //    imgComp.Position = new Position2D(0, 0);
         //    imgComp.Size = new Size2D((Size2D parent) => { return new Size2D(parent.Width / 2, parent.Height / 2); });
