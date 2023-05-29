@@ -27,7 +27,8 @@ namespace Cooler_Text_Editor
 
             }
 
-            Console.Write(str.ToString());
+            Console.Out.Write(str.ToString());
+            Console.Out.Flush();
         }
 
         public static bool CheckWindowResize()
