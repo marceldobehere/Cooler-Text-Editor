@@ -241,5 +241,8 @@ public class Program
         }
 
 
+        Console.BackgroundColor = ConsoleColor.Black;
+        Console.ForegroundColor = ConsoleColor.White;
+        Console.Clear();
     }
 }

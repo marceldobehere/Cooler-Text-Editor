@@ -27,8 +27,12 @@ namespace Cooler_Text_Editor
                 return true;
             }
 
-            if (consoleKeyInfo.Modifiers == ConsoleModifiers.Control &&
-                consoleKeyInfo.Key == ConsoleKey.Backspace)
+            if (
+                (consoleKeyInfo.Modifiers == ConsoleModifiers.Control &&
+                consoleKeyInfo.Key == ConsoleKey.Backspace) ||
+                (consoleKeyInfo.Modifiers == ConsoleModifiers.Alt &&
+                consoleKeyInfo.Key == ConsoleKey.K)
+                )
             {
                 if (Cursor.MainCursor.CursorComponent.Parent != null &&
                     Cursor.MainCursor.CursorComponent.Parent.ComponentCursor != null)
@@ -40,8 +44,12 @@ namespace Cooler_Text_Editor
                 }
             }
 
-            if (consoleKeyInfo.Modifiers == ConsoleModifiers.Control &&
-                consoleKeyInfo.Key == ConsoleKey.Enter)
+            if (
+                (consoleKeyInfo.Modifiers == ConsoleModifiers.Control &&
+                consoleKeyInfo.Key == ConsoleKey.Enter) ||
+                (consoleKeyInfo.Modifiers == ConsoleModifiers.Alt &&
+                consoleKeyInfo.Key == ConsoleKey.I)
+                )
             {
                 if (Cursor.MainCursor.HoverComponent != null &&
                     Cursor.MainCursor.HoverComponent.ComponentCursor != null)

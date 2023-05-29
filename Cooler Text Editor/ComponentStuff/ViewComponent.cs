@@ -63,9 +63,13 @@ namespace Cooler_Text_Editor.ComponentStuff
 
         public override void HandleKey(ConsoleKeyInfo info)
         {
-            if (info.Modifiers == ConsoleModifiers.Control &&
+            if ( 
+                (info.Modifiers == ConsoleModifiers.Control &&
                 (info.Key == ConsoleKey.RightArrow ||
-                info.Key == ConsoleKey.LeftArrow))
+                info.Key == ConsoleKey.LeftArrow)) ||
+                (info.Modifiers == ConsoleModifiers.Alt &&
+                (info.Key == ConsoleKey.J ||
+                info.Key == ConsoleKey.L)))
             {
                 List<BasicComponent> visibleChildren = Children.Where((BasicComponent child) => { return child.Visible; }).ToList();
 
@@ -80,11 +84,9 @@ namespace Cooler_Text_Editor.ComponentStuff
                 {
                     int cIndex = visibleChildren.IndexOf(ComponentCursor.HoverComponent) + visibleChildren.Count;
 
-                    if (info.Modifiers == ConsoleModifiers.Control &&
-                        info.Key == ConsoleKey.RightArrow)
+                    if (info.Key == ConsoleKey.RightArrow || info.Key == ConsoleKey.L)
                         cIndex++;
-                    else if (info.Modifiers == ConsoleModifiers.Control &&
-                        info.Key == ConsoleKey.LeftArrow)
+                    else if (info.Key == ConsoleKey.LeftArrow || info.Key == ConsoleKey.J)
                         cIndex--;
 
                     cIndex = cIndex % visibleChildren.Count;
