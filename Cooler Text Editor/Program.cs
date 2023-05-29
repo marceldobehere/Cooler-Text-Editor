@@ -122,7 +122,7 @@ public class Program
         {
             ViewComponent tViewComp = new ViewComponent(new Size2D(30, 30));
             tViewComp2 = tViewComp;
-            tViewComp.Position = new Position2D(70, 5);
+            tViewComp.Position = new Position2D(126, 40);
             tViewComp.BackgroundColor = new PixelColor(90, 100, 40);
             viewComponent.AddChild(tViewComp);
 
