@@ -74,7 +74,12 @@ public class Program
             //txtComp.InternalTextComponent.WriteLineText("Hello, World!");
             //txtComp.WriteLineText();
             //txtComp.WriteLineText("How are you?");
-            using (StreamReader reader = new StreamReader("../../testFiles/test.txt"))
+
+            string str = "../../testFiles/test.txt";
+            if (!File.Exists(str))
+                str = "./test/testFiles/test.txt";
+
+            using (StreamReader reader = new StreamReader(str))
             {
                 txtComp.InternalTextComponent.WriteText(reader.ReadToEnd());
             }
@@ -130,7 +135,11 @@ public class Program
         }
 
         {
-            ImageComponent imgComp = new ImageComponent(new Bitmap("../../testImages/rocc.png"));
+            string str = "../../testImages/rocc.png";
+            if (!File.Exists(str))
+                str = "./test/testImages/rocc.png";
+
+            ImageComponent imgComp = new ImageComponent(new Bitmap(str));
             viewComponent.AddChild(imgComp);
             imgComp.Position = new Position2D(120, 5);
             imgComp.Size = new Size2D(60, 30);// new Size2D((Size2D parent) => { return new Size2D(parent.Width / 4, parent.Height / 4); });
