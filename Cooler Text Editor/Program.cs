@@ -49,7 +49,7 @@ public class Program
             //{
             //    TextComponent txtComp = new TextComponent();
             //    tViewComp.AddChild(txtComp);
-                
+
             //    txtComp.Position = new Position2D(5, 5);
             //    txtComp.Size = new Size2D((Size2D parent) => { return parent - txtComp.Position; });
 
@@ -153,7 +153,7 @@ public class Program
         //    viewComponent.AddChild(terminalComponent);
         //}
 
-            Stopwatch fpsWatch = new Stopwatch();
+        Stopwatch fpsWatch = new Stopwatch();
         int frameCount = 60;
         FPS = 1;
 
