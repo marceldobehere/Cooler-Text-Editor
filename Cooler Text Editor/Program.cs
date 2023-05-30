@@ -94,28 +94,37 @@ public class Program
             viewComponent.AddChild(editComp);
 
             editComp.Position = new Position2D(5, 5);
-            //txtComp.Size = new Size2D((Size2D parent) => { return parent - txtComp.Position; });
             editComp.MainEditorComponent.BackgroundColor = new PixelColor(10, 20, 30);
 
             editComp.MainEditorComponent.InternalTextComponent.Text.Clear();
             editComp.Update();
-            //txtComp.InternalTextComponent.WriteLineText("Hello, World!");
-            //txtComp.WriteLineText();
-            //txtComp.WriteLineText("How are you?");
 
             string str = "../../testFiles/test.txt";
             if (!File.Exists(str))
                 str = "./test/testFiles/test.txt";
 
-            using (StreamReader reader = new StreamReader(str))
-            {
-                editComp.MainEditorComponent.InternalTextComponent.WriteText(reader.ReadToEnd());
-            }
-            editComp.TextChanged = true;
-            editComp.CancelSyntaxUpdate = false;
+            editComp.LoadFile(str);
+
+            MainScreen.MainView.ComponentCursor.HoverComponent = editComp;
+            Cursor.MainCursor = editComp.ComponentCursor;
+        }
+
+        {
+            SyntaxHighlightingEditorComponent editComp = new SyntaxHighlightingEditorComponent(new Size2D(120, 40));
+
+            viewComponent.AddChild(editComp);
+
+            editComp.Position = new Position2D(140, 5);
+            editComp.MainEditorComponent.BackgroundColor = new PixelColor(10, 20, 30);
+
+            editComp.MainEditorComponent.InternalTextComponent.Text.Clear();
             editComp.Update();
 
-            Cursor.MainCursor = editComp.ComponentCursor;
+            string str = "../../testFiles/test2.txt";
+            if (!File.Exists(str))
+                str = "./test/testFiles/test2.txt";
+
+            editComp.LoadFile(str);
         }
 
 
@@ -144,7 +153,9 @@ public class Program
                 }
                 //txtComp.Visible = false;
             }
-
+            //txtComp.InternalTextComponent.WriteLineText("Hello, World!");
+            //txtComp.WriteLineText();
+            //txtComp.WriteLineText("How are you?");
             {
                 TextComponent txtComp = new TextComponent();
                 tViewComp.AddChild(txtComp);
@@ -172,7 +183,7 @@ public class Program
 
             ImageComponent imgComp = new ImageComponent(Image.Load<Rgba32>(str));
             viewComponent.AddChild(imgComp);
-            imgComp.Position = new Position2D(120, 5);
+            imgComp.Position = new Position2D(120, 50);
             imgComp.Size = new Size2D(60, 30);// new Size2D((Size2D parent) => { return new Size2D(parent.Width / 4, parent.Height / 4); });
             imgComp.UpdateScreen();
 
