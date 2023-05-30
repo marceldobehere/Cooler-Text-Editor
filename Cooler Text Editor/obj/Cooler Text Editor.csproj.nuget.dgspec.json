@@ -1,20 +1,24 @@
 {
   "format": 1,
   "restore": {
-    "E:\\C SHARP\\Cooler-Text-Editor\\Cooler Text Editor\\Cooler Text Editor.csproj": {}
+    "C:\\Users\\MarcelTest\\Documents\\C#\\Cooler Text Editor\\Cooler Text Editor\\Cooler Text Editor.csproj": {}
   },
   "projects": {
-    "E:\\C SHARP\\Cooler-Text-Editor\\Cooler Text Editor\\Cooler Text Editor.csproj": {
+    "C:\\Users\\MarcelTest\\Documents\\C#\\Cooler Text Editor\\Cooler Text Editor\\Cooler Text Editor.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\C SHARP\\Cooler-Text-Editor\\Cooler Text Editor\\Cooler Text Editor.csproj",
+        "projectUniqueName": "C:\\Users\\MarcelTest\\Documents\\C#\\Cooler Text Editor\\Cooler Text Editor\\Cooler Text Editor.csproj",
         "projectName": "Cooler Text Editor",
-        "projectPath": "E:\\C SHARP\\Cooler-Text-Editor\\Cooler Text Editor\\Cooler Text Editor.csproj",
-        "packagesPath": "C:\\Users\\Marcel\\.nuget\\packages\\",
-        "outputPath": "E:\\C SHARP\\Cooler-Text-Editor\\Cooler Text Editor\\obj\\",
+        "projectPath": "C:\\Users\\MarcelTest\\Documents\\C#\\Cooler Text Editor\\Cooler Text Editor\\Cooler Text Editor.csproj",
+        "packagesPath": "C:\\Users\\MarcelTest\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\MarcelTest\\Documents\\C#\\Cooler Text Editor\\Cooler Text Editor\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "C:\\Users\\Marcel\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\MarcelTest\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -61,7 +65,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.201\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.302\\RuntimeIdentifierGraph.json"
         }
       }
     }
