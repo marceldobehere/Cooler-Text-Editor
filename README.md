@@ -12,7 +12,7 @@ The cooler and faster Console Text Editor.
 
 #### CTRL
 
-* *CTRL + LEFT -> Switch hover to left box
+* CTRL + LEFT -> Switch hover to left box
 * CTRL + RIGHT -> Switch hover to right box
 * CTRL + ENTER -> Select hover component
 * CTRL + RETURN -> Select parent component
