@@ -1,4 +1,5 @@
-﻿using Cooler_Text_Editor.HelperStuff;
+﻿using Cooler_Text_Editor.ComponentStuff.ExplorerStuff;
+using Cooler_Text_Editor.HelperStuff;
 using Cooler_Text_Editor.RenderingStuff;
 using Cooler_Text_Editor.SyntaxStuff;
 using Cooler_Text_Editor.WindowStuff;
@@ -18,6 +19,7 @@ namespace Cooler_Text_Editor.ComponentStuff.TextStuff
         public SyntaxHighlightingEditorComponent Editor;
         public PixelColor ForegroundColor, BackgroundColor;
         public PixelColor TitleForegroundColor, TitleBackgroundColor;
+        public ExplorerComponent TempExplorerDialogue;
 
         public string CurrentFilePath = null;
 
@@ -71,6 +73,7 @@ namespace Cooler_Text_Editor.ComponentStuff.TextStuff
             // ignoring the line box for now
 
 
+            TempExplorerDialogue = null;
 
 
 
@@ -126,6 +129,8 @@ namespace Cooler_Text_Editor.ComponentStuff.TextStuff
             txt.Clear();
             foreach (var line in lines)
                 txt.WriteLineText(line);
+
+            Editor.ForceUpdate();
         }
 
         public void SaveFile()
@@ -156,56 +161,120 @@ namespace Cooler_Text_Editor.ComponentStuff.TextStuff
             File.WriteAllText(path, outFileText.ToString());
         }
 
+        public void HandleFileClickedYes(string path)
+        {
+            LoadFile(path);
+            TempExplorerDialogue = null;
+        }
+
         public string OpenFileDialog()
         {
+            TempExplorerDialogue = new ExplorerComponent(new Size2D((Size2D parent) => { return new Size2D(parent.Width - 6, parent.Height - 4); }));
+            TempExplorerDialogue.DefaultBorderColor = PixelColor.Yellow2;
+            TempExplorerDialogue.OnFileClicked = HandleFileClickedYes;
             return null;
         }
 
         public string SaveFileDialog()
         {
+            TempExplorerDialogue = null;
             return null;
         }
 
-        public override void HandleKey(ConsoleKeyInfo info)
+        public override bool HandleKey(ConsoleKeyInfo info)
         {
             if (info.Modifiers == ConsoleModifiers.Alt && info.Key == ConsoleKey.O)
             {
                 string path = OpenFileDialog();
                 LoadFile(path);
-                return;
+                return true;
             }
             if (info.Modifiers == ConsoleModifiers.Alt && info.Key == ConsoleKey.S)
             {
                 SaveFile();
-                return;
+                return true;
+
             }
             if (info.Modifiers == (ConsoleModifiers.Alt | ConsoleModifiers.Shift) && info.Key == ConsoleKey.S)
             {
                 string path = OpenFileDialog();
                 SaveFile(path);
-                return;
+                return true;
             }
 
+            if (TempExplorerDialogue != null)
+            {
+                TempExplorerDialogue.HandleKey(info);
+                return true;
+            }
 
             Editor.HandleKey(info);
+
+            return true;
+
+        }
+
+
+        ExplorerComponent oldExplorerComp = null;
+        public void UpdateExplorerCompIfNeeded()
+        {
+            if (TempExplorerDialogue != oldExplorerComp)
+            {
+                if (View.Children.Contains(oldExplorerComp))
+                    View.RemoveChild(oldExplorerComp);
+
+                if (TempExplorerDialogue != null)
+                    View.AddChild(TempExplorerDialogue);
+
+                oldExplorerComp = TempExplorerDialogue;
+            }
+
+            OverwriteNavigationInput = (TempExplorerDialogue != null);
+            if (TempExplorerDialogue != null)
+            {
+                Size2D explorerSize = TempExplorerDialogue.Size;
+                Size2D compSize = Size;
+                Position2D centerPos = new Position2D
+                    (
+                        (compSize.Width - explorerSize.Width) / 2,
+                        (compSize.Height - explorerSize.Height) / 2
+                    );
+                TempExplorerDialogue.Position = centerPos;
+            }
         }
 
         protected override void InternalUpdate()
         {
-            ComponentCursor.OverwriteCursor(Editor.ComponentCursor);
-            ComponentCursor.CursorPosition += Editor.Position;
+            if (TempExplorerDialogue != null &&
+                TempExplorerDialogue.Done)
+                TempExplorerDialogue = null;
 
-            Editor.MainEditorComponent.ForegroundColor = ForegroundColor;
-            Editor.MainEditorComponent.BackgroundColor = BackgroundColor;
+            UpdateExplorerCompIfNeeded();
+            if (TempExplorerDialogue == null)
+            {
+                ComponentCursor.OverwriteCursor(Editor.ComponentCursor);
+                ComponentCursor.CursorPosition += Editor.Position;
+
+                Editor.MainEditorComponent.ForegroundColor = ForegroundColor;
+                Editor.MainEditorComponent.BackgroundColor = BackgroundColor;
 
 
-            TitleBar.DefaultForegroundColor = TitleForegroundColor;
-            TitleBar.DefaultBackgroundColor = TitleBackgroundColor;
-            TitleBar.BackgroundColor = TitleBackgroundColor;
-            UpdateTitle();
+                TitleBar.DefaultForegroundColor = TitleForegroundColor;
+                TitleBar.DefaultBackgroundColor = TitleBackgroundColor;
+                TitleBar.BackgroundColor = TitleBackgroundColor;
+                UpdateTitle();
+            }
+            else
+            {
+                ComponentCursor.OverwriteCursor(TempExplorerDialogue.ComponentCursor);
+                ComponentCursor.CursorPosition += TempExplorerDialogue.Position;
+            }
+
+            
+
+
 
             View.BackgroundColor = TitleBackgroundColor;
-
             View.Update();
             RenderedScreen = View.RenderedScreen;
 

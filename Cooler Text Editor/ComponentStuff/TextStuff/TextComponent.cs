@@ -206,9 +206,11 @@ namespace Cooler_Text_Editor.ComponentStuff.TextStuff
             updateInternal = true;
         }
 
-        public override void HandleKey(ConsoleKeyInfo info)
+        public override bool HandleKey(ConsoleKeyInfo info)
         {
             //throw new NotImplementedException();
+
+            return false;
         }
         public void Clear()
         {
@@ -216,6 +218,29 @@ namespace Cooler_Text_Editor.ComponentStuff.TextStuff
             updateInternal = true;
             if (AutoYScroll)
                 Scroll.Y = 0;
+        }
+
+        public static string GetLineString(List<Pixel> line)
+        {
+            string str = "";
+            foreach (var pixel in line)
+                str += pixel.Character;
+            return str;
+        }
+
+        public string GetString()
+        {
+            StringBuilder result = new StringBuilder();
+            for (int i = 0; i < Text.Count; i++)
+            {
+                var line = Text[i];
+                result.Append(GetLineString(line));
+
+                if (i < Text.Count - 1)
+                    result.AppendLine();
+            }
+
+            return result.ToString();
         }
     }
 }

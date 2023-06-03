@@ -10,6 +10,7 @@ namespace Cooler_Text_Editor.WindowStuff
     {
         public int Width;
         public int Height;
+        public Func<Size2D, Size2D> SizeBasedOnParent;
 
         public Size2D(int width, int height)
         {
@@ -73,10 +74,5 @@ namespace Cooler_Text_Editor.WindowStuff
         {
             return new Size2D(a.Width - b.X, a.Height - b.Y);
         }
-
-
-
-
-        public Func<Size2D, Size2D> SizeBasedOnParent;
     }
 }

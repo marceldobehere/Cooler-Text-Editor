@@ -17,9 +17,11 @@ namespace Cooler_Text_Editor.ComponentStuff
         public BasicComponent Parent = null;
         public HashSet<Field2D> UpdateFields = new HashSet<Field2D>();
         public bool Visible, OldVisible;
-        public PixelColor BorderColor = PixelColor.Transparent;
+        public PixelColor DefaultBorderColor = PixelColor.Transparent;
+        public PixelColor CurrentBorderColor = PixelColor.Transparent;
         public PixelColor OldBorderColor = PixelColor.Transparent;
         public Cursor ComponentCursor = null;
+        public bool OverwriteNavigationInput = false;
         
 
         public void Update()
@@ -52,18 +54,18 @@ namespace Cooler_Text_Editor.ComponentStuff
             }
 
             if (this == Cursor.MainCursor.CursorComponent)
-                BorderColor = new PixelColor(100, 120, 150);
+                CurrentBorderColor = new PixelColor(100, 120, 150);
             else if (this == Cursor.MainCursor.HoverComponent)
-                BorderColor = new PixelColor(80, 130, 100);
+                CurrentBorderColor = new PixelColor(80, 130, 100);
             else
-                BorderColor = PixelColor.Transparent;
+                CurrentBorderColor = DefaultBorderColor;
 
-            if (BorderColor != OldBorderColor)
+            if (CurrentBorderColor != OldBorderColor)
             {
-                OldBorderColor = BorderColor;
+                OldBorderColor = CurrentBorderColor;
                 //UpdateFields.Clear();
                 //UpdateFields.Add(GetLocalField());
-                Field2D tField1 = GetField();
+                Field2D tField1 = GetPixelField();
                 Field2D TopBorder = new Field2D(tField1.TL - new Position2D(1), new Position2D(tField1.BR.X + 1, tField1.TL.Y - 1));
                 Field2D LeftBorder = new Field2D(tField1.TL - new Position2D(1), new Position2D(tField1.TL.X - 1, tField1.BR.Y + 1));
                 Field2D RightBorder = new Field2D(new Position2D(tField1.BR.X + 1, tField1.TL.Y - 1), tField1.BR + new Position2D(1));
@@ -87,7 +89,7 @@ namespace Cooler_Text_Editor.ComponentStuff
             if (!Visible)
                 return;
 
-            Field2D tField1 = GetField();
+            Field2D tField1 = GetPixelField();
             Field2D tField2 = field;
             Field2D tField3 = new Field2D(new Size2D(screen));
             Field2D internalField = tField3.MergeMinField(tField1.MergeMinField(tField2));
@@ -97,9 +99,9 @@ namespace Cooler_Text_Editor.ComponentStuff
                 for (int x = internalField.TL.X; x <= internalField.BR.X; x++)
                     screen[x + Position.X, y + Position.Y].WriteOver(RenderedScreen[x, y]);
 
-            if (BorderColor.IsTransparent)
+            if (CurrentBorderColor.IsTransparent)
                 return;
-            Pixel borderPixel = new Pixel(BorderColor, BorderColor);
+            Pixel borderPixel = new Pixel(CurrentBorderColor, CurrentBorderColor);
 
 
             Field2D TopBorder = new Field2D(tField1.TL - new Position2D(1), new Position2D(tField1.BR.X + 1, tField1.TL.Y - 1));
@@ -133,10 +135,20 @@ namespace Cooler_Text_Editor.ComponentStuff
 
         public Field2D GetField()
         {
-            return new Field2D(Position, Size);
+            return new Field2D(Position - new Position2D(1, 1), Size + new Position2D(2, 2));
         }
 
         public Field2D GetLocalField()
+        {
+            return new Field2D(new Position2D(-1, -1), Size + new Position2D(2, 2));
+        }
+
+        public Field2D GetPixelField()
+        {
+            return new Field2D(Position, Size);
+        }
+
+        public Field2D GetLocalPixelField()
         {
             return new Field2D(Size);
         }
@@ -167,7 +179,7 @@ namespace Cooler_Text_Editor.ComponentStuff
 
         public virtual void HandleEnterFocus() { }
         public virtual void HandleExitFocus() { }
-        public abstract void HandleKey(ConsoleKeyInfo info);
+        public abstract bool HandleKey(ConsoleKeyInfo info);
 
         public Position2D GetAbsolutePosition()
         {

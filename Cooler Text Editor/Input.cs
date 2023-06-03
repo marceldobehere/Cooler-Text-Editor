@@ -27,37 +27,42 @@ namespace Cooler_Text_Editor
                 return true;
             }
 
-            if (
+            if (Cursor.MainCursor != null &&
+                Cursor.MainCursor.CursorComponent != null &&
+                !Cursor.MainCursor.CursorComponent.OverwriteNavigationInput)
+            {
+                if (
                 (consoleKeyInfo.Modifiers == ConsoleModifiers.Control &&
                 consoleKeyInfo.Key == ConsoleKey.Backspace) ||
                 (consoleKeyInfo.Modifiers == ConsoleModifiers.Alt &&
                 consoleKeyInfo.Key == ConsoleKey.K)
                 )
-            {
-                if (Cursor.MainCursor.CursorComponent.Parent != null &&
-                    Cursor.MainCursor.CursorComponent.Parent.ComponentCursor != null)
                 {
-                    Cursor.MainCursor.CursorComponent.HandleExitFocus();
-                    Cursor.MainCursor = Cursor.MainCursor.CursorComponent.Parent.ComponentCursor;
-                    Cursor.MainCursor.CursorComponent.HandleEnterFocus();
-                    return true;
+                    if (Cursor.MainCursor.CursorComponent.Parent != null &&
+                        Cursor.MainCursor.CursorComponent.Parent.ComponentCursor != null)
+                    {
+                        Cursor.MainCursor.CursorComponent.HandleExitFocus();
+                        Cursor.MainCursor = Cursor.MainCursor.CursorComponent.Parent.ComponentCursor;
+                        Cursor.MainCursor.CursorComponent.HandleEnterFocus();
+                        return true;
+                    }
                 }
-            }
 
-            if (
-                (consoleKeyInfo.Modifiers == ConsoleModifiers.Control &&
-                consoleKeyInfo.Key == ConsoleKey.Enter) ||
-                (consoleKeyInfo.Modifiers == ConsoleModifiers.Alt &&
-                consoleKeyInfo.Key == ConsoleKey.I)
-                )
-            {
-                if (Cursor.MainCursor.HoverComponent != null &&
-                    Cursor.MainCursor.HoverComponent.ComponentCursor != null)
+                if (
+                    (consoleKeyInfo.Modifiers == ConsoleModifiers.Control &&
+                    consoleKeyInfo.Key == ConsoleKey.Enter) ||
+                    (consoleKeyInfo.Modifiers == ConsoleModifiers.Alt &&
+                    consoleKeyInfo.Key == ConsoleKey.I)
+                    )
                 {
-                    Cursor.MainCursor.CursorComponent.HandleExitFocus();
-                    Cursor.MainCursor = Cursor.MainCursor.HoverComponent.ComponentCursor;
-                    Cursor.MainCursor.CursorComponent.HandleEnterFocus();
-                    return true;
+                    if (Cursor.MainCursor.HoverComponent != null &&
+                        Cursor.MainCursor.HoverComponent.ComponentCursor != null)
+                    {
+                        Cursor.MainCursor.CursorComponent.HandleExitFocus();
+                        Cursor.MainCursor = Cursor.MainCursor.HoverComponent.ComponentCursor;
+                        Cursor.MainCursor.CursorComponent.HandleEnterFocus();
+                        return true;
+                    }
                 }
             }
 

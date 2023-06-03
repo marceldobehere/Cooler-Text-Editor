@@ -135,6 +135,7 @@ public class Program
             //editComp.Update();
 
             Cursor.MainCursor = fileComp.ComponentCursor;
+            MainScreen.MainView.ComponentCursor.HoverComponent = fileComp;
         }
 
 

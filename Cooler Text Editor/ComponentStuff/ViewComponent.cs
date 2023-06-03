@@ -61,7 +61,7 @@ namespace Cooler_Text_Editor.ComponentStuff
             Children.Remove(child);
         }
 
-        public override void HandleKey(ConsoleKeyInfo info)
+        public override bool HandleKey(ConsoleKeyInfo info)
         {
             if ( 
                 (info.Modifiers == ConsoleModifiers.Control &&
@@ -76,10 +76,10 @@ namespace Cooler_Text_Editor.ComponentStuff
                 if (visibleChildren.Count == 0)
                 {
                     ComponentCursor.HoverComponent = null;
-                    return;
+                    return true;
                 }
 
-               
+
                 if (visibleChildren.Contains(ComponentCursor.HoverComponent))
                 {
                     int cIndex = visibleChildren.IndexOf(ComponentCursor.HoverComponent) + visibleChildren.Count;
@@ -96,8 +96,12 @@ namespace Cooler_Text_Editor.ComponentStuff
                 {
                     ComponentCursor.HoverComponent = visibleChildren[0];
                 }
+
+                return true;
+
             }
 
+            return false;
         }
 
         protected override void InternalUpdate()

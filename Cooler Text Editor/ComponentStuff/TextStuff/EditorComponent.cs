@@ -16,6 +16,8 @@ namespace Cooler_Text_Editor.ComponentStuff.TextStuff
         public PixelColor ForegroundColor, BackgroundColor;
         public TextComponent InternalTextComponent;
         public Cursor InternalCursor;
+        public bool EnableMovement = true;
+        public bool EnableInput = true;
 
         public EditorComponent(Size2D size)
         {
@@ -102,58 +104,65 @@ namespace Cooler_Text_Editor.ComponentStuff.TextStuff
                 InternalTextComponent.Scroll.X = 0;
         }
 
-        public override void HandleKey(ConsoleKeyInfo info)
+        public override bool HandleKey(ConsoleKeyInfo info)
         {
             if (info.Key == ConsoleKey.LeftArrow ||
                 info.Key == ConsoleKey.UpArrow ||
                 info.Key == ConsoleKey.RightArrow ||
                 info.Key == ConsoleKey.DownArrow)
             {
-                if (info.Key == ConsoleKey.LeftArrow)
+                if (EnableMovement)
                 {
-                    InternalCursor.CursorPosition.X--;
-
-                    if (InternalCursor.CursorPosition.X < 0)
+                    if (info.Key == ConsoleKey.LeftArrow)
                     {
-                        if (InternalCursor.CursorPosition.Y > 0 &&
-                            InternalCursor.CursorPosition.Y < InternalTextComponent.Text.Count)
-                        {
-                            InternalCursor.CursorPosition.Y--;
-                            InternalCursor.CursorPosition.X = InternalTextComponent.Text[InternalCursor.CursorPosition.Y].Count;
-                        }
-                    }
-                }
-                else if (info.Key == ConsoleKey.UpArrow)
-                    InternalCursor.CursorPosition.Y--;
-                else if (info.Key == ConsoleKey.RightArrow)
-                {
-                    InternalCursor.CursorPosition.X++;
+                        InternalCursor.CursorPosition.X--;
 
-                    if (InternalCursor.CursorPosition.Y >= 0 && InternalCursor.CursorPosition.Y < InternalTextComponent.Text.Count)
-                    {
-                        if (InternalCursor.CursorPosition.X > InternalTextComponent.Text[InternalCursor.CursorPosition.Y].Count)
+                        if (InternalCursor.CursorPosition.X < 0)
                         {
-                            if (InternalCursor.CursorPosition.Y < InternalTextComponent.Text.Count - 1)
+                            if (InternalCursor.CursorPosition.Y > 0 &&
+                                InternalCursor.CursorPosition.Y < InternalTextComponent.Text.Count)
                             {
-                                InternalCursor.CursorPosition.X = 0;
-                                InternalCursor.CursorPosition.Y++;
+                                InternalCursor.CursorPosition.Y--;
+                                InternalCursor.CursorPosition.X = InternalTextComponent.Text[InternalCursor.CursorPosition.Y].Count;
                             }
                         }
                     }
-                    else
-                        InternalCursor.CursorPosition.X = 0;
+                    else if (info.Key == ConsoleKey.UpArrow)
+                        InternalCursor.CursorPosition.Y--;
+                    else if (info.Key == ConsoleKey.RightArrow)
+                    {
+                        InternalCursor.CursorPosition.X++;
+
+                        if (InternalCursor.CursorPosition.Y >= 0 && InternalCursor.CursorPosition.Y < InternalTextComponent.Text.Count)
+                        {
+                            if (InternalCursor.CursorPosition.X > InternalTextComponent.Text[InternalCursor.CursorPosition.Y].Count)
+                            {
+                                if (InternalCursor.CursorPosition.Y < InternalTextComponent.Text.Count - 1)
+                                {
+                                    InternalCursor.CursorPosition.X = 0;
+                                    InternalCursor.CursorPosition.Y++;
+                                }
+                            }
+                        }
+                        else
+                            InternalCursor.CursorPosition.X = 0;
+                    }
+                    else if (info.Key == ConsoleKey.DownArrow)
+                        InternalCursor.CursorPosition.Y++;
+
+
+                    CheckCursorBounds();
                 }
-                else if (info.Key == ConsoleKey.DownArrow)
-                    InternalCursor.CursorPosition.Y++;
+                else
+                    return false;
 
-
-                CheckCursorBounds();
-
-                return;
+                return true;
             }
             CheckCursorBounds();
 
 
+            if (!EnableInput)
+                return false;
 
             if (info.Key == ConsoleKey.Escape && info.Modifiers == ConsoleModifiers.Shift)
             {
@@ -244,6 +253,9 @@ namespace Cooler_Text_Editor.ComponentStuff.TextStuff
                 InternalTextComponent.Text[InternalCursor.CursorPosition.Y].Insert(InternalCursor.CursorPosition.X, new Pixel(info.KeyChar, ForegroundColor, BackgroundColor));
                 InternalCursor.CursorPosition.X++;
             }
+
+
+            return true;
         }
 
 

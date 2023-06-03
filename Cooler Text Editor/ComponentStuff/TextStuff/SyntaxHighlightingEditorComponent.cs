@@ -81,7 +81,7 @@ namespace Cooler_Text_Editor.ComponentStuff.TextStuff
         }
 
 
-        public override void HandleKey(ConsoleKeyInfo info)
+        public override bool HandleKey(ConsoleKeyInfo info)
         {
             MainEditorComponent.HandleKey(info);
             if (!(
@@ -95,6 +95,8 @@ namespace Cooler_Text_Editor.ComponentStuff.TextStuff
                 KeyLog.Add(info);
             else if (KeyLog.Count > 0)
                 KeyLog.Clear();
+
+            return true;
         }
 
         protected override void InternalUpdate()
