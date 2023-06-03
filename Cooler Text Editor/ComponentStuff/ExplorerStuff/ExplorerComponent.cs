@@ -4,6 +4,7 @@ using Cooler_Text_Editor.RenderingStuff;
 using Cooler_Text_Editor.WindowStuff;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -148,6 +149,9 @@ namespace Cooler_Text_Editor.ComponentStuff.ExplorerStuff
             if (CurrentPath == null || CurrentPath == "")
                 return res;
 
+            if (!Directory.Exists(CurrentPath))
+                return res;
+
             foreach (var str in Directory.GetDirectories(CurrentPath))
                 res.Add(Path.GetFileName(str));
 
@@ -158,6 +162,9 @@ namespace Cooler_Text_Editor.ComponentStuff.ExplorerStuff
         {
             List<string> res = new List<string>();
             if (CurrentPath == null || CurrentPath == "")
+                return res;
+
+            if (!Directory.Exists(CurrentPath))
                 return res;
 
             foreach (var str in Directory.GetFiles(CurrentPath))
