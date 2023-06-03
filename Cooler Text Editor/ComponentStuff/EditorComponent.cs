@@ -165,6 +165,9 @@ namespace Cooler_Text_Editor.ComponentStuff
                 //InternalTextComponent.WriteLineText();
                 if (InternalCursor.CursorPosition.X == 0)
                 {
+                    if (InternalTextComponent.Text.Count == 0)
+                        InternalTextComponent.Text.Add(new List<Pixel>());
+
                     InternalTextComponent.Text.Insert(InternalCursor.CursorPosition.Y, new List<Pixel>());
                     InternalCursor.CursorPosition.Y++;
                 }
@@ -223,6 +226,9 @@ namespace Cooler_Text_Editor.ComponentStuff
                 }
                 else
                 {
+                    if (InternalTextComponent.Text.Count == 0)
+                        InternalTextComponent.Text.Add(new List<Pixel>());
+
                     for (int i = 0; i < 4; i++)
                     {
                         InternalTextComponent.Text[InternalCursor.CursorPosition.Y].Insert(InternalCursor.CursorPosition.X, new Pixel(' ', ForegroundColor, BackgroundColor));
@@ -232,6 +238,9 @@ namespace Cooler_Text_Editor.ComponentStuff
             }
             else
             {
+                if (InternalTextComponent.Text.Count == 0)
+                    InternalTextComponent.Text.Add(new List<Pixel>());
+
                 InternalTextComponent.Text[InternalCursor.CursorPosition.Y].Insert(InternalCursor.CursorPosition.X, new Pixel(info.KeyChar, ForegroundColor, BackgroundColor));
                 InternalCursor.CursorPosition.X++;
             }

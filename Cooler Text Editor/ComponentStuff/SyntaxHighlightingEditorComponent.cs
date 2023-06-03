@@ -43,13 +43,15 @@ namespace Cooler_Text_Editor.ComponentStuff
             MainEditorComponent = new EditorComponent(size);
             MainEditorComponent.Position = new Position2D(0, 0);
             MainEditorComponent.BackgroundColor = new PixelColor(10, 20, 30);
-            MainEditorComponent.InternalTextComponent.Text.Clear();
+            MainEditorComponent.InternalTextComponent.Clear();
+            MainEditorComponent.InternalTextComponent.WriteLineText();
             MainEditorComponent.Parent = this;
 
             ShadowEditorComponent = new EditorComponent(size);
             ShadowEditorComponent.Position = new Position2D(0, 0);
             ShadowEditorComponent.BackgroundColor = new PixelColor(10, 20, 30);
-            ShadowEditorComponent.InternalTextComponent.Text.Clear();
+            ShadowEditorComponent.InternalTextComponent.Clear();
+            ShadowEditorComponent.InternalTextComponent.WriteLineText();
             ShadowEditorComponent.Parent = this;
 
             syntaxHighlighter = new TestSyntaxHighlighter();

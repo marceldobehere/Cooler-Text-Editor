@@ -88,34 +88,52 @@ public class Program
         }
 
 
+        //{
+        //    SyntaxHighlightingEditorComponent editComp = new SyntaxHighlightingEditorComponent(new Size2D(120, 40));
+
+        //    viewComponent.AddChild(editComp);
+
+        //    editComp.Position = new Position2D(5, 5);
+        //    //txtComp.Size = new Size2D((Size2D parent) => { return parent - txtComp.Position; });
+        //    editComp.MainEditorComponent.BackgroundColor = new PixelColor(10, 20, 30);
+
+        //    editComp.MainEditorComponent.InternalTextComponent.Text.Clear();
+        //    editComp.Update();
+        //    //txtComp.InternalTextComponent.WriteLineText("Hello, World!");
+        //    //txtComp.WriteLineText();
+        //    //txtComp.WriteLineText("How are you?");
+
+        //    string str = "../../testFiles/test.txt";
+        //    if (!File.Exists(str))
+        //        str = "./test/testFiles/test.txt";
+
+        //    using (StreamReader reader = new StreamReader(str))
+        //    {
+        //        editComp.MainEditorComponent.InternalTextComponent.WriteText(reader.ReadToEnd());
+        //    }
+        //    editComp.TextChanged = true;
+        //    editComp.CancelSyntaxUpdate = false;
+        //    editComp.Update();
+
+        //    Cursor.MainCursor = editComp.ComponentCursor;
+        //}
+
         {
-            SyntaxHighlightingEditorComponent editComp = new SyntaxHighlightingEditorComponent(new Size2D(120, 40));
+            FileEditorComponent fileComp = new FileEditorComponent(new Size2D(80, 30));
 
-            viewComponent.AddChild(editComp);
 
-            editComp.Position = new Position2D(5, 5);
+            viewComponent.AddChild(fileComp);
+
+            fileComp.Position = new Position2D(5, 5);
             //txtComp.Size = new Size2D((Size2D parent) => { return parent - txtComp.Position; });
-            editComp.MainEditorComponent.BackgroundColor = new PixelColor(10, 20, 30);
+            fileComp.BackgroundColor = new PixelColor(10, 20, 30);
 
-            editComp.MainEditorComponent.InternalTextComponent.Text.Clear();
-            editComp.Update();
-            //txtComp.InternalTextComponent.WriteLineText("Hello, World!");
-            //txtComp.WriteLineText();
-            //txtComp.WriteLineText("How are you?");
+            
+            //editComp.TextChanged = true;
+            //editComp.CancelSyntaxUpdate = false;
+            //editComp.Update();
 
-            string str = "../../testFiles/test.txt";
-            if (!File.Exists(str))
-                str = "./test/testFiles/test.txt";
-
-            using (StreamReader reader = new StreamReader(str))
-            {
-                editComp.MainEditorComponent.InternalTextComponent.WriteText(reader.ReadToEnd());
-            }
-            editComp.TextChanged = true;
-            editComp.CancelSyntaxUpdate = false;
-            editComp.Update();
-
-            Cursor.MainCursor = editComp.ComponentCursor;
+            Cursor.MainCursor = fileComp.ComponentCursor;
         }
 
 
