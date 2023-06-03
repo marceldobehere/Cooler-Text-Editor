@@ -21,7 +21,7 @@ namespace Cooler_Text_Editor.SyntaxStuff
                 {
                     new List<string>()
                     {
-                        "+", "-", "*", "/", "=", "==", "!=", ">", "<", ">=", "<=", "%", "$"
+                        "+", "-", "*", "/", "=", "==", "!=", ">", "<", ">=", "<=", "%", "$", "|", "&", "!", "~", "^"
                     },
                     PixelColor.Yellow
                 },
@@ -42,14 +42,14 @@ namespace Cooler_Text_Editor.SyntaxStuff
                 {
                     new List<string>()
                     {
-                        "void ", "int ","double ","string ","double ", "bool ", "char ", "float ", "long ", "short ", "byte ", "uint ", "ulong ", "ushort ", "sbyte ", "this ", "base ", "true ", "false ", "null " 
+                        "void ", "int ","double ","string ","double ", "bool ", "char ", "float ", "long ", "short ", "byte ", "uint ", "ulong ", "ushort ", "sbyte ", "this", "base", "true", "false", "null" 
                     },
                     PixelColor.Blue2
                 },
                 {
                     new List<string>()
                     {
-                        "foreach ", "for ", "if ", "else ", "break ", "continue ", "return ", "while ", "do ", "switch ", "case ", "default ", "try ", "catch ", "finally ", "throw ", "new "
+                        "foreach ", "for ", "in ", "if ", "else ", "break;", "continue;", "return;", "return ", "while ", "do ", "switch ", "case ", "default ", "try ", "catch ", "finally ", "throw ", "new "
                     },
                     PixelColor.Magenta2
                 },

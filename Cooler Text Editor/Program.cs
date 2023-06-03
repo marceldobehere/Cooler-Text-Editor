@@ -162,7 +162,9 @@ public class Program
                 }
                 //txtComp.Visible = false;
             }
-
+            //txtComp.InternalTextComponent.WriteLineText("Hello, World!");
+            //txtComp.WriteLineText();
+            //txtComp.WriteLineText("How are you?");
             {
                 TextComponent txtComp = new TextComponent();
                 tViewComp.AddChild(txtComp);
@@ -190,7 +192,7 @@ public class Program
 
             ImageComponent imgComp = new ImageComponent(Image.Load<Rgba32>(str));
             viewComponent.AddChild(imgComp);
-            imgComp.Position = new Position2D(120, 5);
+            imgComp.Position = new Position2D(120, 50);
             imgComp.Size = new Size2D(60, 30);// new Size2D((Size2D parent) => { return new Size2D(parent.Width / 4, parent.Height / 4); });
             imgComp.UpdateScreen();
 

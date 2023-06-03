@@ -19,6 +19,24 @@ namespace Cooler_Text_Editor.ComponentStuff
         public bool CancelSyntaxUpdate;
         public bool TextChanged;
 
+        public void ForceUpdate()
+        {
+            TextChanged = true;
+            CancelSyntaxUpdate = false;
+            Update();
+        }
+
+        public void LoadFile(string path)
+        {
+            using (StreamReader reader = new StreamReader(path))
+            {
+                MainEditorComponent.InternalTextComponent.WriteText(reader.ReadToEnd());
+            }
+            ForceUpdate();
+        }
+
+
+
         public SyntaxHighlightingEditorComponent(Size2D cSize)
         {
             Size = cSize;
