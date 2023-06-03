@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Cooler_Text_Editor.ComponentStuff
+namespace Cooler_Text_Editor.ComponentStuff.TextStuff
 {
     public class TextComponent : BasicComponent
     {
@@ -76,7 +76,7 @@ namespace Cooler_Text_Editor.ComponentStuff
             {
                 RenderedScreen = new Pixel[Size.Width, Size.Height];
             }
-            
+
 
 
             Pixel tempBG = new Pixel(BackgroundColor, BackgroundColor);

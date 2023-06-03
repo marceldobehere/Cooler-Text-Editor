@@ -1,6 +1,7 @@
 ﻿// See https://aka.ms/new-console-template for more information
 using Cooler_Text_Editor;
 using Cooler_Text_Editor.ComponentStuff;
+using Cooler_Text_Editor.ComponentStuff.TextStuff;
 using Cooler_Text_Editor.HelperStuff;
 using Cooler_Text_Editor.RenderingStuff;
 using Cooler_Text_Editor.WindowStuff;

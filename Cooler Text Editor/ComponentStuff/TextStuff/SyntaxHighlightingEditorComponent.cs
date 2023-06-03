@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Cooler_Text_Editor.ComponentStuff
+namespace Cooler_Text_Editor.ComponentStuff.TextStuff
 {
     public class SyntaxHighlightingEditorComponent : BasicComponent
     {
@@ -56,7 +56,7 @@ namespace Cooler_Text_Editor.ComponentStuff
                     RenderedScreen[x, y] = bgPixel;
 
 
-            Size2D size = new Size2D((Size2D parent) => { return parent; });
+            Size2D size = new Size2D((parent) => { return parent; });
 
             MainEditorComponent = new EditorComponent(size);
             MainEditorComponent.Position = new Position2D(0, 0);
@@ -86,7 +86,7 @@ namespace Cooler_Text_Editor.ComponentStuff
             MainEditorComponent.HandleKey(info);
             if (!(
                 info.Key == ConsoleKey.DownArrow ||
-                info.Key == ConsoleKey.UpArrow   ||
+                info.Key == ConsoleKey.UpArrow ||
                 info.Key == ConsoleKey.LeftArrow ||
                 info.Key == ConsoleKey.RightArrow))
                 TextChanged = true;
@@ -120,7 +120,7 @@ namespace Cooler_Text_Editor.ComponentStuff
 
                         UpdateFields.Clear();
                         (MainEditorComponent, ShadowEditorComponent) = (ShadowEditorComponent, MainEditorComponent);
-                        
+
                         MainEditorComponent.Update();
                         ComponentCursor.OverwriteCursor(MainEditorComponent.ComponentCursor);
                     }

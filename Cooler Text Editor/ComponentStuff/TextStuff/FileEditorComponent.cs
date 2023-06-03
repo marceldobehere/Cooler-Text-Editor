@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Cooler_Text_Editor.ComponentStuff
+namespace Cooler_Text_Editor.ComponentStuff.TextStuff
 {
     public class FileEditorComponent : BasicComponent
     {
@@ -20,7 +20,7 @@ namespace Cooler_Text_Editor.ComponentStuff
         public PixelColor TitleForegroundColor, TitleBackgroundColor;
 
         public string CurrentFilePath = null;
-        
+
 
         public FileEditorComponent(Size2D size)
         {
@@ -48,13 +48,13 @@ namespace Cooler_Text_Editor.ComponentStuff
 
 
 
-            Size2D sizeView = new Size2D((Size2D parent) => { return parent; });
+            Size2D sizeView = new Size2D((parent) => { return parent; });
             View = new ViewComponent(sizeView);
             View.Position = new Position2D(0, 0);
             View.Parent = this;
 
 
-            Size2D sizeTitle = new Size2D((Size2D parent) => { return new Size2D(parent.Width, 1); });
+            Size2D sizeTitle = new Size2D((parent) => { return new Size2D(parent.Width, 1); });
             TitleBar = new TextComponent();
             TitleBar.Size = sizeTitle;
             TitleBar.Position = new Position2D(0, 0);
@@ -62,7 +62,7 @@ namespace Cooler_Text_Editor.ComponentStuff
 
 
 
-            Size2D sizeEditor = new Size2D((Size2D parent) => { return new Size2D(parent.Width, parent.Height - 2); });
+            Size2D sizeEditor = new Size2D((parent) => { return new Size2D(parent.Width, parent.Height - 2); });
             Editor = new SyntaxHighlightingEditorComponent(sizeEditor);
             Editor.Position = new Position2D(0, 2);
             View.AddChild(Editor);
@@ -76,7 +76,7 @@ namespace Cooler_Text_Editor.ComponentStuff
 
             UpdateTitle();
         }
-        
+
         public void UpdateTitle()
         {
             int lineCount = Editor.MainEditorComponent.InternalTextComponent.Text.Count;
@@ -132,7 +132,7 @@ namespace Cooler_Text_Editor.ComponentStuff
         {
             if (CurrentFilePath == null)
                 CurrentFilePath = SaveFileDialog();
-            
+
             SaveFile(CurrentFilePath);
         }
 
@@ -189,7 +189,7 @@ namespace Cooler_Text_Editor.ComponentStuff
 
             Editor.HandleKey(info);
         }
-        
+
         protected override void InternalUpdate()
         {
             ComponentCursor.OverwriteCursor(Editor.ComponentCursor);
@@ -197,7 +197,7 @@ namespace Cooler_Text_Editor.ComponentStuff
 
             Editor.MainEditorComponent.ForegroundColor = ForegroundColor;
             Editor.MainEditorComponent.BackgroundColor = BackgroundColor;
-         
+
 
             TitleBar.DefaultForegroundColor = TitleForegroundColor;
             TitleBar.DefaultBackgroundColor = TitleBackgroundColor;

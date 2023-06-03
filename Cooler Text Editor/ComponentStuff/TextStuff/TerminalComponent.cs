@@ -9,7 +9,7 @@ using System.Runtime.ConstrainedExecution;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Cooler_Text_Editor.ComponentStuff
+namespace Cooler_Text_Editor.ComponentStuff.TextStuff
 {
     public class TerminalComponent : BasicComponent
     {
@@ -40,7 +40,7 @@ namespace Cooler_Text_Editor.ComponentStuff
 
 
             InternalTextComponent = new TextComponent();
-            InternalTextComponent.Size = new Size2D(((Size2D parent) => { return parent; }));
+            InternalTextComponent.Size = new Size2D((parent) => { return parent; });
             InternalTextComponent.Position = new Position2D();
             InternalTextComponent.Parent = this;
             InternalTextComponent.BackgroundColor = BackgroundColor;
@@ -71,8 +71,8 @@ namespace Cooler_Text_Editor.ComponentStuff
         public void AttachClearHostAlias()
         {
             PowershellProc.StandardInput.WriteLine(@"
-                function Invoke-CustomClearHost {"+
-                    $"Write-Host '{(char)(0x0C)}'"
+                function Invoke-CustomClearHost {" +
+                    $"Write-Host '{(char)0x0C}'"
                  + @"}
 
                 Set-Alias -Name Clear-Host -Value Invoke-CustomClearHost -Option AllScope");

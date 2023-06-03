@@ -9,7 +9,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace Cooler_Text_Editor.ComponentStuff
+namespace Cooler_Text_Editor.ComponentStuff.TextStuff
 {
     public class EditorComponent : BasicComponent
     {
@@ -39,7 +39,7 @@ namespace Cooler_Text_Editor.ComponentStuff
 
 
             InternalTextComponent = new TextComponent();
-            InternalTextComponent.Size = new Size2D(((Size2D parent) => { return parent; }));
+            InternalTextComponent.Size = new Size2D((parent) => { return parent; });
             InternalTextComponent.Position = new Position2D();
             InternalTextComponent.Parent = this;
             InternalTextComponent.BackgroundColor = BackgroundColor;
@@ -83,18 +83,18 @@ namespace Cooler_Text_Editor.ComponentStuff
             CheckCursorBounds();
 
             {
-                while ((InternalCursor.CursorPosition.Y - InternalTextComponent.Scroll.Y) < 3)
+                while (InternalCursor.CursorPosition.Y - InternalTextComponent.Scroll.Y < 3)
                     InternalTextComponent.Scroll.Y--;
-                while ((InternalTextComponent.Size.Height > 3) && (InternalCursor.CursorPosition.Y - InternalTextComponent.Scroll.Y) > InternalTextComponent.Size.Height - 3)
+                while (InternalTextComponent.Size.Height > 3 && InternalCursor.CursorPosition.Y - InternalTextComponent.Scroll.Y > InternalTextComponent.Size.Height - 3)
                     InternalTextComponent.Scroll.Y++;
             }
             if (InternalTextComponent.Scroll.Y < 0)
                 InternalTextComponent.Scroll.Y = 0;
 
             {
-                while ((InternalCursor.CursorPosition.X - InternalTextComponent.Scroll.X) < 3)
+                while (InternalCursor.CursorPosition.X - InternalTextComponent.Scroll.X < 3)
                     InternalTextComponent.Scroll.X--;
-                while ((InternalTextComponent.Size.Width > 3) && (InternalCursor.CursorPosition.X - InternalTextComponent.Scroll.X) > InternalTextComponent.Size.Width - 3)
+                while (InternalTextComponent.Size.Width > 3 && InternalCursor.CursorPosition.X - InternalTextComponent.Scroll.X > InternalTextComponent.Size.Width - 3)
                     InternalTextComponent.Scroll.X++;
             }
 
