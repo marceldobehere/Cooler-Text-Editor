@@ -1,6 +1,12 @@
 # Cooler-Text-Editor
 
 The cooler and faster Console Text Editor.
+Has inbuilt
+* Reactive UI System
+* Text Editor
+* Image Viewer
+* Gif Player
+* TUI Explorer
 
 
 
