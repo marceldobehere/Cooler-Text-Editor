@@ -129,6 +129,9 @@ namespace Cooler_Text_Editor.ComponentStuff.TextStuff
             txt.Clear();
             foreach (var line in lines)
                 txt.WriteLineText(line);
+            if (txt.Text.Count > 0)
+                txt.Text.RemoveAt(txt.Text.Count - 1);
+
 
             Editor.ForceUpdate();
         }
@@ -136,7 +139,10 @@ namespace Cooler_Text_Editor.ComponentStuff.TextStuff
         public void SaveFile()
         {
             if (CurrentFilePath == null)
-                CurrentFilePath = SaveFileDialog();
+            {
+                SaveFileDialog();
+                return;
+            }
 
             SaveFile(CurrentFilePath);
         }
@@ -161,32 +167,52 @@ namespace Cooler_Text_Editor.ComponentStuff.TextStuff
             File.WriteAllText(path, outFileText.ToString());
         }
 
+        public enum FileDialogueTypeEnum
+        {
+            Open,
+            Save,
+        }
+        public FileDialogueTypeEnum FileDialogueType;
         public void HandleFileClickedYes(string path)
         {
-            LoadFile(path);
+            if (FileDialogueType == FileDialogueTypeEnum.Open)
+                LoadFile(path);
+            else if (FileDialogueType == FileDialogueTypeEnum.Save)
+                SaveFile(path);
             TempExplorerDialogue = null;
         }
 
-        public string OpenFileDialog()
+        public void OpenFileDialog()
         {
             TempExplorerDialogue = new ExplorerComponent(new Size2D((Size2D parent) => { return new Size2D(parent.Width - 6, parent.Height - 4); }));
             TempExplorerDialogue.DefaultBorderColor = PixelColor.Yellow2;
             TempExplorerDialogue.OnFileClicked = HandleFileClickedYes;
-            return null;
+            if (CurrentFilePath != null)
+            {
+                TempExplorerDialogue.CurrentPath = Path.GetDirectoryName(CurrentFilePath);
+                TempExplorerDialogue.RefreshFullList();
+            }
+            FileDialogueType = FileDialogueTypeEnum.Open;
         }
 
-        public string SaveFileDialog()
+        public void SaveFileDialog()
         {
-            TempExplorerDialogue = null;
-            return null;
+            TempExplorerDialogue = new ExplorerComponent(new Size2D((Size2D parent) => { return new Size2D(parent.Width - 6, parent.Height - 4); }));
+            TempExplorerDialogue.DefaultBorderColor = PixelColor.Yellow2;
+            TempExplorerDialogue.OnFileClicked = HandleFileClickedYes;
+            if (CurrentFilePath != null)
+            {
+                TempExplorerDialogue.CurrentPath = Path.GetDirectoryName(CurrentFilePath);
+                TempExplorerDialogue.RefreshFullList();
+            }
+            FileDialogueType = FileDialogueTypeEnum.Save;
         }
 
         public override bool HandleKey(ConsoleKeyInfo info)
         {
             if (info.Modifiers == ConsoleModifiers.Alt && info.Key == ConsoleKey.O)
             {
-                string path = OpenFileDialog();
-                LoadFile(path);
+                OpenFileDialog();
                 return true;
             }
             if (info.Modifiers == ConsoleModifiers.Alt && info.Key == ConsoleKey.S)
@@ -197,8 +223,7 @@ namespace Cooler_Text_Editor.ComponentStuff.TextStuff
             }
             if (info.Modifiers == (ConsoleModifiers.Alt | ConsoleModifiers.Shift) && info.Key == ConsoleKey.S)
             {
-                string path = OpenFileDialog();
-                SaveFile(path);
+                SaveFileDialog();
                 return true;
             }
 
