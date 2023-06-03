@@ -66,7 +66,7 @@ You can switch between the components in the Explorer the same as in the view co
 |Char|Mode|
 |----|----|
 |c   |Contains|
-|C   |Contains|
+|C   |Contains (Case sensitive)|
 |s   |Starts With|
 |S   |Starts With (Case sensitive)|
 |R   |Regex|
