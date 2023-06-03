@@ -63,80 +63,20 @@ public class Program
             //}
         }
 
-        {
-            //EditorComponent txtComp = new EditorComponent(new Size2D(120, 40)); //(new Size2D(60, 20));
-            //viewComponent.AddChild(txtComp);
-
-            //txtComp.Position = new Position2D(5, 5);
-            ////txtComp.Size = new Size2D((Size2D parent) => { return parent - txtComp.Position; });
-            //txtComp.BackgroundColor = new PixelColor(10, 20, 30);
-
-            //txtComp.InternalTextComponent.Text.Clear();
-            ////txtComp.InternalTextComponent.WriteLineText("Hello, World!");
-            ////txtComp.WriteLineText();
-            ////txtComp.WriteLineText("How are you?");
-
-            //string str = "../../testFiles/test.txt";
-            //if (!File.Exists(str))
-            //    str = "./test/testFiles/test.txt";
-
-            //using (StreamReader reader = new StreamReader(str))
-            //{
-            //    txtComp.InternalTextComponent.WriteText(reader.ReadToEnd());
-            //}
-
-            //txtComp.Visible = false;
-        }
-
-
-        //{
-        //    SyntaxHighlightingEditorComponent editComp = new SyntaxHighlightingEditorComponent(new Size2D(120, 40));
-
-        //    viewComponent.AddChild(editComp);
-
-        //    editComp.Position = new Position2D(5, 5);
-        //    //txtComp.Size = new Size2D((Size2D parent) => { return parent - txtComp.Position; });
-        //    editComp.MainEditorComponent.BackgroundColor = new PixelColor(10, 20, 30);
-
-        //    editComp.MainEditorComponent.InternalTextComponent.Text.Clear();
-        //    editComp.Update();
-        //    //txtComp.InternalTextComponent.WriteLineText("Hello, World!");
-        //    //txtComp.WriteLineText();
-        //    //txtComp.WriteLineText("How are you?");
-
-        //    string str = "../../testFiles/test.txt";
-        //    if (!File.Exists(str))
-        //        str = "./test/testFiles/test.txt";
-
-        //    using (StreamReader reader = new StreamReader(str))
-        //    {
-        //        editComp.MainEditorComponent.InternalTextComponent.WriteText(reader.ReadToEnd());
-        //    }
-        //    editComp.TextChanged = true;
-        //    editComp.CancelSyntaxUpdate = false;
-        //    editComp.Update();
-
-        //    Cursor.MainCursor = editComp.ComponentCursor;
-        //}
 
         {
             FileEditorComponent fileComp = new FileEditorComponent(new Size2D(80, 30));
-
-
             viewComponent.AddChild(fileComp);
+            //fileComp.Size = new Size2D((Size2D parent) => { return new Size2D(parent.Width - 40, parent.Height - 20); });
 
             fileComp.Position = new Position2D(5, 5);
-            //txtComp.Size = new Size2D((Size2D parent) => { return parent - txtComp.Position; });
             fileComp.BackgroundColor = new PixelColor(10, 20, 30);
-
-            
-            //editComp.TextChanged = true;
-            //editComp.CancelSyntaxUpdate = false;
-            //editComp.Update();
 
             Cursor.MainCursor = fileComp.ComponentCursor;
             MainScreen.MainView.ComponentCursor.HoverComponent = fileComp;
         }
+
+
 
 
         {

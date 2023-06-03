@@ -30,7 +30,9 @@ namespace Cooler_Text_Editor.ComponentStuff.ExplorerStuff
         public enum SearchModeEnum
         {
             Contains,
+            ContainsCaseSens,
             StartsWith,
+            StartsWithCaseSens,
             Regex
         }
 
@@ -128,8 +130,12 @@ namespace Cooler_Text_Editor.ComponentStuff.ExplorerStuff
             SearchModeComp.Clear();
             string searchModeStr = "";
             if (SearchMode == SearchModeEnum.Contains)
+                searchModeStr = "c";
+            else if (SearchMode == SearchModeEnum.ContainsCaseSens)
                 searchModeStr = "C";
             else if (SearchMode == SearchModeEnum.StartsWith)
+                searchModeStr = "s";
+            else if (SearchMode == SearchModeEnum.StartsWithCaseSens)
                 searchModeStr = "S";
             else if (SearchMode == SearchModeEnum.Regex)
                 searchModeStr = "R";
@@ -172,14 +178,18 @@ namespace Cooler_Text_Editor.ComponentStuff.ExplorerStuff
             return res;
         }
 
-        public static bool FilterSingle(string input, string search, SearchModeEnum mode)
+        public static bool FilterSingle(string input, string search, SearchModeEnum mode, Regex regex)
         {
             if (mode == SearchModeEnum.Contains)
-                return input.Contains(search);
+                return input.ToLower().Contains(search.ToLower());
             else if (mode == SearchModeEnum.StartsWith)
+                return input.ToLower().StartsWith(search.ToLower());
+            else if (mode == SearchModeEnum.ContainsCaseSens)
+                return input.Contains(search);
+            else if (mode == SearchModeEnum.StartsWithCaseSens)
                 return input.StartsWith(search);
             else if (mode == SearchModeEnum.Regex)
-                return Regex.IsMatch(input, search);
+                return regex != null && regex.IsMatch(input);
 
             return false;
         }
@@ -187,9 +197,21 @@ namespace Cooler_Text_Editor.ComponentStuff.ExplorerStuff
         public static List<string> Filter(List<string> input, string searchStr, SearchModeEnum mode)
         {
             List<string> res = new List<string>();
+            Regex regex = null;
+            if (mode == SearchModeEnum.Regex)
+            {
+                try
+                {
+                    regex = new Regex(searchStr, RegexOptions.Compiled);
+                }
+                catch (Exception e)
+                {
+
+                }
+            }
 
             foreach (string tempStr in input)
-                if (FilterSingle(tempStr, searchStr, mode))
+                if (FilterSingle(tempStr, searchStr, mode, regex))
                     res.Add(tempStr);
 
             return res;
@@ -393,12 +415,16 @@ namespace Cooler_Text_Editor.ComponentStuff.ExplorerStuff
 
         public void SwitchSearchMode()
         {
-            if (SearchMode == SearchModeEnum.StartsWith)
-                SearchMode = SearchModeEnum.Contains;
-            else if (SearchMode == SearchModeEnum.Contains)
+            if (SearchMode == SearchModeEnum.Contains)
+                SearchMode = SearchModeEnum.ContainsCaseSens;
+            else if (SearchMode == SearchModeEnum.ContainsCaseSens)
+                SearchMode = SearchModeEnum.StartsWith;
+            else if (SearchMode == SearchModeEnum.StartsWith)
+                SearchMode = SearchModeEnum.StartsWithCaseSens;
+            else if (SearchMode == SearchModeEnum.StartsWithCaseSens)
                 SearchMode = SearchModeEnum.Regex;
             else if (SearchMode == SearchModeEnum.Regex)
-                SearchMode = SearchModeEnum.StartsWith;
+                SearchMode = SearchModeEnum.Contains;
         }
 
         public void UpdateInternalComponents()

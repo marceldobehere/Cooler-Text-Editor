@@ -38,6 +38,11 @@ namespace Cooler_Text_Editor.ComponentStuff
                     Resize(temp);
             }
 
+            if (Size.Width < 0)
+                Size.Width = 0;
+            if (Size.Height < 0)
+                Size.Height = 0;
+
             if (Size.Width != RenderedScreen.GetLength(0) ||
                 Size.Height != RenderedScreen.GetLength(1))
             {

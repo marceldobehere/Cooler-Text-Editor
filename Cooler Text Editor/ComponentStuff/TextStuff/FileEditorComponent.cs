@@ -19,7 +19,9 @@ namespace Cooler_Text_Editor.ComponentStuff.TextStuff
         public SyntaxHighlightingEditorComponent Editor;
         public PixelColor ForegroundColor, BackgroundColor;
         public PixelColor TitleForegroundColor, TitleBackgroundColor;
+        public PixelColor LineForegroundColor, LineBackgroundColor;
         public ExplorerComponent TempExplorerDialogue;
+        public bool ShowLineNum = true;
 
         public string CurrentFilePath = null;
 
@@ -40,6 +42,8 @@ namespace Cooler_Text_Editor.ComponentStuff.TextStuff
             BackgroundColor = PixelColor.Black;
             TitleForegroundColor = PixelColor.Green;
             TitleBackgroundColor = PixelColor.Black;
+            LineForegroundColor = PixelColor.Cyan;
+            LineBackgroundColor = PixelColor.Black;
 
             Pixel bgPixel = new Pixel(ForegroundColor, BackgroundColor);
 
@@ -56,28 +60,69 @@ namespace Cooler_Text_Editor.ComponentStuff.TextStuff
             View.Parent = this;
 
 
-            Size2D sizeTitle = new Size2D((parent) => { return new Size2D(parent.Width, 1); });
             TitleBar = new TextComponent();
-            TitleBar.Size = sizeTitle;
+            TitleBar.Size = new Size2D(10, 1);
             TitleBar.Position = new Position2D(0, 0);
             View.AddChild(TitleBar);
 
 
 
-            Size2D sizeEditor = new Size2D((parent) => { return new Size2D(parent.Width, parent.Height - 2); });
+            Size2D sizeEditor = new Size2D(Size.Width - 2, Size.Height - 2);//= new Size2D((parent) => { return new Size2D(parent.Width, parent.Height - 2); });
             Editor = new SyntaxHighlightingEditorComponent(sizeEditor);
-            Editor.Position = new Position2D(0, 2);
+            Editor.Position = new Position2D(2, 2);
             View.AddChild(Editor);
 
 
             // ignoring the line box for now
+            Size2D sizeLineBox = new Size2D((parent) => { return new Size2D(2, parent.Height - 2); });
+            LineBox = new TextComponent();
+            LineBox.Size = new Size2D(2, Size.Height - 2);
+            LineBox.Position = new Position2D(0, 2);
+            View.AddChild(LineBox);
 
 
             TempExplorerDialogue = null;
 
+            LineBox.DefaultForegroundColor = LineForegroundColor;
+            LineBox.DefaultBackgroundColor = LineBackgroundColor;
+            LineBox.BackgroundColor = LineBackgroundColor;
 
-
+            UpdateLineBox();
             UpdateTitle();
+        }
+
+        int lastStart = 0, lastEnd = 0;
+        public void UpdateLineBox()
+        {
+            if (ShowLineNum)
+            {
+                int start = Editor.MainEditorComponent.InternalTextComponent.Scroll.Y;
+                int end = start + Editor.Size.Height;
+                int maxLineLen = end.ToString().Length;
+                Size2D sizeLineBox = new Size2D(maxLineLen, Size.Height - 2);
+                LineBox.Size = sizeLineBox;
+                LineBox.Visible = true;
+                Editor.Position.X = maxLineLen + 1;
+                Editor.Size = new Size2D(Size.Width - maxLineLen - 1, Size.Height - 2);
+
+                if (start != lastStart || end != lastEnd)
+                {
+                    lastStart = start;
+                    lastEnd = end;
+
+                    LineBox.Clear();
+                    for (int i = start; i < end; i++)
+                    {
+                        LineBox.WriteLineText((i + 1).ToString().PadLeft(maxLineLen, '0'));
+                    }
+                }
+            }
+            else
+            {
+                LineBox.Visible = false;
+                Editor.Position.X = 0;
+                Editor.Size.Width = Size.Width;
+            }
         }
 
         public void UpdateTitle()
@@ -99,6 +144,7 @@ namespace Cooler_Text_Editor.ComponentStuff.TextStuff
             newTitle += lineText;
 
 
+            TitleBar.Size = new Size2D(newTitle.Length, 1);
             TitleBar.Clear();
             TitleBar.WriteLineText(newTitle);
 
@@ -132,7 +178,7 @@ namespace Cooler_Text_Editor.ComponentStuff.TextStuff
             if (txt.Text.Count > 0)
                 txt.Text.RemoveAt(txt.Text.Count - 1);
 
-
+            Editor.MainEditorComponent.InternalCursor.CursorPosition = new Position2D();
             Editor.ForceUpdate();
         }
 
@@ -219,7 +265,11 @@ namespace Cooler_Text_Editor.ComponentStuff.TextStuff
             {
                 SaveFile();
                 return true;
-
+            }
+            if (info.Modifiers == ConsoleModifiers.Alt && info.Key == ConsoleKey.L)
+            {
+                ShowLineNum = !ShowLineNum;
+                return true;
             }
             if (info.Modifiers == (ConsoleModifiers.Alt | ConsoleModifiers.Shift) && info.Key == ConsoleKey.S)
             {
@@ -283,10 +333,15 @@ namespace Cooler_Text_Editor.ComponentStuff.TextStuff
                 Editor.MainEditorComponent.ForegroundColor = ForegroundColor;
                 Editor.MainEditorComponent.BackgroundColor = BackgroundColor;
 
+                LineBox.DefaultForegroundColor = LineForegroundColor;
+                LineBox.DefaultBackgroundColor = LineBackgroundColor;
+                LineBox.BackgroundColor = LineBackgroundColor;
 
                 TitleBar.DefaultForegroundColor = TitleForegroundColor;
                 TitleBar.DefaultBackgroundColor = TitleBackgroundColor;
                 TitleBar.BackgroundColor = TitleBackgroundColor;
+
+                UpdateLineBox();
                 UpdateTitle();
             }
             else
