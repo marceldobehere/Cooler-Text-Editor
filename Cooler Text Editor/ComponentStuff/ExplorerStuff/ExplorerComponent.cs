@@ -26,6 +26,39 @@ namespace Cooler_Text_Editor.ComponentStuff.ExplorerStuff
         public bool Done;
         public Cursor InternalCursor;
 
+        public Stack<string> QueryStack = new Stack<string>();
+        public Stack<SearchModeEnum> SearchModeStack = new Stack<SearchModeEnum>();
+        public Stack<Position2D> CursorPositionStack = new Stack<Position2D>();
+
+        public static int GetPathLevel(string path)
+        {
+            if (!Directory.Exists(path))
+                return 0;
+
+            DirectoryInfo info = new DirectoryInfo(path);
+            int i = 0;
+            for (; info != null; i++)
+                info = info.Parent;
+            return i;
+        }
+
+        public void SetPath(string path)
+        {
+            int lvl = GetPathLevel(path);
+
+            QueryStack.Clear();
+            SearchModeStack.Clear();
+            CursorPositionStack.Clear();
+
+            for (int i = 0; i < lvl; i++)
+            {
+                QueryStack.Push("");
+                SearchModeStack.Push(SearchModeEnum.Contains);
+                CursorPositionStack.Push(new Position2D(0, 0));
+            }
+            CurrentPath = path;
+        }
+
 
         public SearchModeEnum SearchMode;
         public enum SearchModeEnum
@@ -124,6 +157,10 @@ namespace Cooler_Text_Editor.ComponentStuff.ExplorerStuff
             InternalCursor = ResultComp.ComponentCursor;
             View.ComponentCursor.HoverComponent = ResultComp;
             RefreshFullList();
+
+            QueryStack.Clear();
+            SearchModeStack.Clear();
+            CursorPositionStack.Clear();
         }
 
         public void UpdateSearchModeComp()
@@ -152,8 +189,15 @@ namespace Cooler_Text_Editor.ComponentStuff.ExplorerStuff
             if (!Directory.Exists(CurrentPath))
                 return res;
 
-            foreach (var str in Directory.GetDirectories(CurrentPath))
-                res.Add(Path.GetFileName(str));
+            try
+            {
+                foreach (var str in Directory.GetDirectories(CurrentPath))
+                    res.Add(Path.GetFileName(str));
+            }
+            catch (Exception e)
+            {
+
+            }
 
             return res;
         }
@@ -167,8 +211,15 @@ namespace Cooler_Text_Editor.ComponentStuff.ExplorerStuff
             if (!Directory.Exists(CurrentPath))
                 return res;
 
-            foreach (var str in Directory.GetFiles(CurrentPath))
-                res.Add(Path.GetFileName(str));
+            try
+            {
+                foreach (var str in Directory.GetFiles(CurrentPath))
+                    res.Add(Path.GetFileName(str));
+            }
+            catch (Exception e)
+            {
+
+            }
 
             return res;
         }
@@ -180,7 +231,14 @@ namespace Cooler_Text_Editor.ComponentStuff.ExplorerStuff
             if (CurrentPath != null && CurrentPath != "")
                 return res;
 
-            res.AddRange(Directory.GetLogicalDrives());
+            try
+            {
+                res.AddRange(Directory.GetLogicalDrives());
+            }
+            catch (Exception e)
+            {
+
+            }
 
             return res;
         }
@@ -261,6 +319,46 @@ namespace Cooler_Text_Editor.ComponentStuff.ExplorerStuff
                 ResultComp.InternalTextComponent.Text.RemoveAt(ResultComp.InternalTextComponent.Text.Count - 1);
         }
 
+        public void RestoreLastStack(string prev)
+        {
+            string searchQuery = "";
+            SearchModeEnum searchMode = SearchModeEnum.Contains;
+            Position2D cursorPos = new Position2D();
+
+            if (QueryStack.Count > 0)
+            {
+                searchQuery = QueryStack.Pop();
+                searchMode = SearchModeStack.Pop();
+                cursorPos = CursorPositionStack.Pop();
+            }
+            
+            CurrentPath = prev;
+            SearchMode = searchMode;
+
+            SearchQuery = searchQuery;
+            SearchComp.InternalTextComponent.Clear();
+            SearchComp.InternalTextComponent.WriteText(searchQuery);
+
+            RefreshFullList();
+
+            ResultComp.InternalCursor.CursorPosition = cursorPos;
+        }
+
+        public void SaveCurrStack(string next)
+        {
+            CurrentPath = next;
+
+            QueryStack.Push(SearchQuery);
+            SearchModeStack.Push(SearchMode);
+            CursorPositionStack.Push(ResultComp.InternalCursor.CursorPosition);
+
+
+            SearchQuery = "";
+            SearchComp.InternalTextComponent.Clear();
+            ResultComp.InternalCursor.CursorPosition = new Position2D();
+            RefreshFullList();
+        }
+
         public override bool HandleKey(ConsoleKeyInfo info)
         {
             if (info.Key == ConsoleKey.Escape)
@@ -317,11 +415,12 @@ namespace Cooler_Text_Editor.ComponentStuff.ExplorerStuff
                     if (CurrentPath != null && CurrentPath != "")
                     {
                         var dirInfo = Directory.GetParent(CurrentPath);
+                        string t = null;
                         if (dirInfo != null)
-                            CurrentPath = dirInfo.FullName;
-                        else
-                            CurrentPath = null;
-                        RefreshFullList();
+                            t = dirInfo.FullName;
+                        RestoreLastStack(t);
+                        //RefreshFullList();
+                        //ResultComp.InternalCursor.CursorPosition = new Position2D();
                     }
                 }
                 else if (info.Key == ConsoleKey.Enter)
@@ -332,7 +431,7 @@ namespace Cooler_Text_Editor.ComponentStuff.ExplorerStuff
                     }
                     else if (comp == PathComp)
                     {
-                        CurrentPath = PathComp.InternalTextComponent.GetString();
+                        SetPath(PathComp.InternalTextComponent.GetString());
                     }
                     else if (comp == SearchComp)
                     {
@@ -405,10 +504,7 @@ namespace Cooler_Text_Editor.ComponentStuff.ExplorerStuff
             }
             else if (col == ListFolderForegroundColor)
             {
-                CurrentPath += "/" + name;
-                SearchQuery = "";
-                SearchComp.InternalTextComponent.Clear();
-                ResultComp.InternalCursor.CursorPosition = new Position2D();
+                SaveCurrStack(CurrentPath + "/" + name);
             }
             else if (col == ListDriveForegroundColor)
             {

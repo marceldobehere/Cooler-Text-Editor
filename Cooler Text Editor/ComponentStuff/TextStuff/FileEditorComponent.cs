@@ -235,7 +235,7 @@ namespace Cooler_Text_Editor.ComponentStuff.TextStuff
             TempExplorerDialogue.OnFileClicked = HandleFileClickedYes;
             if (CurrentFilePath != null)
             {
-                TempExplorerDialogue.CurrentPath = Path.GetDirectoryName(CurrentFilePath);
+                TempExplorerDialogue.SetPath(Path.GetDirectoryName(CurrentFilePath));
                 TempExplorerDialogue.RefreshFullList();
             }
             FileDialogueType = FileDialogueTypeEnum.Open;
@@ -248,7 +248,7 @@ namespace Cooler_Text_Editor.ComponentStuff.TextStuff
             TempExplorerDialogue.OnFileClicked = HandleFileClickedYes;
             if (CurrentFilePath != null)
             {
-                TempExplorerDialogue.CurrentPath = Path.GetDirectoryName(CurrentFilePath);
+                TempExplorerDialogue.SetPath(Path.GetDirectoryName(CurrentFilePath));
                 TempExplorerDialogue.RefreshFullList();
             }
             FileDialogueType = FileDialogueTypeEnum.Save;
