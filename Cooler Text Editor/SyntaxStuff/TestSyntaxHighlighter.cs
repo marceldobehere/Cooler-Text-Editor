@@ -49,7 +49,7 @@ namespace Cooler_Text_Editor.SyntaxStuff
                 {
                     new List<string>()
                     {
-                        "foreach ", "for ", "in ", "if ", "else ", "break;", "continue;", "return;", "return ", "while ", "do ", "switch ", "case ", "default ", "try ", "catch ", "finally ", "throw ", "new ", "async "
+                        "foreach ", "for ", "in ", "if ", "else", "break;", "continue;", "return;", "return ", "while ", "do ", "switch ", "case ", "default ", "try ", "catch ", "finally ", "throw ", "new ", "async "
                     },
                     PixelColor.Magenta2
                 },
