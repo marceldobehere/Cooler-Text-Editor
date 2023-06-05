@@ -346,3 +346,9 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+Cooler Text Editor/obj/Cooler Text Editor.csproj.nuget.dgspec.json
+Cooler Text Editor/obj/project.assets.json
+Cooler Text Editor/obj/Debug/net7.0/Cooler Text Editor.GeneratedMSBuildEditorConfig.editorconfig
+Cooler Text Editor/obj/Debug/net7.0/Cooler Text Editor.GeneratedMSBuildEditorConfig.editorconfig
+Cooler Text Editor/obj/Cooler Text Editor.csproj.nuget.g.props
+Cooler Text Editor/obj/Cooler Text Editor.csproj.nuget.dgspec.json
