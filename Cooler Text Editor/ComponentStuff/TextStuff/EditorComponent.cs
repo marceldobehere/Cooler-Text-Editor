@@ -104,7 +104,7 @@ namespace Cooler_Text_Editor.ComponentStuff.TextStuff
                 InternalTextComponent.Scroll.X = 0;
         }
 
-        public override bool HandleKey(ConsoleKeyInfo info)
+        public override bool InternalHandleKey(ConsoleKeyInfo info)
         {
             if (info.Key == ConsoleKey.LeftArrow ||
                 info.Key == ConsoleKey.UpArrow ||

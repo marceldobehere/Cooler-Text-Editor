@@ -198,7 +198,7 @@ namespace Cooler_Text_Editor.ComponentStuff
             OldSize = Size;
         }
 
-        public override bool HandleKey(ConsoleKeyInfo info)
+        public override bool InternalHandleKey(ConsoleKeyInfo info)
         {
             //throw new NotImplementedException();
 

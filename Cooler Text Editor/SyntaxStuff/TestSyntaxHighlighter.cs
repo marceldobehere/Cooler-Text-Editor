@@ -35,7 +35,7 @@ namespace Cooler_Text_Editor.SyntaxStuff
                 {
                     new List<string>()
                     {
-                        "public ","static ","abstract ","private ", "protected ", "virtual ", "class ", "namespace ", "struct ", "using ", "enum "
+                        "public ","static ","abstract ","private ", "protected ", "virtual ", "class ", "namespace ", "struct ", "using ", "enum ", "internal "
                     },
                     PixelColor.Blue3
                 },

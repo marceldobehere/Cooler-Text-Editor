@@ -52,7 +52,7 @@ namespace Cooler_Text_Editor.ComponentStuff
             UpdateFields.Clear();
         }
 
-        public override bool HandleKey(ConsoleKeyInfo info)
+        public override bool InternalHandleKey(ConsoleKeyInfo info)
         {
             return MainView.HandleKey(info);
 

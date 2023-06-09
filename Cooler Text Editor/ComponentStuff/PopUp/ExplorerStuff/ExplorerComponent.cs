@@ -10,9 +10,9 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace Cooler_Text_Editor.ComponentStuff.ExplorerStuff
+namespace Cooler_Text_Editor.ComponentStuff.PopUp.ExplorerStuff
 {
-    public class ExplorerComponent : BasicComponent
+    public class ExplorerComponent : BasicPopUpComponent
     {
         public string CurrentPath = null, SearchQuery = "";
         public PixelColor ForegroundColor, BackgroundColor;
@@ -23,7 +23,6 @@ namespace Cooler_Text_Editor.ComponentStuff.ExplorerStuff
         public ViewComponent View;
         public EditorComponent PathComp, SearchComp, ResultComp;
         public TextComponent SearchModeComp;
-        public bool Done;
         public Cursor InternalCursor;
 
         public Stack<string> QueryStack = new Stack<string>();
@@ -331,7 +330,7 @@ namespace Cooler_Text_Editor.ComponentStuff.ExplorerStuff
                 searchMode = SearchModeStack.Pop();
                 cursorPos = CursorPositionStack.Pop();
             }
-            
+
             CurrentPath = prev;
             SearchMode = searchMode;
 
@@ -359,7 +358,7 @@ namespace Cooler_Text_Editor.ComponentStuff.ExplorerStuff
             RefreshFullList();
         }
 
-        public override bool HandleKey(ConsoleKeyInfo info)
+        public override bool InternalHandleKey(ConsoleKeyInfo info)
         {
             if (info.Key == ConsoleKey.Escape)
             {
@@ -367,50 +366,37 @@ namespace Cooler_Text_Editor.ComponentStuff.ExplorerStuff
                 return true;
             }
 
+
             if (
                 (info.Modifiers == ConsoleModifiers.Control &&
-                info.Key == ConsoleKey.Backspace) ||
+                (info.Key == ConsoleKey.RightArrow ||
+                info.Key == ConsoleKey.LeftArrow)) ||
                 (info.Modifiers == ConsoleModifiers.Alt &&
-                info.Key == ConsoleKey.K)
-                )
+                (info.Key == ConsoleKey.J ||
+                info.Key == ConsoleKey.L)))
             {
-                if (InternalCursor.CursorComponent.Parent != null &&
-                    InternalCursor.CursorComponent.Parent.ComponentCursor != null &&
-                    InternalCursor.CursorComponent != View)
                 {
                     InternalCursor.CursorComponent.HandleExitFocus();
                     InternalCursor = InternalCursor.CursorComponent.Parent.ComponentCursor;
                     InternalCursor.CursorComponent.HandleEnterFocus();
-                    return true;
                 }
-            }
-
-            if (
-                (info.Modifiers == ConsoleModifiers.Control &&
-                info.Key == ConsoleKey.Enter) ||
-                (info.Modifiers == ConsoleModifiers.Alt &&
-                info.Key == ConsoleKey.I)
-                )
-            {
-                if (InternalCursor.HoverComponent != null &&
-                    InternalCursor.HoverComponent.ComponentCursor != null)
+                View.HandleKey(info);
                 {
                     InternalCursor.CursorComponent.HandleExitFocus();
                     InternalCursor = InternalCursor.HoverComponent.ComponentCursor;
                     InternalCursor.CursorComponent.HandleEnterFocus();
-                    return true;
-
                 }
+
+                return true;
+
             }
-
-
 
 
             if (!View.HandleKey(info))
             {
                 var comp = InternalCursor.CursorComponent;
                 if (
-                    (info.Key == ConsoleKey.Backspace && info.Modifiers == ConsoleModifiers.Shift))
+                    info.Key == ConsoleKey.Backspace && info.Modifiers == ConsoleModifiers.Shift)
                 {
                     if (CurrentPath != null && CurrentPath != "")
                     {

@@ -80,7 +80,7 @@ namespace Cooler_Text_Editor.ComponentStuff.TextStuff
             PowershellProc.StandardInput.WriteLine("cls");
         }
 
-        public override bool HandleKey(ConsoleKeyInfo info)
+        public override bool InternalHandleKey(ConsoleKeyInfo info)
         {
             if (info.Key == ConsoleKey.Enter)
             {

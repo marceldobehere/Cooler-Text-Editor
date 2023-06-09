@@ -76,6 +76,15 @@ public class Program
             MainScreen.MainView.ComponentCursor.HoverComponent = fileComp;
         }
 
+        {
+            FileEditorComponent fileComp = new FileEditorComponent(new Size2D(80, 30));
+            viewComponent.AddChild(fileComp);
+            //fileComp.Size = new Size2D((Size2D parent) => { return new Size2D(parent.Width / 3, parent.Height / 3); });
+
+            fileComp.Position = new Position2D(90, 5);
+            fileComp.BackgroundColor = new PixelColor(10, 20, 30);
+        }
+
 
 
 

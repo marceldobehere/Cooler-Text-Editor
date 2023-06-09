@@ -61,7 +61,7 @@ namespace Cooler_Text_Editor.ComponentStuff
             Children.Remove(child);
         }
 
-        public override bool HandleKey(ConsoleKeyInfo info)
+        public override bool InternalHandleKey(ConsoleKeyInfo info)
         {
             if ( 
                 (info.Modifiers == ConsoleModifiers.Control &&

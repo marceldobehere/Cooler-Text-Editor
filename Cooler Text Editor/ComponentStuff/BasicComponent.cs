@@ -1,4 +1,5 @@
-﻿using Cooler_Text_Editor.HelperStuff;
+﻿using Cooler_Text_Editor.ComponentStuff.PopUp;
+using Cooler_Text_Editor.HelperStuff;
 using Cooler_Text_Editor.RenderingStuff;
 using Cooler_Text_Editor.WindowStuff;
 using System;
@@ -22,7 +23,10 @@ namespace Cooler_Text_Editor.ComponentStuff
         public PixelColor OldBorderColor = PixelColor.Transparent;
         public Cursor ComponentCursor = null;
         public bool OverwriteNavigationInput = false;
-        
+
+        public BasicPopUpComponent PopUpComponent = null;
+        private Field2D? OldPopUpComponentfield = null;
+
 
         public void Update()
         {
@@ -84,10 +88,73 @@ namespace Cooler_Text_Editor.ComponentStuff
                 }
             }
 
+
+            if (PopUpComponent != null)
+            {
+                Size2D compSize = Size;
+                PopUpComponent.Size = new Size2D(compSize.Width - 6, compSize.Height - 4);
+
+                Size2D popUpSize = PopUpComponent.Size;
+                Position2D centerPos = new Position2D
+                    (
+                        (compSize.Width - popUpSize.Width) / 2,
+                        (compSize.Height - popUpSize.Height) / 2
+                    );
+                PopUpComponent.Position = centerPos + Position;
+
+                PopUpComponent.Update();
+            }
+            if (PopUpComponent != null || OldPopUpComponentfield != null)
+            {
+                if (PopUpComponent != null)
+                {
+                    if (Parent != null)
+                    {
+                        if (OldPopUpComponentfield != null &&
+                        PopUpComponent.GetField() != OldPopUpComponentfield)
+                            Parent.UpdateFields.Add(OldPopUpComponentfield.Value);
+
+                        Parent.UpdateFields.Add(PopUpComponent.GetField());
+                    }
+                    OldPopUpComponentfield = PopUpComponent.GetField();
+                }
+                else
+                {
+                    if (Parent != null)
+                        Parent.UpdateFields.Add(OldPopUpComponentfield.Value);
+                    OldPopUpComponentfield = null;
+                }
+            }
+
             InternalUpdate();
+
+            if (PopUpComponent != null)
+            {
+                Size2D compSize = Size;
+                Size2D popUpSize = PopUpComponent.Size;
+                Position2D centerPos = new Position2D
+                    (
+                        (compSize.Width - popUpSize.Width) / 2,
+                        (compSize.Height - popUpSize.Height) / 2
+                    );
+
+                ComponentCursor.OverwriteCursor(PopUpComponent.ComponentCursor);
+                ComponentCursor.CursorPosition += centerPos;
+            }
+
+            if (PopUpComponent != null && PopUpComponent.Done)
+                PopUpComponent = null;
         }
 
         protected abstract void InternalUpdate();
+
+        public void RenderPopUpComponent(Pixel[,] screen, Field2D field)
+        {
+            if (PopUpComponent == null)
+                return;
+
+            PopUpComponent.RenderTo(screen, field);
+        }
 
         public void RenderTo(Pixel[,] screen, Field2D field)
         {
@@ -104,38 +171,41 @@ namespace Cooler_Text_Editor.ComponentStuff
                 for (int x = internalField.TL.X; x <= internalField.BR.X; x++)
                     screen[x + Position.X, y + Position.Y].WriteOver(RenderedScreen[x, y]);
 
-            if (CurrentBorderColor.IsTransparent)
-                return;
-            Pixel borderPixel = new Pixel(CurrentBorderColor, CurrentBorderColor);
-
-
-            Field2D TopBorder = new Field2D(tField1.TL - new Position2D(1), new Position2D(tField1.BR.X + 1, tField1.TL.Y - 1));
-            Field2D LeftBorder = new Field2D(tField1.TL - new Position2D(1), new Position2D(tField1.TL.X - 1, tField1.BR.Y + 1));
-            Field2D RightBorder = new Field2D(new Position2D(tField1.BR.X + 1, tField1.TL.Y - 1), tField1.BR + new Position2D(1));
-            Field2D BottomBorder = new Field2D(new Position2D(tField1.TL.X - 1, tField1.BR.Y + 1), tField1.BR + new Position2D(1));
+            if (!CurrentBorderColor.IsTransparent)
             {
-                //Field2D TopBorder = new Field2D(tField1.TL, new Position2D(tField1.BR.X, tField1.TL.Y));
-                TopBorder = tField3.MergeMinField(TopBorder.MergeMinField(tField2));
-                Rendering.FillOverPixel(screen, TopBorder, borderPixel);
+                Pixel borderPixel = new Pixel(CurrentBorderColor, CurrentBorderColor);
+
+
+                Field2D TopBorder = new Field2D(tField1.TL - new Position2D(1), new Position2D(tField1.BR.X + 1, tField1.TL.Y - 1));
+                Field2D LeftBorder = new Field2D(tField1.TL - new Position2D(1), new Position2D(tField1.TL.X - 1, tField1.BR.Y + 1));
+                Field2D RightBorder = new Field2D(new Position2D(tField1.BR.X + 1, tField1.TL.Y - 1), tField1.BR + new Position2D(1));
+                Field2D BottomBorder = new Field2D(new Position2D(tField1.TL.X - 1, tField1.BR.Y + 1), tField1.BR + new Position2D(1));
+                {
+                    //Field2D TopBorder = new Field2D(tField1.TL, new Position2D(tField1.BR.X, tField1.TL.Y));
+                    TopBorder = tField3.MergeMinField(TopBorder.MergeMinField(tField2));
+                    Rendering.FillOverPixel(screen, TopBorder, borderPixel);
+                }
+
+                {
+                    //Field2D LeftBorder = new Field2D(tField1.TL, new Position2D(tField1.TL.X, tField1.BR.Y));
+                    LeftBorder = tField3.MergeMinField(LeftBorder.MergeMinField(tField2));
+                    Rendering.FillOverPixel(screen, LeftBorder, borderPixel);
+                }
+
+                {
+                    //Field2D RightBorder = new Field2D(new Position2D(tField1.BR.X, tField1.TL.Y), tField1.BR);
+                    RightBorder = tField3.MergeMinField(RightBorder.MergeMinField(tField2));
+                    Rendering.FillOverPixel(screen, RightBorder, borderPixel);
+                }
+
+                {
+                    //Field2D BottomBorder = new Field2D(new Position2D(tField1.TL.X, tField1.BR.Y), tField1.BR);
+                    BottomBorder = tField3.MergeMinField(BottomBorder.MergeMinField(tField2));
+                    Rendering.FillOverPixel(screen, BottomBorder, borderPixel);
+                }
             }
 
-            {
-                //Field2D LeftBorder = new Field2D(tField1.TL, new Position2D(tField1.TL.X, tField1.BR.Y));
-                LeftBorder = tField3.MergeMinField(LeftBorder.MergeMinField(tField2));
-                Rendering.FillOverPixel(screen, LeftBorder, borderPixel);
-            }
-
-            {
-                //Field2D RightBorder = new Field2D(new Position2D(tField1.BR.X, tField1.TL.Y), tField1.BR);
-                RightBorder = tField3.MergeMinField(RightBorder.MergeMinField(tField2));
-                Rendering.FillOverPixel(screen, RightBorder, borderPixel);
-            }
-
-            {
-                //Field2D BottomBorder = new Field2D(new Position2D(tField1.TL.X, tField1.BR.Y), tField1.BR);
-                BottomBorder = tField3.MergeMinField(BottomBorder.MergeMinField(tField2));
-                Rendering.FillOverPixel(screen, BottomBorder, borderPixel);
-            }
+            RenderPopUpComponent(screen, field);
         }
 
         public Field2D GetField()
@@ -184,7 +254,14 @@ namespace Cooler_Text_Editor.ComponentStuff
 
         public virtual void HandleEnterFocus() { }
         public virtual void HandleExitFocus() { }
-        public abstract bool HandleKey(ConsoleKeyInfo info);
+        public bool HandleKey(ConsoleKeyInfo info)
+        {
+            if (PopUpComponent != null)
+                return PopUpComponent.HandleKey(info);
+            else
+                return InternalHandleKey(info);
+        }
+        public abstract bool InternalHandleKey(ConsoleKeyInfo info);
 
         public Position2D GetAbsolutePosition()
         {
