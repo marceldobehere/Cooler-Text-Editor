@@ -112,22 +112,22 @@ public class Program
             //    tabComp.AddTab(imgComp);
             //}
 
-            {
-                TabComponent tabComp2 = new TabComponent(new Size2D(80, 30));
+            //{
+            //    TabComponent tabComp2 = new TabComponent(new Size2D(80, 30));
 
-                {
-                    FileEditorComponent fileComp = new FileEditorComponent(new Size2D(80, 30));
-                    fileComp.BackgroundColor = new PixelColor(10, 20, 30);
-                    tabComp2.AddTab(fileComp);
-                }
+            //    {
+            //        FileEditorComponent fileComp = new FileEditorComponent(new Size2D(80, 30));
+            //        fileComp.BackgroundColor = new PixelColor(10, 20, 30);
+            //        tabComp2.AddTab(fileComp);
+            //    }
 
-                {
-                    FileEditorComponent fileComp = new FileEditorComponent(new Size2D(80, 30));
-                    fileComp.BackgroundColor = new PixelColor(10, 20, 30);
-                    tabComp2.AddTab(fileComp);
-                }
-                tabComp.AddTab(tabComp2);
-            }
+            //    {
+            //        FileEditorComponent fileComp = new FileEditorComponent(new Size2D(80, 30));
+            //        fileComp.BackgroundColor = new PixelColor(10, 20, 30);
+            //        tabComp2.AddTab(fileComp);
+            //    }
+            //    tabComp.AddTab(tabComp2);
+            //}
         }
 
 
