@@ -56,7 +56,7 @@ namespace Cooler_Text_Editor.SyntaxStuff
 
             };
 
-        public override async Task<List<List<Pixel>>> SyntaxHighlight(List<string> data, PixelColor defaultFG, PixelColor defaultBG)
+        public override async Task<List<List<Pixel>>> SyntaxHighlight(List<string> data, string ext, PixelColor defaultFG, PixelColor defaultBG)
         {
             await Task.Delay(50);
             List<List<Pixel>> res = new List<List<Pixel>>();

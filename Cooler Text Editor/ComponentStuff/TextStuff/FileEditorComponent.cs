@@ -167,6 +167,12 @@ namespace Cooler_Text_Editor.ComponentStuff.TextStuff
                 return;
 
             CurrentFilePath = path;
+
+            if (CurrentFilePath != null)
+                Editor.Extension = Path.GetExtension(CurrentFilePath);
+            else
+                Editor.Extension = ".cs";
+
             var txt = Editor.MainEditorComponent.InternalTextComponent;
 
             string[] lines = new string[1] { "" };
@@ -304,6 +310,10 @@ namespace Cooler_Text_Editor.ComponentStuff.TextStuff
 
             Editor.MainEditorComponent.ForegroundColor = ForegroundColor;
             Editor.MainEditorComponent.BackgroundColor = BackgroundColor;
+            if (CurrentFilePath != null)
+                Editor.Extension = Path.GetExtension(CurrentFilePath);
+            else
+                Editor.Extension = ".cs";
 
             LineBox.DefaultForegroundColor = LineForegroundColor;
             LineBox.DefaultBackgroundColor = LineBackgroundColor;

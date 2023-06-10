@@ -8,6 +8,6 @@ namespace Cooler_Text_Editor.SyntaxStuff
 {
     public abstract class BasicSyntaxHighlighter
     {
-        public abstract Task<List<List<Pixel>>> SyntaxHighlight(List<string> data, PixelColor defaultFG, PixelColor defaultBG);
+        public abstract Task<List<List<Pixel>>> SyntaxHighlight(List<string> data, string ext, PixelColor defaultFG, PixelColor defaultBG);
     }
 }

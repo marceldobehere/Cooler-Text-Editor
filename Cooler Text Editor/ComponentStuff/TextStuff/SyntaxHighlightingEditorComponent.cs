@@ -18,6 +18,7 @@ namespace Cooler_Text_Editor.ComponentStuff.TextStuff
         Task<List<List<Pixel>>> syntaxTask;
         public bool CancelSyntaxUpdate;
         public bool TextChanged;
+        public string Extension = ".txt";
 
         public void ForceUpdate()
         {
@@ -72,7 +73,7 @@ namespace Cooler_Text_Editor.ComponentStuff.TextStuff
             ShadowEditorComponent.InternalTextComponent.WriteLineText();
             ShadowEditorComponent.Parent = this;
 
-            syntaxHighlighter = new TestSyntaxHighlighter();
+            syntaxHighlighter = new MultiSyntaxHighlighter();
             syntaxTask = null;
             CancelSyntaxUpdate = true;
             TextChanged = false;
@@ -152,8 +153,8 @@ namespace Cooler_Text_Editor.ComponentStuff.TextStuff
                         ShadowEditorComponent.InternalTextComponent.ComponentCursor.OverwriteCursor(MainEditorComponent.InternalTextComponent.ComponentCursor);
                         ShadowEditorComponent.InternalTextComponent.Scroll = MainEditorComponent.InternalTextComponent.Scroll;
                         MainEditorComponent.InternalTextComponent.RenderTo(ShadowEditorComponent.InternalTextComponent.RenderedScreen, GetLocalField());
-
-                        syntaxTask = syntaxHighlighter.SyntaxHighlight(tList, MainEditorComponent.ForegroundColor, MainEditorComponent.BackgroundColor);
+                     
+                        syntaxTask = syntaxHighlighter.SyntaxHighlight(tList, Extension, MainEditorComponent.ForegroundColor, MainEditorComponent.BackgroundColor);
                     }
                 }
             }
