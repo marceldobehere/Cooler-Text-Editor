@@ -23,6 +23,7 @@ namespace Cooler_Text_Editor.ComponentStuff
         public PixelColor OldBorderColor = PixelColor.Transparent;
         public Cursor ComponentCursor = null;
         public bool OverwriteNavigationInput = false;
+        public string Title = "";
 
         public BasicPopUpComponent PopUpComponent = null;
         private Field2D? OldPopUpComponentfield = null;

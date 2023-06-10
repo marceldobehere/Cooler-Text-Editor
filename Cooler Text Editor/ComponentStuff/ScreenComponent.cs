@@ -49,6 +49,7 @@ namespace Cooler_Text_Editor.ComponentStuff
             //    MainView.RenderTo(screen, field);
 
             Rendering.RenderFields(MainView.RenderedScreen, UpdateFields);
+            Program.UpdateCount += UpdateFields.Count;
             UpdateFields.Clear();
         }
 

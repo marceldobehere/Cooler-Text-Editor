@@ -55,10 +55,12 @@ namespace Cooler_Text_Editor.ComponentStuff
             if (!Children.Contains(child))
                 return;
 
+            int indx = Children.IndexOf(child);
             UpdateFields.Add(child.GetField());
-            child.Parent = null;
-            OldFields.RemoveAt(Children.IndexOf(child));
+            UpdateFields.Add(OldFields[indx]);
+            OldFields.RemoveAt(indx);
             Children.Remove(child);
+            child.Parent = null;
         }
 
         public override bool InternalHandleKey(ConsoleKeyInfo info)

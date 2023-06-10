@@ -14,7 +14,7 @@ namespace Cooler_Text_Editor.ComponentStuff.TextStuff
     public class FileEditorComponent : BasicComponent
     {
         public ViewComponent View;
-        public TextComponent TitleBar;
+        public CenterTextComponent TitleBar;
         public TextComponent LineBox;
         public SyntaxHighlightingEditorComponent Editor;
         public PixelColor ForegroundColor, BackgroundColor;
@@ -60,7 +60,7 @@ namespace Cooler_Text_Editor.ComponentStuff.TextStuff
             View.Parent = this;
 
 
-            TitleBar = new TextComponent();
+            TitleBar = new CenterTextComponent();
             TitleBar.Size = new Size2D(10, 1);
             TitleBar.Position = new Position2D(0, 0);
             View.AddChild(TitleBar);
@@ -149,66 +149,11 @@ namespace Cooler_Text_Editor.ComponentStuff.TextStuff
                 lineText = $" - ({lineCount} lines)";
 
             newTitle += lineText;
+            Title = newTitle;
 
-
-            TitleBar.Size = new Size2D(newTitle.Length, 1);
-            TitleBar.Clear();
-            TitleBar.WriteLineText(newTitle);
-
-            if (newTitle.Length < View.Size.Width)
-            {
-                int titleLength = newTitle.Length;
-                int w = View.Size.Width;
-                int x = (w - titleLength) / 2;
-
-                TitleBar.Position = new Position2D(x, 0);
-                DoTitleScroll = false;
-            }
-            else
-            {
-                const int padding = 5;
-                long tempTime = (long)(uint)Environment.TickCount;
-                if (!DoTitleScroll)
-                {
-                    DoTitleScroll = true;
-                    TitleScrollX = 0;
-                    LastMS = tempTime;
-                }
-
-                if (tempTime > LastMS + 150)
-                {
-                    if (TitleScrollX == 0)
-                    {
-                        if (tempTime > LastMS + 1000)
-                        {
-                            TitleScrollX++;
-                            LastMS = tempTime;
-                        }
-                    }
-                    else
-                    {
-                        int maxW = newTitle.Length - View.Size.Width + 2 * padding;
-                        if (TitleScrollX >= maxW)
-                        {
-                            if (tempTime > LastMS + 1000)
-                            {
-                                TitleScrollX = 0;
-                                LastMS = tempTime;
-                            }
-                            else
-                                TitleScrollX = maxW;
-                        }
-                        else
-                        {
-                            TitleScrollX++;
-                            LastMS = tempTime;
-                        }
-                    }
-
-                }
-
-                TitleBar.Position = new Position2D(padding - TitleScrollX, 0);
-            }
+            TitleBar.Size = new Size2D(Size.Width, 1);
+            TitleBar.Position = new Position2D();
+            TitleBar.Text = newTitle;
         }
 
 
@@ -364,14 +309,12 @@ namespace Cooler_Text_Editor.ComponentStuff.TextStuff
             LineBox.DefaultBackgroundColor = LineBackgroundColor;
             LineBox.BackgroundColor = LineBackgroundColor;
 
-            TitleBar.DefaultForegroundColor = TitleForegroundColor;
-            TitleBar.DefaultBackgroundColor = TitleBackgroundColor;
-            TitleBar.BackgroundColor = TitleBackgroundColor;
+            TitleBar.TextComp.DefaultForegroundColor = TitleForegroundColor;
+            TitleBar.TextComp.DefaultBackgroundColor = TitleBackgroundColor;
+            TitleBar.TextComp.BackgroundColor = TitleBackgroundColor;
 
             UpdateLineBox();
             UpdateTitle();
-
-
 
 
 

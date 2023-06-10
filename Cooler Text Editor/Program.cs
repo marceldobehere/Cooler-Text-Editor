@@ -13,6 +13,14 @@ public class Program
     public static bool Exit;
     public static double FPS;
     public static ScreenComponent MainScreen;
+    public static int UpdateCount;
+
+    public static void HandleCancelKeyPress(object sender, ConsoleCancelEventArgs args)
+    {
+        //args.SpecialKey == ConsoleSpecialKey.ControlC;
+        Console.Title = $"CTRL + C";
+        args.Cancel = true;
+    }
 
     public static void Main()
     {
@@ -20,6 +28,7 @@ public class Program
         Console.InputEncoding = System.Text.Encoding.UTF8;
         Console.BackgroundColor = ConsoleColor.Black;
         Console.ForegroundColor = ConsoleColor.White;
+        Console.CancelKeyPress += HandleCancelKeyPress;
         Console.Clear();
 
         //Console.WriteLine("TEST");
@@ -76,16 +85,46 @@ public class Program
             MainScreen.MainView.ComponentCursor.HoverComponent = fileComp;
         }
 
+        //{
+        //    FileEditorComponent fileComp = new FileEditorComponent(new Size2D(80, 30));
+        //    viewComponent.AddChild(fileComp);
+        //    //fileComp.Size = new Size2D((Size2D parent) => { return new Size2D(parent.Width / 3, parent.Height / 3); });
+
+        //    fileComp.Position = new Position2D(90, 5);
+        //    fileComp.BackgroundColor = new PixelColor(10, 20, 30);
+        //}
+
         {
-            FileEditorComponent fileComp = new FileEditorComponent(new Size2D(80, 30));
-            viewComponent.AddChild(fileComp);
+            TabComponent tabComp = new TabComponent(new Size2D(80, 30));
+            viewComponent.AddChild(tabComp);
             //fileComp.Size = new Size2D((Size2D parent) => { return new Size2D(parent.Width / 3, parent.Height / 3); });
 
-            fileComp.Position = new Position2D(90, 5);
-            fileComp.BackgroundColor = new PixelColor(10, 20, 30);
+            tabComp.Position = new Position2D(90, 5);
+            //tabComp.BackgroundColor = new PixelColor(10, 20, 30);
+
+
+            {
+                FileEditorComponent fileComp = new FileEditorComponent(new Size2D(80, 30));
+                //viewComponent.AddChild(fileComp);
+                //fileComp.Size = new Size2D((Size2D parent) => { return new Size2D(parent.Width - 40, parent.Height - 20); });
+
+                fileComp.Position = new Position2D(5, 5);
+                fileComp.BackgroundColor = new PixelColor(10, 20, 30);
+
+                tabComp.AddTab(fileComp);
+            }
+
+            {
+                FileEditorComponent fileComp = new FileEditorComponent(new Size2D(80, 30));
+                //viewComponent.AddChild(fileComp);
+                //fileComp.Size = new Size2D((Size2D parent) => { return new Size2D(parent.Width - 40, parent.Height - 20); });
+
+                fileComp.Position = new Position2D(5, 5);
+                fileComp.BackgroundColor = new PixelColor(10, 20, 30);
+
+                tabComp.AddTab(fileComp);
+            }
         }
-
-
 
 
         {
@@ -173,6 +212,7 @@ public class Program
             fpsWatch.Restart();
             for (int frame = 0; frame < frameCount && !Exit; frame++)
             {
+                UpdateCount = 0;
                 Input.HandleInputs(100);
 
                 //tViewComp2.Position.X = frame % 30 + 10;
@@ -208,7 +248,11 @@ public class Program
                 Task.Delay(5).Wait(); // Limit yes
             }
             FPS = frameCount / fpsWatch.Elapsed.TotalSeconds;
-            Console.Title = $"Cooler Text Editor - {Math.Round(FPS, 2)} FPS";
+            MainScreen.MainView.Title = $"Cooler Text Editor - {Math.Round(FPS, 2)} FPS ({UpdateCount} Updates)";
+            MainScreen.Title = MainScreen.MainView.Title;
+            if (Cursor.MainCursor != null &&
+                Cursor.MainCursor.CursorComponent != null)
+                Console.Title = Cursor.MainCursor.CursorComponent.Title;
         }
 
 

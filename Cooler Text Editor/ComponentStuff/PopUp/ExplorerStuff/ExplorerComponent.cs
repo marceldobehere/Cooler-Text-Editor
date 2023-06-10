@@ -541,6 +541,7 @@ namespace Cooler_Text_Editor.ComponentStuff.PopUp.ExplorerStuff
 
         protected override void InternalUpdate()
         {
+            Title = $"Explorer";
             UpdateInternalComponents();
 
             Cursor temp = InternalCursor;
