@@ -84,11 +84,11 @@ namespace Cooler_Text_Editor.ComponentStuff
                 UpdateSelected(tab);
             }
 
-            //if (CurrentTab == null)
-            //    return;
+            if (CurrentTab != null)
+                Title = CurrentTab.TabBody.Title;
 
-            if (Tabs.Count < 1)
-                return;
+            //if (Tabs.Count < 1)
+            //    return;
 
             List<TabThing> wantedTabs = new List<TabThing>();
             wantedTabs.AddRange(Tabs); // just for now
@@ -117,8 +117,11 @@ namespace Cooler_Text_Editor.ComponentStuff
                     if (!TabBox.Children.Contains(CurrentTab.TabBody))
                         TabBox.AddChild(CurrentTab.TabBody);
             }
+            int tC = wantedTabs.Count;
+            if (tC < 1)
+                tC = 1;
 
-            int spacePerTabTitle = (Size.Width - wantedTabs.Count) / wantedTabs.Count;
+            int spacePerTabTitle = (Size.Width - tC) / tC;
             if (spacePerTabTitle < 5)
                 spacePerTabTitle = 5;
 
@@ -171,7 +174,8 @@ namespace Cooler_Text_Editor.ComponentStuff
 
         public override bool InternalHandleKey(ConsoleKeyInfo info)
         {
-            if (info.Key == ConsoleKey.Tab && info.Modifiers == ConsoleModifiers.Control)
+            if (info.Key == ConsoleKey.Tab && 
+                info.Modifiers == ConsoleModifiers.Control)
             {
                 int indx = Tabs.IndexOf(CurrentTab) + Tabs.Count;
                 indx++;
@@ -183,6 +187,25 @@ namespace Cooler_Text_Editor.ComponentStuff
                 }
             }
 
+            if (info.Key == ConsoleKey.W && 
+                info.Modifiers == ConsoleModifiers.Control)
+            {
+                if (CurrentTab != null)
+                {
+                    RemoveTab(CurrentTab);
+                    return true;
+                }
+            }
+
+            if (info.Key == ConsoleKey.T && 
+                info.Modifiers == ConsoleModifiers.Control)
+            {
+                FileEditorComponent fileComp = new FileEditorComponent(new Size2D(80, 30));
+                fileComp.BackgroundColor = new PixelColor(10, 20, 30);
+                AddTab(fileComp);
+                return true;
+            }
+
             if (CurrentTab != null)
                 return CurrentTab.TabBody.HandleKey(info);
             return false;
@@ -191,6 +214,7 @@ namespace Cooler_Text_Editor.ComponentStuff
         protected override void InternalUpdate()
         {
             TabBox.Position = Position;
+            TabBox.BackgroundColor = BackgroundColor;
             UpdateTabDisplay();
             TabBox.Update();
 

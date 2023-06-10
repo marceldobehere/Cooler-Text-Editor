@@ -97,32 +97,36 @@ public class Program
         {
             TabComponent tabComp = new TabComponent(new Size2D(80, 30));
             viewComponent.AddChild(tabComp);
-            //fileComp.Size = new Size2D((Size2D parent) => { return new Size2D(parent.Width / 3, parent.Height / 3); });
-
             tabComp.Position = new Position2D(90, 5);
-            //tabComp.BackgroundColor = new PixelColor(10, 20, 30);
 
-
+            for (int i = 0; i < 2; i++)
             {
                 FileEditorComponent fileComp = new FileEditorComponent(new Size2D(80, 30));
-                //viewComponent.AddChild(fileComp);
-                //fileComp.Size = new Size2D((Size2D parent) => { return new Size2D(parent.Width - 40, parent.Height - 20); });
-
-                fileComp.Position = new Position2D(5, 5);
                 fileComp.BackgroundColor = new PixelColor(10, 20, 30);
-
                 tabComp.AddTab(fileComp);
             }
 
+            //{
+            //    ImageComponent imgComp = new ImageComponent(Image.Load<Rgba32>("../../testImages/wat.gif"));
+            //    //imgComp.UpdateScreen();
+            //    tabComp.AddTab(imgComp);
+            //}
+
             {
-                FileEditorComponent fileComp = new FileEditorComponent(new Size2D(80, 30));
-                //viewComponent.AddChild(fileComp);
-                //fileComp.Size = new Size2D((Size2D parent) => { return new Size2D(parent.Width - 40, parent.Height - 20); });
+                TabComponent tabComp2 = new TabComponent(new Size2D(80, 30));
 
-                fileComp.Position = new Position2D(5, 5);
-                fileComp.BackgroundColor = new PixelColor(10, 20, 30);
+                {
+                    FileEditorComponent fileComp = new FileEditorComponent(new Size2D(80, 30));
+                    fileComp.BackgroundColor = new PixelColor(10, 20, 30);
+                    tabComp2.AddTab(fileComp);
+                }
 
-                tabComp.AddTab(fileComp);
+                {
+                    FileEditorComponent fileComp = new FileEditorComponent(new Size2D(80, 30));
+                    fileComp.BackgroundColor = new PixelColor(10, 20, 30);
+                    tabComp2.AddTab(fileComp);
+                }
+                tabComp.AddTab(tabComp2);
             }
         }
 

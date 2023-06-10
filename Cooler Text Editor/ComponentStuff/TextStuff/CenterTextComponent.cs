@@ -125,6 +125,7 @@ namespace Cooler_Text_Editor.ComponentStuff.TextStuff
         {
             UpdateTitle();
             ViewComp.Update();
+            ViewComp.Position = Position;
 
             RenderedScreen = ViewComp.RenderedScreen;
             if (Parent != null)

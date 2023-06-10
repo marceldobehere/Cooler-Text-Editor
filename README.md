@@ -79,5 +79,12 @@ You can switch between the components in the Explorer the same as in the view co
 
 
 
+### Navigating a Tabcomponent
+
+
+* CTRL + TAB -> Switch Tab
+* CTRL + T -> Create Tab
+* CTRL + W -> Close Tab
+
 
 

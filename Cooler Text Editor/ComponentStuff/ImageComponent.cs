@@ -33,6 +33,8 @@ namespace Cooler_Text_Editor.ComponentStuff
             ComponentCursor = new Cursor(this);
             ComponentCursor.CursorShown = false;
 
+            Title = "Image";
+
             LoadImage(image);
         }
 
@@ -43,6 +45,7 @@ namespace Cooler_Text_Editor.ComponentStuff
                 Size = new Size2D(1, 1);
             else
                 Size = new Size2D(image.Width, image.Height / 2);
+            Title = $"Image ({Size.Width} x {Size.Height})";
 
             int fCount = InternalImage.Frames.Count;
             //if (InternalImage.PropertyIdList.Contains(0x5100))
