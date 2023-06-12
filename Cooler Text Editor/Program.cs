@@ -113,6 +113,12 @@ public class Program
             //}
 
             //{
+            //    FileEditorComponent fileComp = new FileEditorComponent(new Size2D(80, 30));
+            //    fileComp.BackgroundColor = new PixelColor(10, 20, 30);
+            //    tabComp.AddTab(fileComp);
+            //}
+
+            //{
             //    TabComponent tabComp2 = new TabComponent(new Size2D(80, 30));
 
             //    {
