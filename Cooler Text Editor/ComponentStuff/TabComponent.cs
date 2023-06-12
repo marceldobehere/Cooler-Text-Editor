@@ -63,13 +63,18 @@ namespace Cooler_Text_Editor.ComponentStuff
 
         public void RemoveTab(TabThing tab)
         {
-            if (Tabs.Contains(tab))
+            int indx = Tabs.IndexOf(tab);
+            if (indx != -1)
             {
                 Tabs.Remove(tab);
                 if (CurrentTab == tab)
                 {
                     if (Tabs.Count > 0)
-                        CurrentTab = Tabs[0];
+                    {
+                        if (indx > Tabs.Count - 1)
+                            indx = Tabs.Count - 1;
+                        CurrentTab = Tabs[indx];
+                    }
                     else
                         CurrentTab = null;
                 }
