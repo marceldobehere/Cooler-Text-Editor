@@ -284,6 +284,21 @@ public class Program
                 }
 
                 Cursor.MainCursor = (vSplitter.Children[0] as ViewComponent).Children[1].ComponentCursor;
+
+                //{
+                //    {
+                //        string str = "../../testImages/rocc.png";
+                //        if (!File.Exists(str))
+                //            str = "./test/testImages/rocc.png";
+
+                //        ImageComponent imgComp = new ImageComponent(Image.Load<Rgba32>(str));
+                //        //viewComponent.AddChild(imgComp);
+                //        (vSplitter.Children[0] as ViewComponent).Children[1] = imgComp;
+                //        imgComp.Position = new Position2D(120, 50);
+                //        imgComp.Size = new Size2D(60, 30);// new Size2D((Size2D parent) => { return new Size2D(parent.Width / 4, parent.Height / 4); });
+                //        imgComp.UpdateScreen();
+                //    }
+                //}
             }
         }
 
