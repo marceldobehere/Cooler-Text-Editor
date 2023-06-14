@@ -4,6 +4,7 @@ using Cooler_Text_Editor.ComponentStuff;
 using Cooler_Text_Editor.ComponentStuff.TextStuff;
 using Cooler_Text_Editor.HelperStuff;
 using Cooler_Text_Editor.RenderingStuff;
+using Cooler_Text_Editor.SyntaxStuff;
 using Cooler_Text_Editor.WindowStuff;
 using System.Diagnostics;
 using System.Drawing;
@@ -45,6 +46,16 @@ public class Program
         Cursor.MainCursor = MainScreen.MainView.ComponentCursor;
 
         Rendering.InitCursor();
+
+
+        {
+            string filePath = "../../syntaxFiles/langs.xml";
+            if (!File.Exists(filePath))
+                filePath = "./bin/syntaxFiles/langs.xml";
+
+            MultiSyntaxHighlighter.GrammarHighlighter.ReadFile(filePath);
+        }
+
 
         ViewComponent viewComponent = MainScreen.MainView;
         ViewComponent tViewComp1, tViewComp2, tViewComp3;

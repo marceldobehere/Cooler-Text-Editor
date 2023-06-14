@@ -9,9 +9,13 @@ namespace Cooler_Text_Editor.SyntaxStuff
 {
     public class MultiSyntaxHighlighter : BasicSyntaxHighlighter
     {
+        public static GrammarSyntaxHighlighter GrammarHighlighter = new GrammarSyntaxHighlighter();
         
         public override async Task<List<List<Pixel>>> SyntaxHighlight(List<string> data, string ext, PixelColor defaultFG, PixelColor defaultBG)
         {
+            return await GrammarHighlighter.SyntaxHighlight(data, ext, defaultFG, defaultBG);
+
+
             await Task.Delay(50);
 
             if (ext.Equals(".cs"))

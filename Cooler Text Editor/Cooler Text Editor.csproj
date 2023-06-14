@@ -12,6 +12,7 @@
   <ItemGroup>
     <PackageReference Include="OmniSharp.Extensions.LanguageClient" Version="0.19.7" />
     <PackageReference Include="SixLabors.ImageSharp" Version="3.0.1" />
+    <PackageReference Include="System.Xml.XmlSerializer" Version="4.3.0" />
   </ItemGroup>
 
 </Project>
