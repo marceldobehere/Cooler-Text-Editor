@@ -102,7 +102,6 @@ public class Program
             for (int i = 0; i < 2; i++)
             {
                 FileEditorComponent fileComp = new FileEditorComponent(new Size2D(80, 30));
-                fileComp.BackgroundColor = new PixelColor(10, 20, 30);
                 tabComp.AddTab(fileComp);
             }
 
@@ -136,6 +135,46 @@ public class Program
             //}
         }
 
+
+
+        {
+            VerticalSplitterComponent vSplitter = new VerticalSplitterComponent(new Size2D(120, 60));
+            viewComponent.AddChild(vSplitter);
+            vSplitter.Position = new Position2D(1, 1);
+
+            for (int i2 = 0; i2 < 3; i2++)
+            {
+                {
+                    HorizontalSplitterComponent hSplitter = new HorizontalSplitterComponent(new Size2D(160, 30));
+                    vSplitter.AddChild(hSplitter);
+
+                    for (int i = 0; i < 2; i++)
+                    {
+                        FileEditorComponent fileComp = new FileEditorComponent(new Size2D(80, 30));
+                        hSplitter.AddChild(fileComp);
+
+                        //TabComponent tabComp = new TabComponent(new Size2D(80, 30));
+                        //hSplitter.AddChild(tabComp);
+                    }
+                }
+            }
+
+            //{
+            //    {
+            //        string str = "../../testImages/rocc.png";
+            //        if (!File.Exists(str))
+            //            str = "./test/testImages/rocc.png";
+
+            //        ImageComponent imgComp = new ImageComponent(Image.Load<Rgba32>(str));
+            //        //viewComponent.AddChild(imgComp);
+            //        (vSplitter.Children[0] as ViewComponent).Children[1] = imgComp;
+            //        imgComp.Position = new Position2D(120, 50);
+            //        imgComp.Size = new Size2D(60, 30);// new Size2D((Size2D parent) => { return new Size2D(parent.Width / 4, parent.Height / 4); });
+            //        imgComp.UpdateScreen();
+            //    }
+            //}
+
+        }
 
         {
             ViewComponent tViewComp = new ViewComponent(new Size2D(30, 30));
@@ -195,7 +234,6 @@ public class Program
             imgComp.Position = new Position2D(120, 50);
             imgComp.Size = new Size2D(60, 30);// new Size2D((Size2D parent) => { return new Size2D(parent.Width / 4, parent.Height / 4); });
             imgComp.UpdateScreen();
-
         }
 
         //{
@@ -212,6 +250,47 @@ public class Program
         //    terminalComponent.Position = new Position2D(15, 35);
         //    viewComponent.AddChild(terminalComponent);
         //}
+
+
+
+
+
+        if (true)
+        {
+            viewComponent.Children.Clear();
+            viewComponent.OldFields.Clear();
+
+            {
+                VerticalSplitterComponent vSplitter = new VerticalSplitterComponent(Size2D.UseParentMinusBorder);
+                vSplitter.Position = new Position2D(1, 1);
+                viewComponent.AddChild(vSplitter);
+                vSplitter.Position = new Position2D(1, 1);
+
+                for (int i2 = 0; i2 < 2; i2++)
+                {
+                    {
+                        HorizontalSplitterComponent hSplitter = new HorizontalSplitterComponent(new Size2D(160, 30));
+                        vSplitter.AddChild(hSplitter);
+
+                        for (int i = 0; i < 3; i++)
+                        {
+                            FileEditorComponent fileComp = new FileEditorComponent(new Size2D(80, 30));
+                            hSplitter.AddChild(fileComp);
+
+                            //TabComponent tabComp = new TabComponent(new Size2D(80, 30));
+                            //hSplitter.AddChild(tabComp);
+                        }
+                    }
+                }
+
+                Cursor.MainCursor = (vSplitter.Children[0] as ViewComponent).Children[1].ComponentCursor;
+            }
+        }
+
+
+
+
+
 
         Stopwatch fpsWatch = new Stopwatch();
         int frameCount = 60;

@@ -39,7 +39,7 @@ namespace Cooler_Text_Editor.ComponentStuff.TextStuff
             ComponentCursor.CursorShown = false;
 
             ForegroundColor = PixelColor.White;
-            BackgroundColor = PixelColor.Black;
+            BackgroundColor = new PixelColor(10, 20, 30);
             TitleForegroundColor = PixelColor.Green;
             TitleBackgroundColor = PixelColor.Black;
             LineForegroundColor = PixelColor.Cyan;
