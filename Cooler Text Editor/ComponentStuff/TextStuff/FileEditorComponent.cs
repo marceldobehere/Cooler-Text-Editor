@@ -117,7 +117,7 @@ namespace Cooler_Text_Editor.ComponentStuff.TextStuff
                     LineBox.Clear();
                     for (int i = start; i < end; i++)
                     {
-                        LineBox.WriteLineText((i + 1).ToString().PadLeft(maxLineLen, '0'));
+                        LineBox.WriteLineText((i + 1).ToString().PadLeft(maxLineLen, ' '));
                     }
                 }
             }
