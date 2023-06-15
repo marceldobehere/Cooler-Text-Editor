@@ -277,6 +277,13 @@ namespace Cooler_Text_Editor.SyntaxStuff
                                     bg = PixelColor.Transparent;
                                 }
 
+                                if (kwName == "TAG")
+                                    kwName = "KEYWORD";
+
+
+                                if (kwName == "VALUE")
+                                    kwName = "NUMBER";
+
                                 var style = new StyleSet(kwName, fg, bg, kwClass);
 
                                 if (curr != null)
