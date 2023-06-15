@@ -53,7 +53,15 @@ public class Program
             if (!File.Exists(filePath))
                 filePath = "./bin/syntaxFiles/langs.xml";
 
-            MultiSyntaxHighlighter.GrammarHighlighter.ReadFile(filePath);
+            MultiSyntaxHighlighter.GrammarHighlighter.ReadRuleFile(filePath);
+        }
+
+        {
+            string filePath = "../../syntaxFiles/styles.xml";
+            if (!File.Exists(filePath))
+                filePath = "./bin/syntaxFiles/styles.xml";
+
+            MultiSyntaxHighlighter.GrammarHighlighter.ReadStyleFile(filePath);
         }
 
 

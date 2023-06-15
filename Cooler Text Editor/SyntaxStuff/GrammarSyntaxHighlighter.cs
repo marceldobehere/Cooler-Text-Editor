@@ -44,17 +44,29 @@ namespace Cooler_Text_Editor.SyntaxStuff
 
         public class GrammarKeyword
         {
-            public PixelColor? FG;
-            public PixelColor? BG;
             public List<string> Words;
             public string Name;
 
-            public GrammarKeyword(string name, PixelColor? fg, PixelColor? bg)
+            public GrammarKeyword(string name)
             {
-                FG = fg;
-                BG = bg;
                 Words = new List<string>();
                 Name = name;
+            }
+        }
+
+        public class StyleSet
+        {
+            public string DEF_TYPE;
+            public PixelColor FG;
+            public PixelColor BG;
+            public string KW_CLASS;
+
+            public StyleSet(string name, PixelColor fg, PixelColor bg, string kwClass)
+            {
+                DEF_TYPE = name;
+                FG = fg;
+                BG = bg;
+                KW_CLASS = kwClass;
             }
         }
 
@@ -66,17 +78,19 @@ namespace Cooler_Text_Editor.SyntaxStuff
             public string CommentLine = "//";
             public PixelColor? CommentFG = PixelColor.Green;
             public PixelColor? CommentBG = null;
+            public List<StyleSet> Styles;
 
 
             public LanguageRuleset()
             {
                 Extensions = new List<string>();
                 Keywords = new List<GrammarKeyword>();
+                Styles = new List<StyleSet>();
             }
         }
 
         public List<LanguageRuleset> Rulesets = new List<LanguageRuleset>();
-        public void ReadFile(string path)
+        public void ReadRuleFile(string path)
         {
             if (!File.Exists(path))
                 return;
@@ -132,7 +146,7 @@ namespace Cooler_Text_Editor.SyntaxStuff
                         else if (nam == "Keywords")
                         {
                             string kwName = tempAttr.Find((x) => x.name == "name").val;
-                            lastKW = new GrammarKeyword(kwName, PixelColor.Red, null);
+                            lastKW = new GrammarKeyword(kwName);
                             curr.Keywords.Add(lastKW);
 
                         }
@@ -143,6 +157,137 @@ namespace Cooler_Text_Editor.SyntaxStuff
                             ;
                         }
                         else if (nam == "" || nam == "Languages" || nam == "NotepadPlus")
+                        {
+
+                        }
+                        else
+                        {
+                            Console.WriteLine($"ERROR: IDK \"{nam}\"");
+                            Console.ReadLine();
+                        }
+
+                        lastNam = nam;
+                    }
+                }
+
+
+
+
+                //Console.ReadLine();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("\nError:");
+                Console.WriteLine(e);
+                Console.ReadLine();
+            }
+            //Console.ReadLine();
+
+        }
+
+        public void ReadStyleFile(string path)
+        {
+            if (!File.Exists(path))
+                return;
+
+            //Rulesets = new List<LanguageRuleset>();
+
+            try
+            {
+                using (XmlReader reader = XmlReader.Create(path))
+                {
+                    //Console.Clear();
+                    bool ignore = false;
+                    LanguageRuleset curr = null;
+                    string lastNam = "";
+                    //GrammarKeyword lastKW = null;
+                    while (reader.Read())
+                    {
+                        if (reader.Name == "LexerType")
+                        {
+                            ignore = false;
+                        }
+                        if (ignore)
+                            continue;
+
+                        string nam = reader.Name;
+                        string val = reader.Value;
+                        string bruh = "";
+                        List<(string name, string val)> tempAttr = new List<(string name, string val)>();
+                        for (int i = 0; i < reader.AttributeCount; i++)
+                        {
+                            reader.MoveToNextAttribute();
+                            tempAttr.Add((reader.Name, reader.Value));
+                            bruh += $"{reader.Name}: {reader.Value}, ";
+                        }
+                        //Console.WriteLine($" - \"{nam}\": \"{val}\" - {bruh}");
+
+                        if (nam == "LexerType")
+                        {
+                            // "LexerType": "" - name: actionscript, desc: ActionScript, ext: ,
+
+                            if (tempAttr.FindIndex((x) => x.name == "name") != -1)
+                            {
+                                string langName = tempAttr.Find((x) => x.name == "name").val;
+                                ;
+
+                                if (Rulesets.FindIndex((x) => x.Name == langName) != 1)
+                                {
+                                    var ruleset = Rulesets.Find((x) => x.Name == langName);
+                                    curr = ruleset;
+                                }
+                            }
+                            ;
+                        }
+                        else if (nam == "WordsStyle")
+                        {
+                            //  - "WordsStyle": "" - name: OPCODE, styleID: 6, fgColor: 0000FF, bgColor: FFFFFF, fontName: , fontStyle: 1, fontSize: , keywordClass: instre1,
+                            if (tempAttr.FindIndex((x) => x.name == "name") != -1)
+                            {
+                                string kwName = tempAttr.Find((x) => x.name == "name").val;
+                                string fgStr = tempAttr.Find((x) => x.name == "fgColor").val;
+                                string bgStr = tempAttr.Find((x) => x.name == "bgColor").val;
+                                string kwClass = "";
+                                if (tempAttr.FindIndex((x) => x.name == "keywordClass") != -1)
+                                {
+                                    kwClass = tempAttr.Find((x) => x.name == "keywordClass").val;
+                                }
+
+
+
+                                PixelColor fg = PixelColor.Transparent;
+                                if (fgStr != null)
+                                {
+                                    int r = Convert.ToInt32(fgStr.Substring(0, 2), 16);
+                                    int g = Convert.ToInt32(fgStr.Substring(2, 2), 16);
+                                    int b = Convert.ToInt32(fgStr.Substring(4, 2), 16);
+
+                                    fg = new PixelColor(r, g, b);
+                                }
+
+                                PixelColor bg = PixelColor.Transparent;
+                                if (bgStr != null)
+                                {
+                                    int r = Convert.ToInt32(bgStr.Substring(0, 2), 16);
+                                    int g = Convert.ToInt32(bgStr.Substring(2, 2), 16);
+                                    int b = Convert.ToInt32(bgStr.Substring(4, 2), 16);
+
+                                    bg = new PixelColor(r, g, b);
+
+                                    bg = PixelColor.Transparent;
+                                }
+
+                                var style = new StyleSet(kwName, fg, bg, kwClass);
+
+                                if (curr != null)
+                                    curr.Styles.Add(style);
+                            }
+                        }
+                        else if (nam == "WidgetStyle")
+                        {
+
+                        }
+                        else if (nam == "" || nam == "xml" || nam == "LexerStyles" || nam == "GlobalStyles" || nam == "NotepadPlus")
                         {
 
                         }
@@ -170,6 +315,8 @@ namespace Cooler_Text_Editor.SyntaxStuff
             //Console.ReadLine();
 
         }
+
+
 
         public static async Task<List<List<Pixel>>> DoDefaultSyntaxHighlight(List<string> data, PixelColor defaultFG, PixelColor defaultBG)
         {
@@ -199,6 +346,34 @@ namespace Cooler_Text_Editor.SyntaxStuff
                 FG = fg;
                 BG = bg;
             }
+        }
+
+        public static (string typeName, string kwClass) GetTokenType(LanguageRuleset set, GrammarToken tok)
+        {
+            foreach (var kw in set.Keywords)
+            {
+                if (kw.Words.Contains(tok.Text))
+                {
+                    return ("KEYWORD", kw.Name);
+                }
+            }
+
+            if (tok.Text.StartsWith("\"") || tok.Text.EndsWith("\""))
+                return ("STRING", "<IDK>");
+
+            if (tok.Text.StartsWith("\'") || tok.Text.EndsWith("\'"))
+                return ("CHARARCTER", "<IDK>");
+
+            if (float.TryParse(tok.Text, NumberStyles.Float, CultureInfo.InvariantCulture, out float val))
+                return ("NUMBER", "<IDK>");
+
+            if (tok.Text.StartsWith("//"))
+                return ("COMMENT", "<IDK>");
+
+            if ("[]{}<>+-.,:;()?%|&~*/&=".Contains(tok.Text))
+                return ("OPERATOR", "<IDK>");
+
+            return ("DEFAULT", "<IDK>");
         }
 
         public override async Task<List<List<Pixel>>> SyntaxHighlight(List<string> data, string ext, PixelColor defaultFG, PixelColor defaultBG)
@@ -315,37 +490,25 @@ namespace Cooler_Text_Editor.SyntaxStuff
 
             foreach (var tok in toks)
             {
-                bool f = false;
-                foreach (var kw in set.Keywords)
-                {
-                    if (kw.Words.Contains(tok.Text))
-                    {
-                        tok.FG = kw.FG ?? tok.FG;
-                        tok.BG = kw.BG ?? tok.BG;
-                        f = true;
-                        break;
-                    }
-                }
-                if (f)
-                    continue;
+                var typeInfo = GetTokenType(set, tok);
 
-                if (tok.Text.StartsWith("\"") || tok.Text.EndsWith("\""))
+                var styleInfoType = set.Styles.Find((x) => x.DEF_TYPE == typeInfo.typeName);
+                var styleInfoClass = set.Styles.Find((x) => x.KW_CLASS == typeInfo.kwClass);
+
+                if (styleInfoClass != null)
                 {
-                    tok.FG = PixelColor.Orange;
-                    continue;
+                    tok.FG = styleInfoClass.FG;
+                    tok.BG = styleInfoClass.BG;
+                }
+                else if (styleInfoType != null)
+                {
+                    tok.FG = styleInfoType.FG;
+                    tok.BG = styleInfoType.BG;
                 }
 
-                if (float.TryParse(tok.Text, NumberStyles.Float, CultureInfo.InvariantCulture, out float num))
-                {
-                    if (num > 0)
-                        tok.FG = PixelColor.Green2;
-                    else if (num == 0)
-                        tok.FG = PixelColor.Cyan;
-                    else
-                        tok.FG = PixelColor.Red2;
-                    continue;
-                }
+                tok.BG = defaultBG;
             }
+
 
 
             List<List<Pixel>> res = new List<List<Pixel>>();
