@@ -7,6 +7,7 @@ Has inbuilt
 * Image Viewer
 * Gif Player
 * TUI Explorer
+* Syntax Highlighting (currently using the Notepad++ rules and a style) (Basic stuff is working)
 
 
 
