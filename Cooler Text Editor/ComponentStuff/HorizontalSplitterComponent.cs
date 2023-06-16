@@ -31,12 +31,13 @@ namespace Cooler_Text_Editor.ComponentStuff
                 return true;
             }
 
-            if (info.Key == ConsoleKey.T && (info.Modifiers & ConsoleModifiers.Control) != 0)
+            if ((info.Key == ConsoleKey.T || info.Key == ConsoleKey.Z) && (info.Modifiers & ConsoleModifiers.Control) != 0)
             {
                 BasicComponent newComp = null;
-                {
+                if (info.Key == ConsoleKey.T)
                     newComp = new FileEditorComponent(new Size2D(10, 10));
-                }
+                else
+                    newComp = new TabComponent(new Size2D(10, 10));
                 if (ComponentCursor.HoverComponent == null ||
                     !Children.Contains(ComponentCursor.HoverComponent)) 
                 {

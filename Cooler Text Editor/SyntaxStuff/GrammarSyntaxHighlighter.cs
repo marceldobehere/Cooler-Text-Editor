@@ -369,7 +369,7 @@ namespace Cooler_Text_Editor.SyntaxStuff
                 return ("STRING", "<IDK>");
 
             if (tok.Text.StartsWith("\'") || tok.Text.EndsWith("\'"))
-                return ("CHARARCTER", "<IDK>");
+                return ("CHARACTER", "<IDK>");
 
             if (float.TryParse(tok.Text, NumberStyles.Float, CultureInfo.InvariantCulture, out float val))
                 return ("NUMBER", "<IDK>");
@@ -404,6 +404,7 @@ namespace Cooler_Text_Editor.SyntaxStuff
                 int y = 0;
                 string tempStr = "";
                 bool inString = false;
+                char strChr = 'X';
 
                 void addStrIfNeeded(int lastX, char ch = ' ', bool add = false)
                 {
@@ -442,11 +443,26 @@ namespace Cooler_Text_Editor.SyntaxStuff
                     }
 
                     char chr = data[y][x];
-                    if (chr == '"')
+                    if (chr == '"' && (!inString || strChr == chr))
                     {
                         inString = !inString;
                         if (inString)
+                        {
                             addStrIfNeeded(x - 1);
+                            strChr = chr;
+                        }
+                        tempStr += chr;
+                        if (!inString)
+                            addStrIfNeeded(x);
+                    }
+                    else if (chr == '\'' && (!inString || strChr == chr))
+                    {
+                        inString = !inString;
+                        if (inString)
+                        {
+                            addStrIfNeeded(x - 1);
+                            strChr = chr;
+                        }
                         tempStr += chr;
                         if (!inString)
                             addStrIfNeeded(x);
