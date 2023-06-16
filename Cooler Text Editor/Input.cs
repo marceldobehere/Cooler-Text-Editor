@@ -20,6 +20,13 @@ namespace Cooler_Text_Editor
                 return false;
 
             ConsoleKeyInfo consoleKeyInfo = Console.ReadKey(true);
+
+            if (consoleKeyInfo.Key == ConsoleKey.F5)
+            {
+                Program.LoadSyntaxHighlighting();
+                return true;
+            }
+
             if (consoleKeyInfo.Modifiers == ConsoleModifiers.Alt &&
                 consoleKeyInfo.Key == ConsoleKey.X)
             {

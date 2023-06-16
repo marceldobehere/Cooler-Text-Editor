@@ -18,7 +18,8 @@ namespace Cooler_Text_Editor.ComponentStuff.TextStuff
         public CenterTextComponent TitleBar;
         public TextComponent LineBox;
         public SyntaxHighlightingEditorComponent Editor;
-        public PixelColor ForegroundColor, BackgroundColor;
+        public PixelColor CurrForegroundColor, CurrBackgroundColor;
+        public PixelColor DefForegroundColor, DefBackgroundColor;
         public PixelColor TitleForegroundColor, TitleBackgroundColor;
         public PixelColor LineForegroundColor, LineBackgroundColor;
         //public ExplorerComponent TempExplorerDialogue;
@@ -40,14 +41,16 @@ namespace Cooler_Text_Editor.ComponentStuff.TextStuff
             ComponentCursor = new Cursor(this);
             ComponentCursor.CursorShown = false;
 
-            ForegroundColor = PixelColor.White;
-            BackgroundColor = new PixelColor(10, 20, 30);
+            CurrForegroundColor = PixelColor.White;
+            CurrBackgroundColor = new PixelColor(10, 20, 30);
+            DefForegroundColor = PixelColor.White;
+            DefBackgroundColor = new PixelColor(10, 20, 30);
             TitleForegroundColor = PixelColor.Green;
             TitleBackgroundColor = PixelColor.Black;
             LineForegroundColor = PixelColor.Cyan;
             LineBackgroundColor = PixelColor.Black;
 
-            Pixel bgPixel = new Pixel(ForegroundColor, BackgroundColor);
+            Pixel bgPixel = new Pixel(CurrForegroundColor, CurrBackgroundColor);
 
             RenderedScreen = new Pixel[Size.Width, Size.Height];
             for (int y = 0; y < Size.Height; y++)
@@ -95,6 +98,7 @@ namespace Cooler_Text_Editor.ComponentStuff.TextStuff
 
             UpdateLineBox();
             UpdateTitle();
+            Program.SyntaxHighlightUpdate += YesUpdatePls;
         }
 
         int lastStart = 0, lastEnd = 0;
@@ -193,6 +197,7 @@ namespace Cooler_Text_Editor.ComponentStuff.TextStuff
             if (txt.Text.Count > 0)
                 txt.Text.RemoveAt(txt.Text.Count - 1);
 
+            NeedToUpdateBcYes = true;
             Editor.MainEditorComponent.InternalCursor.CursorPosition = new Position2D();
             Editor.ForceUpdate();
         }
@@ -311,28 +316,45 @@ namespace Cooler_Text_Editor.ComponentStuff.TextStuff
 
             StyleSet set = highlighter.GetDefaultColorFromExtension(Editor.Extension);
             if (set == null)
-                return;
+            {
+                CurrForegroundColor = DefForegroundColor;
+                CurrBackgroundColor = DefBackgroundColor;
+            }
+            else
+            {
+                CurrForegroundColor = set.FG;
+                CurrBackgroundColor = set.BG;
+            }
 
-            ForegroundColor = set.FG;
-            BackgroundColor = set.BG;
 
-            Editor.MainEditorComponent.ForegroundColor = set.FG;
-            Editor.MainEditorComponent.BackgroundColor = set.BG;
+            Editor.MainEditorComponent.ForegroundColor = CurrForegroundColor;
+            Editor.MainEditorComponent.BackgroundColor = CurrBackgroundColor;
 
-            Editor.ShadowEditorComponent.ForegroundColor = set.FG;
-            Editor.ShadowEditorComponent.BackgroundColor = set.BG;
+            Editor.ShadowEditorComponent.ForegroundColor = CurrForegroundColor;
+            Editor.ShadowEditorComponent.BackgroundColor = CurrBackgroundColor;
+        }
+
+        public bool NeedToUpdateBcYes = false;
+        public void YesUpdatePls()
+        {
+            NeedToUpdateBcYes = true;
         }
 
         protected override void InternalUpdate()
         {
             if (UseSyntaxDefColors)
                 DoDefColUpdate();
+            if (NeedToUpdateBcYes)
+            {
+                Editor.ForceUpdate();
+                NeedToUpdateBcYes = false;
+            }
 
             ComponentCursor.OverwriteCursor(Editor.ComponentCursor);
             ComponentCursor.CursorPosition += Editor.Position;
 
-            Editor.MainEditorComponent.ForegroundColor = ForegroundColor;
-            Editor.MainEditorComponent.BackgroundColor = BackgroundColor;
+            Editor.MainEditorComponent.ForegroundColor = CurrForegroundColor;
+            Editor.MainEditorComponent.BackgroundColor = CurrBackgroundColor;
             if (CurrentFilePath != null)
                 Editor.Extension = Path.GetExtension(CurrentFilePath);
             else

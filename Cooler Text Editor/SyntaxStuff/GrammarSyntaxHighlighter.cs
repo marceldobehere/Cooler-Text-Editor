@@ -246,7 +246,7 @@ namespace Cooler_Text_Editor.SyntaxStuff
 
 
                                 PixelColor fg = PixelColor.Transparent;
-                                if (fgStr != null)
+                                if (fgStr != null && fgStr.Length >= 6)
                                 {
                                     int r = Convert.ToInt32(fgStr.Substring(0, 2), 16);
                                     int g = Convert.ToInt32(fgStr.Substring(2, 2), 16);
@@ -256,7 +256,7 @@ namespace Cooler_Text_Editor.SyntaxStuff
                                 }
 
                                 PixelColor bg = PixelColor.Transparent;
-                                if (bgStr != null)
+                                if (bgStr != null && bgStr.Length >= 6)
                                 {
                                     int r = Convert.ToInt32(bgStr.Substring(0, 2), 16);
                                     int g = Convert.ToInt32(bgStr.Substring(2, 2), 16);

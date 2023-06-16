@@ -215,6 +215,24 @@ namespace Cooler_Text_Editor.ComponentStuff.TextStuff
                     }
                 }
             }
+            else if (info.Key == ConsoleKey.Delete)
+            {
+                //InternalTextComponent.WriteText(info.KeyChar.ToString(), ForegroundColor, BackgroundColor);
+                int c = info.Modifiers == ConsoleModifiers.Shift ? 4 : 1;
+                while (c-- > 0)
+                {
+                    if (InternalCursor.CursorPosition.X == InternalTextComponent.Text[InternalCursor.CursorPosition.Y].Count)
+                    {
+                        if (InternalCursor.CursorPosition.Y < InternalTextComponent.Text.Count - 1)
+                        {
+                            InternalTextComponent.Text[InternalCursor.CursorPosition.Y].AddRange(InternalTextComponent.Text[InternalCursor.CursorPosition.Y + 1]);
+                            InternalTextComponent.Text.RemoveAt(InternalCursor.CursorPosition.Y + 1);
+                        }
+                    }
+                    else
+                        InternalTextComponent.Text[InternalCursor.CursorPosition.Y].RemoveAt(InternalCursor.CursorPosition.X);
+                }
+            }
             else if (info.Key == ConsoleKey.Tab)
             {
                 if (info.Modifiers == ConsoleModifiers.Shift)

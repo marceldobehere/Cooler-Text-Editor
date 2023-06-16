@@ -206,7 +206,7 @@ namespace Cooler_Text_Editor.ComponentStuff
                 info.Modifiers == ConsoleModifiers.Control)
             {
                 FileEditorComponent fileComp = new FileEditorComponent(new Size2D(80, 30));
-                fileComp.BackgroundColor = new PixelColor(10, 20, 30);
+                fileComp.CurrBackgroundColor = new PixelColor(10, 20, 30);
                 AddTab(fileComp);
                 return true;
             }
