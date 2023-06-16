@@ -10,6 +10,14 @@ Has inbuilt
 
 
 
+## Showcase
+![Image 1](./images/tabs_with_syntax_highlighting.PNG)
+Showcase of Multiple Components showing different Files
+
+![Image 2](./images/cte_vs_npp.png)
+Comparison To Notepad++ bc yes
+
+
 
 
 ## Input
@@ -79,12 +87,23 @@ You can switch between the components in the Explorer the same as in the view co
 
 
 
-### Navigating a Tabcomponent
-
+### Tabcomponent
 
 * CTRL + TAB -> Switch Tab
 * CTRL + T -> Create Tab
 * CTRL + W -> Close Tab
 
 
+### Vertical Splitter
 
+CTRL + W - Delete Selected Horizontal Splitter
+CTRL + T - Insert Horizontal Splitter Before
+CTRL + T + SHIFT - Insert Horizontal Splitter After
+
+### Horizontal Splitter
+
+CTRL + W - Delete Selected Comp
+CTRL + T - Insert File Text Editor Comp Before
+CTRL + T + SHIFT - Insert File Text Editor Comp After
+CTRL + Z - Insert File Tab Comp Before
+CTRL + Z + SHIFT - Insert Tab Comp After
