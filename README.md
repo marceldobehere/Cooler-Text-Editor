@@ -8,7 +8,7 @@ Has inbuilt
 * Gif Player
 * TUI Explorer
 * Syntax Highlighting (currently using the Notepad++ rules and a style) (Basic stuff is working)
-
+  - Supports A lot of Langs
 
 
 ## Showcase
