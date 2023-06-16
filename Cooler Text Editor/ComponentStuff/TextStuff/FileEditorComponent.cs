@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Cooler_Text_Editor.SyntaxStuff.GrammarSyntaxHighlighter;
 
 namespace Cooler_Text_Editor.ComponentStuff.TextStuff
 {
@@ -22,6 +23,7 @@ namespace Cooler_Text_Editor.ComponentStuff.TextStuff
         public PixelColor LineForegroundColor, LineBackgroundColor;
         //public ExplorerComponent TempExplorerDialogue;
         public bool ShowLineNum = true;
+        public bool UseSyntaxDefColors = true;
 
         public string CurrentFilePath = null;
 
@@ -303,8 +305,29 @@ namespace Cooler_Text_Editor.ComponentStuff.TextStuff
         }
 
 
+        public void DoDefColUpdate()
+        {
+            var highlighter = MultiSyntaxHighlighter.GrammarHighlighter;
+
+            StyleSet set = highlighter.GetDefaultColorFromExtension(Editor.Extension);
+            if (set == null)
+                return;
+
+            ForegroundColor = set.FG;
+            BackgroundColor = set.BG;
+
+            Editor.MainEditorComponent.ForegroundColor = set.FG;
+            Editor.MainEditorComponent.BackgroundColor = set.BG;
+
+            Editor.ShadowEditorComponent.ForegroundColor = set.FG;
+            Editor.ShadowEditorComponent.BackgroundColor = set.BG;
+        }
+
         protected override void InternalUpdate()
         {
+            if (UseSyntaxDefColors)
+                DoDefColUpdate();
+
             ComponentCursor.OverwriteCursor(Editor.ComponentCursor);
             ComponentCursor.CursorPosition += Editor.Position;
 

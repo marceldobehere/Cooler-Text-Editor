@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
@@ -14,33 +15,22 @@ namespace Cooler_Text_Editor.SyntaxStuff
 {
     public class GrammarSyntaxHighlighter : BasicSyntaxHighlighter
     {
-        public Dictionary<string, PixelColor> ColorStrings = new Dictionary<string, PixelColor>()
+        public StyleSet GetDefaultColorFromExtension(string ext)
         {
-            {"White", PixelColor.White},
-            {"Black", PixelColor.Black},
-            {"Red", PixelColor.Red},
-            {"Green", PixelColor.Green},
-            {"Green2", PixelColor.Green2},
-            {"Orange", PixelColor.Orange},
-            {"Blue", PixelColor.Blue},
-            {"Blue2", PixelColor.Blue2},
-            {"Blue3", PixelColor.Blue3},
-            {"Yellow", PixelColor.Yellow},
-            {"Yellow2", PixelColor.Yellow2},
-            {"Magenta", PixelColor.Magenta},
-            {"Magenta2", PixelColor.Magenta2},
-            {"Cyan", PixelColor.Cyan},
-            {"Gray", PixelColor.Gray},
-            {"Gray2", PixelColor.Gray2},
-            {"DarkGray", PixelColor.DarkGray},
-            {"DarkRed", PixelColor.DarkRed},
-            {"DarkGreen", PixelColor.DarkGreen},
-            {"DarkBlue", PixelColor.DarkBlue},
-            {"DarkYellow", PixelColor.DarkYellow},
-            {"DarkMagenta", PixelColor.DarkMagenta},
-            {"DarkCyan", PixelColor.DarkCyan},
-            {"Transparent", PixelColor.Transparent}
-        };
+            LanguageRuleset set = null;
+            foreach (var tempSet in Rulesets)
+                if (tempSet.Extensions.Contains(ext))
+                {
+                    set = tempSet;
+                    break;
+                }
+
+            if (set == null)
+                return null;
+
+            var style = set.Styles.Find((x) => x.DEF_TYPE == "DEFAULT");
+            return style;
+        }
 
         public class GrammarKeyword
         {
@@ -274,7 +264,7 @@ namespace Cooler_Text_Editor.SyntaxStuff
 
                                     bg = new PixelColor(r, g, b);
 
-                                    bg = PixelColor.Transparent;
+                                    //bg = PixelColor.Transparent;
                                 }
 
                                 if (kwName == "TAG")
