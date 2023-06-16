@@ -19,6 +19,18 @@ Showcase of Multiple Components showing different Files
 Comparison To Notepad++ bc yes
 
 
+## Missing Features
+
+* File Editor
+  - Select
+  - Find
+  - Replace
+  - Block Select (?)
+* Explorer
+  - Create File
+  - Rename File
+  - Create Folder
+  - Rename Folder
 
 
 ## Input
