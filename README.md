@@ -20,13 +20,15 @@ Comparison To Notepad++ bc yes
 
 
 ## Missing Features
-
-* File Editor
++ General
+  - Way to change Style in Program
+  - Possible Style Change mode (?)
++ File Editor
   - Select
-  - Find
+  - Find 
   - Replace
   - Block Select (?)
-* Explorer
++ Explorer
   - Create File
   - Rename File
   - Create Folder
