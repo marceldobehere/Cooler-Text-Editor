@@ -97,14 +97,14 @@ You can switch between the components in the Explorer the same as in the view co
 
 ### Vertical Splitter
 
-CTRL + W - Delete Selected Horizontal Splitter
-CTRL + T - Insert Horizontal Splitter Before
-CTRL + T + SHIFT - Insert Horizontal Splitter After
+* CTRL + W - Delete Selected Horizontal Splitter
+* CTRL + T - Insert Horizontal Splitter Before
+* CTRL + T + SHIFT - Insert Horizontal Splitter After
 
 ### Horizontal Splitter
 
-CTRL + W - Delete Selected Comp
-CTRL + T - Insert File Text Editor Comp Before
-CTRL + T + SHIFT - Insert File Text Editor Comp After
-CTRL + Z - Insert File Tab Comp Before
-CTRL + Z + SHIFT - Insert Tab Comp After
+* CTRL + W - Delete Selected Comp
+* CTRL + T - Insert File Text Editor Comp Before
+* CTRL + T + SHIFT - Insert File Text Editor Comp After
+* CTRL + Z - Insert File Tab Comp Before
+* CTRL + Z + SHIFT - Insert Tab Comp After
