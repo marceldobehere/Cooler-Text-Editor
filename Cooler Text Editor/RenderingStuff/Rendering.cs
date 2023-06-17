@@ -2,6 +2,7 @@
 using Cooler_Text_Editor.HelperStuff;
 using Cooler_Text_Editor.RenderingStuff;
 using Cooler_Text_Editor.WindowStuff;
+using Mindmagma.Curses;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -15,41 +16,68 @@ namespace Cooler_Text_Editor
     public class Rendering
     {
         public static Pixel[,] ScreenBackbuffer = new Pixel[0, 0];
+        public static nint WindowId;
+        public static int CursorOff = 0;
 
         public static void ConsWrite(StringBuilder str)
         {
+            //try
+            //{
+            //    GC.KeepAlive(Console.WindowWidth);
+            //}
+            //catch 
+            //{
+
+            //}
+
+            //Console.Out.Write(str.ToString());
+            //Console.Out.Flush();
+
             try
             {
-                GC.KeepAlive(Console.WindowWidth);
+                NCurses.AddString(str.ToString());
             }
-            catch 
+            catch
             {
 
             }
-
-            Console.Out.Write(str.ToString());
-            Console.Out.Flush();
+            NCurses.Refresh();
         }
 
         public static bool CheckWindowResize()
         {
-            int cSizeX = Console.WindowWidth;
-            if (cSizeX < 1)
-                cSizeX = 1;
-            int cSizeY = Console.WindowHeight;
-            if (cSizeY < 1)
-                cSizeY = 1;
+            //NCurses.ResizeTerminal(40, 140);
+            //NCurses.WindowRefresh(WindowId);
+            
+
+            //NCurses.WindowRefresh(WindowId);
+            NCurses.GetMaxYX(WindowId, out int cSizeY, out int cSizeX);
+
+            if (cSizeY != NCurses.Lines)
+                ;
+
+            //NCurses.
+            
+            //int cSizeX = Console.WindowWidth;
+            //if (cSizeX < 1)
+            //    cSizeX = 1;
+            //int cSizeY = Console.WindowHeight;
+            //if (cSizeY < 1)
+            //    cSizeY = 1;
 
             if (cSizeX == Program.MainScreen.Size.Width &&
                 cSizeY == Program.MainScreen.Size.Height)
                 return false;
 
+            ;
+
             // Might Remove Later
-            StringBuilder renderString = new StringBuilder();
-            renderString.Append($"\u001b[38;{Pixel.DefaultForegroundColor.GetAnsiColorString()}");
-            renderString.Append($"\u001b[48;{Pixel.DefaultBackgroundColor.GetAnsiColorString()}");
-            renderString.Append("\u001b[2J");
-            ConsWrite(renderString);
+            //StringBuilder renderString = new StringBuilder();
+            //renderString.Append($"\u001b[38;{Pixel.DefaultForegroundColor.GetAnsiColorString()}");
+            //renderString.Append($"\u001b[48;{Pixel.DefaultBackgroundColor.GetAnsiColorString()}");
+            //renderString.Append("\u001b[2J");
+            //ConsWrite(renderString);
+            NCurses.Clear();
 
             //Program.MainScreen.Resize(cSizeX, cSizeY);
             Program.MainScreen.Resize(cSizeX, cSizeY);
@@ -90,6 +118,20 @@ namespace Cooler_Text_Editor
             DoActualRender(updatedPixels);
         }
 
+        public static void InitSystem()
+        {
+            WindowId = NCurses.InitScreen();
+            NCurses.NoDelay(WindowId, true);
+            NCurses.NoEcho();
+            NCurses.StartColor();
+            //NCurses.UseDefaultColors();
+            NCurses.Clear();
+            NCurses.Refresh();
+
+
+            InitCursor();
+        }
+
         public static void InitCursor()
         {
             Position2D actualCursorPos = GetActualCursorPosition(MainCursor, false);
@@ -100,17 +142,23 @@ namespace Cooler_Text_Editor
             OldCursorShown = MainCursor.CursorShown;
 
 
-            StringBuilder renderString = new StringBuilder();
-            renderString.Append("\x1b[" + (0 + 1) + ";" + (0 + 1) + "H");
-            //ESC [ ? 12 l
-            //renderString.Append("\x1b[?25l");
+            //StringBuilder renderString = new StringBuilder();
+            //renderString.Append("\x1b[" + (0 + 1) + ";" + (0 + 1) + "H");
+            ////ESC [ ? 12 l
+            ////renderString.Append("\x1b[?25l");
+            NCurses.Move(CursorOff, CursorOff);
 
-            // ESC [ 6 SP q	
-            renderString.Append($"\x1b[{(int)OldCursorMode} q");
-            renderString.Append("\x1b[" + (inbounds.X + 1) + ";" + (inbounds.Y + 1) + "H");
+            //// ESC [ 6 SP q	
+            //renderString.Append($"\x1b[{(int)OldCursorMode} q");
+            //renderString.Append("\x1b[" + (inbounds.X + 1) + ";" + (inbounds.Y + 1) + "H");
 
 
-            ConsWrite(renderString);
+            //ConsWrite(renderString);
+
+            //NCurses.SetCursor((int)MainCursor.CursorMode);
+            // FIND CORRECT WAY
+
+            NCurses.Refresh();
         }
 
         public static Position2D OldCursorPosition;
@@ -164,38 +212,51 @@ namespace Cooler_Text_Editor
             Bruh = (Bruh + 16) % 100;
             if (updatedPoints.Count == 0)
             {
-                StringBuilder tBuilder = new StringBuilder();
+                //StringBuilder tBuilder = new StringBuilder();
                 if (MainCursor.CursorMode != OldCursorMode)
                 {
-                    tBuilder.Append($"\x1b[{(int)MainCursor.CursorMode} q");
+                    //tBuilder.Append($"\x1b[{(int)MainCursor.CursorMode} q");
+                    
+                    //FIND CORRECT WAY
+                    //NCurses.SetCursor((int)MainCursor.CursorMode);
                     OldCursorMode = MainCursor.CursorMode;
                 }
 
                 if (actualCursorPos != OldCursorPosition)
                 {
-                    tBuilder.Append("\x1b[" + (inbounds.Y + 1) + ";" + (inbounds.X + 1) + "H");
+                    //tBuilder.Append("\x1b[" + (inbounds.Y + 1) + ";" + (inbounds.X + 1) + "H");
+                    NCurses.Move(inbounds.Y + CursorOff, inbounds.X + CursorOff);
                     OldCursorPosition = actualCursorPos;
                 }
 
                 if (MainCursor.CursorShown != OldCursorShown)
                 {
-                    if (MainCursor.CursorShown)
-                        tBuilder.Append("\x1b[?25h");
-                    else
-                        tBuilder.Append("\x1b[?25l");
+                    try
+                    {
+                        if (MainCursor.CursorShown)
+                            //tBuilder.Append("\x1b[?25h");
+                            NCurses.SetCursor(1);
+                        else
+                            //tBuilder.Append("\x1b[?25l");
+                            NCurses.SetCursor(0);
+                    }
+                    catch
+                    {
+
+                    }
                     OldCursorShown = MainCursor.CursorShown;
                 }
 
-                if (tBuilder.Length > 0)
-                    ConsWrite(tBuilder);
+                //if (tBuilder.Length > 0)
+                //    ConsWrite(tBuilder);
                 return;
             }
 
 
-            StringBuilder renderString = new StringBuilder();
+            //StringBuilder renderString = new StringBuilder();
             //renderString.Append("\x1b[" + (inbounds.Y) + ";" + (inbounds.X) + "H");
             //ESC [ ? 12 l
-            renderString.Append("\x1b[?25l");
+            //renderString.Append("\x1b[?25l");
 
             int lastX = updatedPoints[0].X + 100;
             int lastY = updatedPoints[0].Y + 100;
@@ -209,21 +270,40 @@ namespace Cooler_Text_Editor
 
                 Pixel pxl = ScreenBackbuffer[x, y];
                 if (y != lastY || x != lastX + 1)
-                    renderString.Append("\x1b[" + (y + 1) + ";" + (x + 1) + "H");
+                    //renderString.Append("\x1b[" + (y + 1) + ";" + (x + 1) + "H");
+                    NCurses.Move(y + CursorOff, x + CursorOff);
+                    //NCurses.TouchLine(WindowId, y, x);
 
                 if (pxl.ForegroundColor != lastFG)
-                    renderString.Append($"\u001b[38;{pxl.ForegroundColor.GetAnsiColorString()}");
+                //renderString.Append($"\u001b[38;{pxl.ForegroundColor.GetAnsiColorString()}");
+                {
+                    // use ncurses
+                    //NCurses.Init
+                }
+                    
                 if (pxl.BackgroundColor != lastBG)
-                    renderString.Append($"\u001b[48;{pxl.BackgroundColor.GetAnsiColorString()}");
-                PixelColor Bruh2 = pxl.BackgroundColor;
-                Bruh2.R = 0;
-                Bruh2.G = Bruh;
-                Bruh2.B = 0;
+                //renderString.Append($"\u001b[48;{pxl.BackgroundColor.GetAnsiColorString()}");
+                {
+
+                }
+                //PixelColor Bruh2 = pxl.BackgroundColor;
+                //Bruh2.R = 0;
+                //Bruh2.G = Bruh;
+                //Bruh2.B = 0;
                 //renderString.Append($"\u001b[48;{Bruh2.GetAnsiColorString()}");
-                if ("\0\n\r\t\u001b\b".Contains(pxl.Character))
-                    renderString.Append(" ");
-                else
-                    renderString.Append(pxl.Character);
+                try
+                {
+                    if ("\0\n\r\t\u001b\b".Contains(pxl.Character))
+                        //renderString.Append(" ");
+                        NCurses.AddString(" ");
+                    else
+                        //renderString.Append(pxl.Character);
+                        NCurses.AddString(pxl.Character.ToString());
+                }
+                catch
+                {
+
+                }
                 //renderString.Append("?");
 
                 lastX = x;
@@ -232,15 +312,19 @@ namespace Cooler_Text_Editor
                 lastBG = pxl.BackgroundColor;
             }
 
-            renderString.Append("\x1b[" + (inbounds.Y + 1) + ";" + (inbounds.X + 1) + "H");
-            renderString.Append($"\u001b[38;{Pixel.DefaultForegroundColor.GetAnsiColorString()}");
-            renderString.Append($"\u001b[48;{Pixel.DefaultBackgroundColor.GetAnsiColorString()}");
-            if (MainCursor.CursorShown)
-                renderString.Append("\x1b[?25h");
-            else
-                renderString.Append("\x1b[?25l");
+            //renderString.Append("\x1b[" + (inbounds.Y + 1) + ";" + (inbounds.X + 1) + "H");
+            NCurses.Move(inbounds.Y + CursorOff, inbounds.X + CursorOff);
 
-            ConsWrite(renderString);
+            //renderString.Append($"\u001b[38;{Pixel.DefaultForegroundColor.GetAnsiColorString()}");
+            //renderString.Append($"\u001b[48;{Pixel.DefaultBackgroundColor.GetAnsiColorString()}");
+            //if (MainCursor.CursorShown)
+            //    renderString.Append("\x1b[?25h");
+            //else
+            //    renderString.Append("\x1b[?25l");
+
+            //ConsWrite(renderString);
+
+            NCurses.Refresh();
         }
 
         public static void FillPixel(Pixel[,] screen, Field2D field, Pixel pxl)

@@ -1,4 +1,5 @@
 ﻿using Cooler_Text_Editor.HelperStuff;
+using Mindmagma.Curses;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,6 +27,9 @@ namespace Cooler_Text_Editor
                 Program.LoadSyntaxHighlighting();
                 return true;
             }
+
+            if (NCurses.GetChar() == CursesKey.RESIZE)
+                ;
 
             if (consoleKeyInfo.Modifiers == ConsoleModifiers.Alt &&
                 consoleKeyInfo.Key == ConsoleKey.X)

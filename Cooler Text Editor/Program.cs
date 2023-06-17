@@ -8,7 +8,7 @@ using Cooler_Text_Editor.RenderingStuff;
 using Cooler_Text_Editor.SyntaxStuff;
 using Cooler_Text_Editor.WindowStuff;
 using System.Diagnostics;
-using System.Drawing;
+using Mindmagma.Curses;
 
 public class Program
 {
@@ -96,9 +96,11 @@ public class Program
             for (int x = 0; x < MainScreen.Size.Width; x++)
                 Rendering.ScreenBackbuffer[x, y] = Pixel.Empty;
 
-        Rendering.InitCursor();
+        Rendering.InitSystem();
         InitConfig();
         InitMainView();
+
+        MouseInput.Init();
 
         Stopwatch fpsWatch = new Stopwatch();
         int frameCount = 60;
